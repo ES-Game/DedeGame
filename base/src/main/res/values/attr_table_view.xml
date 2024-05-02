@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TableView">
+        <attr name="tblv_left_top_head_layout_res_id" format="reference" />
+        <attr name="tblv_head_layout_res_id" format="reference" />
+        <attr name="tblv_footer_layout_res_id" format="reference" />
+
+        <attr name="tblv_head_index_text" format="string" />
+        <attr name="tblv_head_index_text_size" format="dimension" />
+        <attr name="tblv_head_index_text_gravity">
+            <enum name="center" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+            <enum name="center_vertical" value="3" />
+            <enum name="center_horizontal" value="4" />
+        </attr>
+        <attr name="tblv_head_index_text_color" format="color" />
+        <attr name="tblv_head_index_width" format="dimension" />
+        <attr name="tblv_head_index_height" format="dimension" />
+        <attr name="tblv_head_index_background_color" format="color" />
+
+        <attr name="tblv_footer_index_text" format="string" />
+        <attr name="tblv_footer_index_text_gravity">
+            <enum name="center" value="0" />
+            <enum name="left" value="1" />
+            <enum name="right" value="2" />
+            <enum name="center_vertical" value="3" />
+            <enum name="center_horizontal" value="4" />
+        </attr>
+        <attr name="tblv_footer_index_text_color" format="color" />
+        <attr name="tblv_footer_index_width" format="dimension" />
+        <attr name="tblv_footer_index_height" format="dimension" />
+        <attr name="tblv_footer_index_text_size" format="dimension" />
+        <attr name="tblv_footer_index_background_color" format="color" />
+    </declare-styleable>
+</resources>

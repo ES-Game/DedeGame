@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="arrow_above" type="id"/>
+    <item name="arrow_below" type="id"/>
+    <item name="container" type="id"/>
+</resources>

@@ -1,0 +1,88 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+}
+
+android {
+    namespace 'com.quangph.base'
+    compileSdk 34
+
+    lintOptions {
+        abortOnError false
+    }
+
+    packagingOptions {
+        merge "/META-INF/*.kotlin_module"
+    }
+
+    defaultConfig {
+        minSdk 29
+        targetSdk 34
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        consumerProguardFiles "consumer-rules.pro"
+        renderscriptTargetApi 19
+        renderscriptSupportModeEnabled true
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled true
+//            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+
+        debug {
+            minifyEnabled true
+//            useProguard true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+}
+
+dependencies {
+
+    implementation 'androidx.core:core-ktx:1.6.0'
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'com.google.android.material:material:1.10.0'
+    api 'androidx.multidex:multidex:2.0.1'
+    api "org.jetbrains.kotlin:kotlin-reflect"
+    api 'com.squareup.retrofit2:retrofit:2.9.0'
+    api 'com.squareup.retrofit2:converter-gson:2.9.0'
+    api 'com.squareup.retrofit2:converter-scalars:2.9.0'
+    api 'com.github.bumptech.glide:glide:4.12.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    api 'androidx.work:work-runtime:2.7.1'
+    api 'androidx.work:work-runtime-ktx:2.7.1'
+    api 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    api 'org.greenrobot:eventbus:3.2.0'
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation "androidx.asynclayoutinflater:asynclayoutinflater:1.0.0"
+    api 'androidx.lifecycle:lifecycle-extensions:2.2.0'
+    api 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    api 'com.google.android.material:material:1.6.0'
+    api 'com.google.firebase:firebase-analytics-ktx:21.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.5'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
+}
+
+task deleteAar(type: Delete) {
+    delete 'libs/aars/mvp-sdk.aar'
+}
+
+task createAar(type: Copy) {
+    from('build/outputs/aar/')
+    into('libs/aars/')
+    include('app-release.aar')
+    rename('app-release.aar', 'mvp-sdk.aar')
+}
+
+createAar.dependsOn(deleteAar, build)

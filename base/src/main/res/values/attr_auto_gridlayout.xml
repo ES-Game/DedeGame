@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AutoGridLayout">
+        <attr name="auto_gridlayout_item_count" format="integer"/>
+        <attr name="auto_gridlayout_item_layout" format="reference"/>
+        <attr name="auto_gridlayout_column_count" format="integer"/>
+        <attr name="auto_gridlayout_item_margin_start" format="dimension"/>
+        <attr name="auto_gridlayout_item_margin_top" format="dimension"/>
+        <attr name="auto_gridlayout_item_margin_end" format="dimension"/>
+        <attr name="auto_gridlayout_item_margin_bottom" format="dimension"/>
+    </declare-styleable>
+</resources>

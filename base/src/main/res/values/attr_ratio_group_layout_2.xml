@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="RatioGroupLayout">
+        <attr name="ratio_group_layout2_spacing" format="dimension"/>
+    </declare-styleable>
+
+    <declare-styleable name="RatioGroupLayout_Layout">
+        <attr name="ratio_group_layout2_left_col_index" format="integer"/>
+        <attr name="ratio_group_layout2_top_row_index" format="integer"/>
+        <attr name="ratio_group_layout2_right_col_index" format="integer"/>
+        <attr name="ratio_group_layout2_bottom_row_index" format="integer"/>
+    </declare-styleable>
+</resources>

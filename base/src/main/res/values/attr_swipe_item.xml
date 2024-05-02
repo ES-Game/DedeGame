@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="SwipeItemView">
+        <attr name="swipe_item_swipe_view_id" format="integer"/>
+    </declare-styleable>
+</resources>

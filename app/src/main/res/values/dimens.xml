@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Height of the status bar -->
+    <dimen name="status_bar_height">64dp</dimen>
+    <!-- Height of the bottom navigation / system bar. -->
+    <dimen name="navigation_bar_height">88dp</dimen>
+    <!-- Height of the bottom navigation bar in portrait; often the same as @dimen/navigation_bar_height -->
+    <dimen name="navigation_bar_height_landscape">88dp</dimen>
+    <dimen name="vertical_divider_height">@dimen/_24sdp</dimen>
+</resources>

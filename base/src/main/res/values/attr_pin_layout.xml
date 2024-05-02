@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PinLayout">
+        <attr name="pin_layout_pin" format="boolean" />
+        <attr name="pin_layout_dynamic_scale" format="boolean"/>
+    </declare-styleable>
+</resources>

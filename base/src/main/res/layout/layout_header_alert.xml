@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dimen_20"
+    android:paddingBottom="@dimen/dimen_20"
+    android:paddingStart="@dimen/dimen_16"
+    android:paddingEnd="@dimen/dimen_16"
+    android:background="#FF0000"
+    android:gravity="center">
+
+    <ImageView
+        android:id="@+id/ivHeaderAlertIcon"
+        android:layout_width="@dimen/icon_size"
+        android:layout_height="@dimen/icon_size"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_error_info"/>
+
+    <TextView
+        android:id="@+id/tvHeaderAlertMsg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/icon_size"
+        android:layout_marginStart="@dimen/dimen_16"
+        android:layout_gravity="center"
+        android:gravity="center_vertical"
+        android:textColor="#FFFFFF"
+        android:textSize="@dimen/text_size_16"/>
+</LinearLayout>

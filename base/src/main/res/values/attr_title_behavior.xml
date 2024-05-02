@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TitleBehavior">
+        <attr name="title_behavior_toolbar_anchor" format="integer"/>
+        <attr name="title_behavior_above_baseline" format="integer"/>
+        <attr name="title_behavior_collapsed_scale_ratio" format="string"/>
+    </declare-styleable>
+</resources>

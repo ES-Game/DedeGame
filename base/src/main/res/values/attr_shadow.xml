@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="ShadowLayout">
+        <attr name="shadow_layout_color" format="color"/>
+        <attr name="shadow_layout_radius" format="dimension"/>
+        <attr name="shadow_layout_shape">
+            <flag name="rectangle" value="0x0001"/>
+            <flag name="oval" value="0x0010"/>
+        </attr>
+        <attr name="shadow_layout_side">
+            <flag name="all" value="0x1111"/>
+            <flag name="left" value="0x0001"/>
+            <flag name="top" value="0x0010"/>
+            <flag name="right" value="0x0100"/>
+            <flag name="bottom" value="0x1000"/>
+        </attr>
+        <attr name="shadow_layout_padding_exclude" format="boolean"/>
+    </declare-styleable>
+
+</resources>

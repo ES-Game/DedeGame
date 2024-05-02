@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">DedeGame</string>
+    <string name="book_title">Book Title</string>
+    <string name="book_author">Book Author</string>
+    <string name="book_publisher">Book Publisher</string>
+    <string name="book_des">Book Description</string>
+    <string name="add_book_submit">Add Book</string>
+    <string name="item_book_title">Book title: %s</string>
+    <string name="item_book_author">Author: %s</string>
+    <string name="book_detail_title">Book title: %s</string>
+    <string name="book_detail_des">Description: %s</string>
+    <string name="book_detail_publisher">Publisher: %s</string>
+    <string name="book_detail_rank">Rank: %s</string>
+    <string name="news_title">Tin tức</string>
+    <string name="rank_title">Xếp hạng</string>
+    <string name="trending_title">Trending</string>
+
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

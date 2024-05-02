@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="IndicatorView">
+        <attr name="indicator_view_selected_icon" format="reference" />
+        <attr name="indicator_view_unselected_icon" format="reference" />
+        <attr name="indicator_view_icon_width" format="dimension" />
+        <attr name="indicator_view_icon_height" format="dimension" />
+        <attr name="indicator_view_space" format="dimension" />
+        <attr name="indicator_view_slide_duration" format="integer" />
+        <attr name="indicator_view_type" format="enum">
+            <enum name="none" value="0"/>
+            <enum name="slide" value="1"/>
+        </attr>
+    </declare-styleable>
+</resources>

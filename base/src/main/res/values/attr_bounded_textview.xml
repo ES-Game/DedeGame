@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="BoundedTextView">
+        <attr name="bounded_text_view_sample" format="string"/>
+    </declare-styleable>
+</resources>

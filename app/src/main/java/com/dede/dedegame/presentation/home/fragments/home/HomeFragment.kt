@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments
+package com.dede.dedegame.presentation.home.fragments.home
 
 import android.content.Intent
 import com.dede.dedegame.R
@@ -11,8 +11,8 @@ import com.quangph.base.viewbinder.Layout
 import com.quangph.dedegame.domain.model.Home
 import com.quangph.dedegame.domain.model.Rank
 import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.domain.usecase.GetHomeDataAction
-import com.quangph.dedegame.domain.usecase.GetRankingAction
+import com.dede.dedegame.domain.usecase.GetHomeDataAction
+import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.quangph.jetpack.JetFragment
 import java.util.Calendar
 

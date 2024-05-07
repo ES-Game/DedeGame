@@ -1,8 +1,6 @@
-package com.quangph.dedegame.domain.usecase
+package com.dede.dedegame.domain.usecase
 
 import com.quangph.base.mvp.action.Action
-import com.quangph.dedegame.AppConfig
-import com.quangph.dedegame.domain.model.BookPage
 import com.quangph.dedegame.domain.model.Home
 import com.quangph.dedegame.domain.repo.IDedeGameRepo
 import com.quangph.dedegame.domain.repo.RepoFactory

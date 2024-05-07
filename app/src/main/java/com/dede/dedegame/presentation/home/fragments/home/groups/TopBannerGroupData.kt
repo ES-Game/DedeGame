@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.main_game.fragments.groups
+package com.dede.dedegame.presentation.home.fragments.home.groups
 
 import android.os.Handler
 import android.os.Looper

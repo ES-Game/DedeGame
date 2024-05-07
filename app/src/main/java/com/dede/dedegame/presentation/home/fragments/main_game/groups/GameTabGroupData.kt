@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.groups
+package com.dede.dedegame.presentation.home.fragments.main_game.groups
 
 import android.util.Log
 import android.view.View
@@ -11,7 +11,7 @@ import com.dede.dedegame.R
 
 import com.google.android.material.tabs.TabLayout
 
-class HomeTabGroupData(data: Unit?) :
+class GameTabGroupData(data: Unit?) :
     GroupData<Unit>(data) {
     var mPresenter: IPresenter? = null
 
@@ -44,8 +44,8 @@ class HomeTabGroupData(data: Unit?) :
         return INVALID_RESOURCE
     }
 
-    private class TabLayoutVH(itemView: View, val homeTabGroupData: HomeTabGroupData) :
-        GroupRclvVH<Unit, HomeTabGroupData>(itemView) {
+    private class TabLayoutVH(itemView: View, val homeTabGroupData: GameTabGroupData) :
+        GroupRclvVH<Unit, GameTabGroupData>(itemView) {
         private var tabLayout: TabLayout
         init {
             tabLayout = itemView.findViewById(R.id.tlHome)

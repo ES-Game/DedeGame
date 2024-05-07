@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.main_game.fragments
+package com.dede.dedegame.presentation.home.fragments.main_game
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.main_game.fragments.groups.GameTabGroupData
-import com.dede.dedegame.presentation.main_game.fragments.groups.ListStoryGroupData
-import com.dede.dedegame.presentation.main_game.fragments.groups.TopBannerGroupData
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.GameTabGroupData
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListStoryGroupData
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 import com.quangph.dedegame.domain.model.Story

@@ -2,8 +2,8 @@ package com.dede.dedegame.presentation.home
 
 import androidx.fragment.app.Fragment
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.dede.dedegame.presentation.home.fragments.HomeFragment
-import com.dede.dedegame.presentation.main_game.fragments.MainGameFragment
+import com.dede.dedegame.presentation.home.fragments.home.HomeFragment
+import com.dede.dedegame.presentation.home.fragments.main_game.MainGameFragment
 import com.quangph.jetpack.JetActivity
 
 class HomeAdapter(activity: JetActivity<*>) : FragmentStateAdapter(activity) {

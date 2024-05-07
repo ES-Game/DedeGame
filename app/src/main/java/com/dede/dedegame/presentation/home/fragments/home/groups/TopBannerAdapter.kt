@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.groups
+package com.dede.dedegame.presentation.home.fragments.home.groups
 
 import android.annotation.SuppressLint
 import android.view.View

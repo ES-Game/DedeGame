@@ -18,7 +18,7 @@
         android:id="@+id/tab_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Tab Title"
+        android:text=""
         android:textStyle="bold"
         android:textColor="@color/orange_300"
         android:textSize="@dimen/size_text_medium"

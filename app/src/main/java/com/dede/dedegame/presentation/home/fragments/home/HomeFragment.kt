@@ -4,7 +4,6 @@ import android.content.Intent
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
 import com.dede.dedegame.domain.usecase.GetRankingAction
-import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
@@ -14,7 +13,6 @@ import com.quangph.base.viewbinder.Layout
 import com.quangph.dedegame.domain.model.Home
 import com.quangph.dedegame.domain.model.Rank
 import com.quangph.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.presentation.home.fragments.home.HomeFragmentView
 
 import com.quangph.jetpack.JetFragment
 import java.util.Calendar
@@ -95,7 +93,7 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
     }
 
     private fun goToStoryDetail(storyDetail: StoryDetail) {
-        val intent = Intent(activity, ChapterActivity:: class.java)
+        val intent = Intent(activity, StoryCoverActivity:: class.java)
         intent.putExtra("storyId", storyDetail.id)
         activity?.startActivity(intent)
     }

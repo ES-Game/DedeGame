@@ -27,4 +27,6 @@
     <string name="story_cover_top_comment_label">Comments</string>
     <string name="story_cover_top_read_later">Đọc sau</string>
     <string name="story_cover_summary_title">Tóm tắt</string>
+
+    <string name="shop_screen_label">Gói đăng ký hệ thống</string>
 </resources>

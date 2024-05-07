@@ -1,6 +1,8 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic.states
 
-import com.dede.dedegame.presentation.home.common.TimeUtil
+
+import com.dede.dedegame.domain.usecase.GetRankingAction
+import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.home.fragments.home.HomeFragment
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragment
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragmentView
@@ -8,7 +10,6 @@ import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.mvpcomponent.MVPState
 import com.quangph.dedegame.domain.model.Rank
-import com.quangph.dedegame.domain.usecase.GetRankingAction
 import java.util.Calendar
 
 class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView): MVPState<HomeComicsFragment, HomeComicsFragmentView>(stateContext, view){

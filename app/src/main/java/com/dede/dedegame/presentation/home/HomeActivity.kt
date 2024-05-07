@@ -1,4 +1,4 @@
-package com.quangph.dedegame.presentation.home
+package com.dede.dedegame.presentation.home
 
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout

@@ -9,4 +9,9 @@
     <color name="white">#FFFFFFFF</color>
     <color name="orange_300">#f47820</color>
     <color name="gray_300">#505050</color>
+
+    <color name="black_opacity_80">#CC000000</color>
+    <color name="orange_300_opacity_80">#CCF47820</color>
+    <color name="orange_300_opacity_16">#29F47820</color>
+
 </resources>

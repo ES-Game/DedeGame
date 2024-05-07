@@ -1,13 +1,13 @@
-package com.quangph.dedegame.presentation.home
+package com.dede.dedegame.presentation.home
 
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.Button
-import android.widget.EditText
+import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
-import com.quangph.base.mvp.ICommand
-import com.quangph.base.mvp.mvpcomponent.view.BaseLinearView
 import com.dede.dedegame.R
+import com.dede.dedegame.presentation.home.HomeAdapter
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.jetpack.JetActivity
@@ -22,7 +22,7 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         super.onInitView()
         vpMain = findViewById(R.id.vpHome)
         bnvMain = findViewById(R.id.bottom_nav)
-
+        setupToolbar()
         adapter = HomeAdapter(context as JetActivity<*>)
         vpMain.adapter = adapter
         vpMain.isUserInputEnabled = false
@@ -51,6 +51,14 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         })
     }
 
+    private fun setupToolbar(){
+        val containerBack : View = findViewById(R.id.containerBack)
+        val txtStartTitle : TextView = findViewById(R.id.txtStartTitle)
+        val txtCenterTitle : TextView = findViewById(R.id.txtCenterTitle)
+        containerBack.visibility = View.GONE
+        txtStartTitle.text = "Home"
+    }
+
     fun showHomeFragment() {
         adapter.notifyItemChanged(0)
     }
@@ -58,10 +66,6 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
     fun changeToTabId(tabId: Int) {
         bnvMain.selectedItemId = tabId
     }
-
-    class SubmitBookCmd(
-        val bookTitle: String, val bookAuthor: String, val bookPublisher: String, val bookDes: String
-    ) : ICommand
 }
 
 

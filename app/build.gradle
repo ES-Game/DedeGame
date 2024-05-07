@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.dede.dedegame"
-        minSdk 29
+        minSdk 23
         targetSdk 34
         versionCode 1
         versionName "1.0"
@@ -50,7 +50,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.16.0")
     // If you want to use the GPU Filters
     implementation ("jp.co.cyberagent.android:gpuimage:2.1.0")
-
+    implementation "androidx.cardview:cardview:1.0.0"
     retrofit()
 //    implementation project(path: ':base')
 }

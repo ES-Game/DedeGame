@@ -12,8 +12,9 @@ import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
 import com.quangph.dedegame.domain.model.Story
-import com.dede.dedegame.presentation.home.fragments.home.Groups.TopBannerAdapter
+import com.dede.dedegame.presentation.home.fragments.home.groups.TopBannerAdapter
 import com.dede.dedegame.presentation.commom.IndicatorView
+import com.dede.dedegame.presentation.home.fragments.home.groups.ItemViewType
 
 class TopBannerGroupData(listStory: List<Story>?) :
     GroupData<List<Story>>(listStory) {

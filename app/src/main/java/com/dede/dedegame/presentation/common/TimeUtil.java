@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.common;
+package com.dede.dedegame.presentation.common;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

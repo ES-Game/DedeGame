@@ -4,16 +4,14 @@ import android.content.Context
 import android.util.AttributeSet
 import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.home.Groups.HomeTabGroupData
-import com.dede.dedegame.presentation.home.fragments.home.Groups.ListStoryGroupData
-import com.dede.dedegame.presentation.home.fragments.home.Groups.TopBannerGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.HomeTabGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.ListStoryGroupData
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.quangph.dedegame.domain.model.Story
 import com.quangph.dedegame.domain.model.StoryDetail
 
 class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {

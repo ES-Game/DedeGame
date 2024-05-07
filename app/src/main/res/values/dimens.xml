@@ -8,4 +8,29 @@
     <dimen name="navigation_bar_height_landscape">88dp</dimen>
     <dimen name="vertical_divider_height">@dimen/_24sdp</dimen>
     <dimen name="corner_12">@dimen/_12sdp</dimen>
+
+    <dimen name="size_text_very_small">10sp</dimen>
+    <dimen name="size_text_small">12sp</dimen>
+    <dimen name="size_text_medium">14sp</dimen>
+    <dimen name="size_text_large">16sp</dimen>
+
+    <dimen name="size_icon_medium">18dp</dimen>
+    <dimen name="size_icon_40dp">40dp</dimen>
+    <dimen name="size_icon_58dp">58dp</dimen>
+
+    <dimen name="margin_left_right_layout">16dp</dimen>
+
+    <dimen name="padding_icon_toolbar">16dp</dimen>
+
+
+    <dimen name="margin_small_between_part_in_item">5dp</dimen>
+    <dimen name="margin_small_to_medium_between_part_in_item">8dp</dimen>
+    <dimen name="margin_between_part_in_item_10dp">10dp</dimen>
+    <dimen name="margin_between_part_in_item_15dp">10dp</dimen>
+
+    <dimen name="margin_left_right_decorate">24dp</dimen>
+    <dimen name="margin_top_bottom_decorate">16dp</dimen>
+
+
+
 </resources>

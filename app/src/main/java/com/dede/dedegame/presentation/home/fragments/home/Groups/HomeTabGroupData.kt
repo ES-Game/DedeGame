@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.home.Groups
+package com.dede.dedegame.presentation.home.fragments.home.groups
 
 import android.util.Log
 import android.view.View
@@ -8,6 +8,7 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
 
 import com.google.android.material.tabs.TabLayout
 

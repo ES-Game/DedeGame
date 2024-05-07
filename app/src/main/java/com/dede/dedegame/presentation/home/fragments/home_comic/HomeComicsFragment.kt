@@ -2,7 +2,8 @@ package com.dede.dedegame.presentation.home.fragments.home_comic
 
 import android.content.Intent
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.common.TimeUtil
+import com.dede.dedegame.presentation.chapter.ChapterActivity
+
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.CategoryState
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.RankState
 import com.quangph.base.mvp.ICommand
@@ -12,9 +13,7 @@ import com.quangph.base.viewbinder.Layout
 import com.quangph.dedegame.domain.model.Home
 import com.quangph.dedegame.domain.model.Rank
 import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.domain.usecase.GetHomeDataAction
-import com.quangph.dedegame.domain.usecase.GetRankingAction
-import com.quangph.dedegame.presentation.chapter.ChapterActivity
+
 import com.quangph.jetpack.JetFragment
 import java.util.Calendar
 

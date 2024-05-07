@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.home.Groups
+package com.dede.dedegame.presentation.home.fragments.home.groups
 
 class ItemViewType {
     companion object {

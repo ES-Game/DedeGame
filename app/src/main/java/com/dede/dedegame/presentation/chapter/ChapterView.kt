@@ -20,6 +20,7 @@ import android.widget.TextView
 import android.widget.Toast
 import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
+import com.dede.dedegame.presentation.story_cover.StoryCoverView
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.dedegame.domain.model.Chapter
 
@@ -32,9 +33,9 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
     override fun onInitView() {
         super.onInitView()
         tvChapterName = findViewById(R.id.tvStoryNameDetail)
-
         spListChapter = findViewById(R.id.spListChapter)
         spListChapter.setSelection(0)
+        setupToolbar()
 
         wvContent = findViewById(R.id.wvContent)
         CookieManager.getInstance().setAcceptCookie(true)
@@ -91,6 +92,16 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
 
     }
 
+    private fun setupToolbar(){
+        val containerBack : View = findViewById(R.id.containerBack)
+        val txtStartTitle : TextView = findViewById(R.id.txtStartTitle)
+        val txtCenterTitle : TextView = findViewById(R.id.txtCenterTitle)
+        txtCenterTitle.text = "Chapter"
+        containerBack.setOnClickListener {
+            mPresenter.executeCommand(OnBackCmd())
+        }
+    }
+
     fun fillDataToSpinner(chapters: List<Chapter>) {
 
         val listChapterName = chapters.map { chapter: Chapter -> chapter.title }
@@ -123,6 +134,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
     }
 
     class ChangeChapterCmd(val chapterId: Int): ICommand {}
+    class OnBackCmd() : ICommand
 }
 
 

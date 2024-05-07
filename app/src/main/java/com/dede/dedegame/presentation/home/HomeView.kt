@@ -33,7 +33,7 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
                     vpMain.currentItem = 0
                     return@OnNavigationItemSelectedListener true
                 }
-                R.id.store_tab -> {
+                R.id.story_tab -> {
                     vpMain.currentItem = 1
                     return@OnNavigationItemSelectedListener true
                 }

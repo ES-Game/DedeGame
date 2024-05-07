@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.quangph.dedegame.presentation.home.HomeFragmentView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.dede.dedegame.presentation.home.fragments.home.HomeFragmentView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.home.fragments.HomeFragment">
+    tools:context=".presentation.home.fragments.home.HomeFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -15,4 +15,4 @@
 
     </androidx.recyclerview.widget.RecyclerView>
 
-</com.quangph.dedegame.presentation.home.HomeFragmentView>
+</com.dede.dedegame.presentation.home.fragments.home.HomeFragmentView>

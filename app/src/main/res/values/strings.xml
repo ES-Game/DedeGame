@@ -14,6 +14,9 @@
     <string name="news_title">Tin tức</string>
     <string name="rank_title">Xếp hạng</string>
     <string name="trending_title">Trending</string>
+    <string name="rank_title_button">Bảng xếp hạng</string>
+    <string name="category_title_button">Phân loại</string>
+
 
 
     <!-- TODO: Remove or change this placeholder text -->

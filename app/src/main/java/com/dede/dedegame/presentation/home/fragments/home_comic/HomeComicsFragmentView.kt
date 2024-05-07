@@ -9,9 +9,11 @@ import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
 import com.dede.dedegame.presentation.home.fragments.home.groups.HomeTabGroupData
 import com.dede.dedegame.presentation.home.fragments.home.groups.ListStoryGroupData
+import com.dede.dedegame.presentation.home.fragments.home_comic.groups.RankStoryGroupData
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
+import com.quangph.dedegame.domain.model.Category
 import com.quangph.dedegame.domain.model.StoryDetail
 
 class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
@@ -21,9 +23,7 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
     private var btnRankList: Button? = null
 
     private val homeContentAdapter = GroupRclvAdapter()
-    private val topBannerGroupData = TopBannerGroupData(null)
-    private val homeTabGroupData = HomeTabGroupData(null)
-    private val listStoryGroupData = ListStoryGroupData(null)
+    private val rankGroupData = RankStoryGroupData(null)
 
 
     override fun onInitView() {
@@ -50,11 +50,12 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
 
     }
 
+    fun showStoryCategories(stories: List<StoryDetail>) {
 
+    }
 
-    fun showListStory(data: List<StoryDetail>) {
-        listStoryGroupData.reset(data)
-        listStoryGroupData.show()
+    fun showStoryRankList(stories: List<StoryDetail>) {
+
     }
 
     private fun setupCategoryBtnState(isSelected: Boolean) {

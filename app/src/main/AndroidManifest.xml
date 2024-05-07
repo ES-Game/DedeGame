@@ -16,7 +16,7 @@
         tools:targetApi="31">
 
         <activity
-            android:name="com.quangph.dedegame.presentation.home.HomeActivity"
+            android:name="com.dede.dedegame.presentation.splash.SplashActivity"
             android:exported="true">
             <meta-data
                 android:name="android.app.lib_name"
@@ -28,10 +28,29 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
-            android:name="com.quangph.dedegame.presentation.chapter.ChapterActivity"
+            android:name=".presentation.home.HomeActivity"
             android:exported="false"
-            android:parentActivityName="com.quangph.dedegame.presentation.home.HomeActivity">
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name=".presentation.chapter.ChapterActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name="com.dede.dedegame.presentation.story_cover.StoryCoverActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

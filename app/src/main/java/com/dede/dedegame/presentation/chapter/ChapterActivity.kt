@@ -1,21 +1,27 @@
-package com.quangph.dedegame.presentation.chapter
+package com.dede.dedegame.presentation.chapter
 
+import android.os.Parcel
+import android.os.Parcelable
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
 import com.dede.dedegame.R
-import com.quangph.base.mvp.action.Action
-import com.quangph.base.mvp.action.ActionException
 import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.domain.usecase.GetStoryDetailAction
+import com.quangph.dedegame.presentation.chapter.ChapterView
+import com.quangph.jetpack.IScreenData
 
 @Layout(R.layout.activity_chapter)
 class ChapterActivity : JetActivity<ChapterView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
-        val storyId = intent.getIntExtra("storyId", -1)
-        getStory(storyId)
+
+        val input : StoryDetail? = intent.getParcelableExtra("key_data_story")
+        input?.let {
+            it.title?.let { it1 -> mvpView.setStoryName(it1) }
+            it.chapters?.reversed()?.let { it1 -> mvpView.fillDataToSpinner(it1) }
+            it.chapters?.reversed()?.first()?.id?.let { it1 -> getChapterDetail(it1) }
+        }
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -24,35 +30,10 @@ class ChapterActivity : JetActivity<ChapterView>() {
             is ChapterView.ChangeChapterCmd -> {
                 getChapterDetail(command.chapterId)
             }
-        }
-    }
-
-
-    private fun getStory(id: Int) {
-        showLoading()
-
-        val rv = GetStoryDetailAction.RV().apply {
-            this.storyId = id
-        }
-
-        mActionManager.executeAction(GetStoryDetailAction(), rv, object : Action.SimpleActionCallback<StoryDetail>() {
-            override fun onSuccess(responseValue: StoryDetail?) {
-                super.onSuccess(responseValue)
-                hideLoading()
-                responseValue?.title?.let { mvpView.setStoryName(it) }
-                responseValue?.chapters?.reversed()?.first()?.id?.let {
-                    getChapterDetail(it)
-                }
-                responseValue?.chapters?.reversed()?.let {
-                    mvpView.fillDataToSpinner(it)
-                }
+            is ChapterView.OnBackCmd -> {
+                onBackPressedDispatcher.onBackPressed()
             }
-
-            override fun onError(e: ActionException) {
-                super.onError(e)
-                hideLoading()
-            }
-        })
+        }
     }
 
     private fun getChapterDetail(id: Int) {
@@ -61,4 +42,32 @@ class ChapterActivity : JetActivity<ChapterView>() {
     }
 
 
+    class ChapterInput() : IScreenData {
+        var storyDetail: StoryDetail? = null
+
+        constructor(parcel: Parcel) : this() {
+            storyDetail = parcel.readParcelable(StoryDetail::class.java.classLoader)
+        }
+
+
+        override fun writeToParcel(parcel: Parcel, flags: Int) {
+            parcel.writeParcelable(storyDetail, flags)
+        }
+
+        override fun describeContents(): Int {
+            return 0
+        }
+
+        companion object CREATOR : Parcelable.Creator<ChapterInput> {
+            override fun createFromParcel(parcel: Parcel): ChapterInput {
+                return ChapterInput(parcel)
+            }
+
+            override fun newArray(size: Int): Array<ChapterInput?> {
+                return arrayOfNulls(size)
+            }
+        }
+
+
+    }
 }

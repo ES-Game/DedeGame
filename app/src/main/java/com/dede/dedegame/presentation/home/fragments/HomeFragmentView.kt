@@ -1,4 +1,4 @@
-package com.quangph.dedegame.presentation.home
+package com.dede.dedegame.presentation.home.fragments
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.Groups.HomeTabGroupData
-import com.dede.dedegame.presentation.home.fragments.Groups.ListStoryGroupData
-import com.dede.dedegame.presentation.home.fragments.Groups.TopBannerGroupData
+import com.dede.dedegame.presentation.home.fragments.groups.HomeTabGroupData
+import com.dede.dedegame.presentation.home.fragments.groups.ListStoryGroupData
+import com.dede.dedegame.presentation.home.fragments.groups.TopBannerGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 import com.quangph.dedegame.domain.model.Story
@@ -26,7 +26,7 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
     override fun onInitView() {
         super.onInitView()
 
-        rvContent = findViewById<RecyclerView>(R.id.rvContent)
+        rvContent = findViewById(R.id.rvContent)
         rvContent!!.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
         rvContent!!.adapter = homeContentAdapter
         homeContentAdapter.addGroup(topBannerGroupData)

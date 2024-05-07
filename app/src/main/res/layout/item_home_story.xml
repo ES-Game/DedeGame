@@ -3,12 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp">
 
     <ImageView
         android:id="@+id/ivThumb"
         android:layout_width="@dimen/_100sdp"
         android:layout_height="@dimen/_150sdp"
+        android:scaleType="centerCrop"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -20,7 +23,7 @@
 
     <TextView
         android:id="@+id/tvStoryName"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
@@ -42,7 +45,7 @@
 
     </TextView>
 
-    <TextView
+    <com.dede.dedegame.presentation.common.JustifiedTextView
         android:id="@+id/tvDesc"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -52,6 +55,6 @@
         app:layout_constraintStart_toEndOf="@id/ivThumb"
         app:layout_constraintTop_toBottomOf="@+id/tvStoryName">
 
-    </TextView>
+    </com.dede.dedegame.presentation.common.JustifiedTextView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

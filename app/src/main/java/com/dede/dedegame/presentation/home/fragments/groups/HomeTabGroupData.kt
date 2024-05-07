@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.Groups
+package com.dede.dedegame.presentation.home.fragments.groups
 
 import android.util.Log
 import android.view.View

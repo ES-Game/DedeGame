@@ -1,20 +1,15 @@
-package com.dede.dedegame.presentation.home.fragments.Groups
+package com.dede.dedegame.presentation.home.fragments.groups
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
-import com.quangph.dedegame.domain.model.Story
 import com.quangph.dedegame.domain.model.StoryDetail
 
 

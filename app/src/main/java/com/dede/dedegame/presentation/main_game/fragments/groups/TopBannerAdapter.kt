@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.home.fragments.Groups
+package com.dede.dedegame.presentation.main_game.fragments.groups
 
 import android.annotation.SuppressLint
 import android.view.View
@@ -10,7 +10,6 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
 import com.quangph.dedegame.domain.model.Story
-import com.quangph.jetpack.imageloader.ImageLoaderFactory
 
 
 class TopBannerAdapter : BaseRclvAdapter(){

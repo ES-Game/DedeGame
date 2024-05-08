@@ -29,4 +29,8 @@
     <string name="story_cover_summary_title">Tóm tắt</string>
 
     <string name="shop_screen_label">Gói đăng ký hệ thống</string>
+
+    <string name="event_title">Sự kiện</string>
+    <string name="notification_title">Thông báo</string>
+    <string name="game_title">Games</string>
 </resources>

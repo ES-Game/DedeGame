@@ -2,14 +2,14 @@ package com.dede.dedegame.presentation.home.fragments.main_game.groups
 
 import android.util.Log
 import android.view.View
-
+import android.widget.Toast
+import com.dede.dedegame.R
+import com.dede.dedegame.presentation.widget.customTab.CustomTabView
+import com.dede.dedegame.presentation.widget.customTab.TabModel
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.R
-
-import com.google.android.material.tabs.TabLayout
 
 class GameTabGroupData(data: Unit?) :
     GroupData<Unit>(data) {
@@ -29,7 +29,7 @@ class GameTabGroupData(data: Unit?) :
 
     override fun onCreateVH(itemView: View, viewType: Int): BaseRclvHolder<*>? {
         Log.i("onCreateVH tablayout", "")
-        if ( viewType == ItemViewType.TAB_LAYOUT) {
+        if (viewType == ItemViewType.TAB_LAYOUT) {
             Log.i("onCreateVH tablayout", "TAB_LAYOUT")
             return TabLayoutVH(itemView, this)
         }
@@ -46,24 +46,42 @@ class GameTabGroupData(data: Unit?) :
 
     private class TabLayoutVH(itemView: View, val homeTabGroupData: GameTabGroupData) :
         GroupRclvVH<Unit, GameTabGroupData>(itemView) {
-        private var tabLayout: TabLayout
+        private var tabLayout: CustomTabView
+
         init {
             tabLayout = itemView.findViewById(R.id.tlHome)
-            val firstTab = tabLayout.newTab()
-            firstTab.setText(R.string.news_title)
+            tabLayout.addItemTab(
+                TabModel(
+                    tabLayout.context.getString(R.string.event_title),
+                    R.drawable.event,
+                    R.drawable.event_unselect,
+                    true
+                )
+            )
+            tabLayout.addItemTab(
+                TabModel(
+                    tabLayout.context.getString(R.string.notification_title),
+                    R.drawable.megaphone,
+                    R.drawable.megaphone_unselect,
+                    false
+                )
+            )
+            tabLayout.addItemTab(
+                TabModel(
+                    tabLayout.context.getString(R.string.game_title),
+                    R.drawable.gaming,
+                    R.drawable.gaming_unselect,
+                    false
+                )
+            )
 
-            val secondTab = tabLayout.newTab()
-            secondTab.setText(R.string.rank_title)
-
-            val thirdTab = tabLayout.newTab()
-            thirdTab.setText(R.string.trending_title)
-
-            tabLayout.addTab(firstTab)
-
-            tabLayout.addTab(secondTab)
-
-            tabLayout.addTab(thirdTab)
-
+            tabLayout.setEvenListener { tabModel, pos ->
+                Toast.makeText(
+                    tabLayout.context,
+                    tabModel?.name,
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
 
         }
 

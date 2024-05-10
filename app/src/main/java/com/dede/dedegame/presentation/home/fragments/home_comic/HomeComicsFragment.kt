@@ -40,6 +40,13 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
             is HomeComicsFragmentView.GotoStoryDetailCmd -> {
                 goToStoryDetail(command.item)
             }
+            is HomeComicsFragmentView.OnclickCategoryCmd -> {
+                transitToState(StateName.CATEGORY)
+            }
+
+            is HomeComicsFragmentView.OnclickRankCmd -> {
+                transitToState(StateName.RANK)
+            }
         }
     }
 

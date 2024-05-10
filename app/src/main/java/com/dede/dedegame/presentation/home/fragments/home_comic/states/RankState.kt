@@ -16,6 +16,8 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView):
 
     override fun onEnter() {
         super.onEnter()
+        mView.setupRankLayout()
+        getRanking()
     }
 
     private fun getRanking() {
@@ -36,7 +38,7 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView):
                 super.onSuccess(responseValue)
                 mStateContext.hideLoading()
                 if (responseValue != null) {
-                    responseValue.all?.let { mView.showListStory(it) }
+                    responseValue.all?.let { mView.showStoryRankList(it) }
                 }
             }
 

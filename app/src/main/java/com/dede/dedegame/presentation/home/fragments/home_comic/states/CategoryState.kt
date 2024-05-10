@@ -14,6 +14,8 @@ class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentVi
 
     override fun onEnter() {
         super.onEnter()
+        mView.setupCategoryLayout()
+        getHomeData()
     }
 
     private fun getHomeData() {
@@ -27,8 +29,8 @@ class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentVi
                 super.onSuccess(responseValue)
                 mStateContext.hideLoading()
                 if (responseValue != null) {
-                    responseValue.featuredStories?.let {
-
+                    responseValue.categories?.let {
+                        mView.showStoryCategories(it)
                     }
                 }
             }

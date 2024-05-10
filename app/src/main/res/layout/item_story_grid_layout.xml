@@ -5,21 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.dede.dedegame.presentation.widget.RoundedTextView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        app:cornerRadiusTopLeft="0dp"
-        app:cornerRadiusBottomLeft="20dp"
-        app:cornerRadiusTopRight="20dp"
-        app:cornerRadiusBottomRight="20dp"
-        app:borderWidth="5dp"
-        app:borderColor="@android:color/holo_blue_bright"
-        app:solidColor="@color/orange_300"
-        app:layout_constraintTop_toTopOf="@+id/ivThumb"
-        app:layout_constraintStart_toStartOf="@+id/ivThumb">
-
-    </com.dede.dedegame.presentation.widget.RoundedTextView>
-
     <ImageView
         android:id="@+id/ivThumb"
         android:layout_width="0dp"
@@ -32,46 +17,65 @@
         app:layout_constraintTop_toTopOf="parent">
 
     </ImageView>
+    <com.dede.dedegame.presentation.widget.RoundedTextView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:cornerRadiusTopLeft="0dp"
+        app:cornerRadiusBottomLeft="4dp"
+        app:cornerRadiusTopRight="4dp"
+        app:cornerRadiusBottomRight="4dp"
+        app:borderWidth="2dp"
+        app:borderColor="@android:color/holo_blue_bright"
+        app:solidColor="@color/black"
+        app:layout_constraintTop_toTopOf="@+id/ivThumb"
+        app:layout_constraintStart_toStartOf="@+id/ivThumb">
+
+    </com.dede.dedegame.presentation.widget.RoundedTextView>
 
     <TextView
         android:id="@+id/tvDesc"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:maxLines="1"
+        android:ellipsize="end"
         app:layout_constraintStart_toStartOf="@id/ivThumb"
         app:layout_constraintEnd_toEndOf="@id/ivThumb"
         app:layout_constraintTop_toBottomOf="@+id/ivThumb">
 
     </TextView>
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toStartOf="@id/ivThumb"
+        android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintStart_toStartOf="@id/ivThumb"
+        app:layout_constraintTop_toBottomOf="@+id/tvDesc">
+
         <ImageView
             android:id="@+id/ivHeart"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:background="@drawable/ic_heart"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
         </ImageView>
+
         <TextView
             android:id="@+id/tvLiked"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/_4sdp"
             android:text="100k"
-            app:layout_constraintStart_toEndOf="@id/ivHeart"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/ivHeart"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/ivHeart">
+            app:layout_constraintStart_toEndOf="@id/ivHeart"
+            app:layout_constraintTop_toTopOf="@id/ivHeart">
 
         </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -80,30 +84,32 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="@id/ivThumb"
+        android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
+        app:layout_constraintEnd_toEndOf="@id/ivThumb"
+        app:layout_constraintTop_toBottomOf="@+id/tvDesc">
+
         <ImageView
             android:id="@+id/ivViewed"
-            android:layout_width="@dimen/_16sdp"
-            android:layout_height="@dimen/_16sdp"
+            android:layout_width="@dimen/_10sdp"
+            android:layout_height="@dimen/_10sdp"
             android:background="@drawable/ic_heart"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent">
+            app:layout_constraintTop_toTopOf="parent">
 
         </ImageView>
+
         <TextView
             android:id="@+id/tvViewed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginStart="@dimen/_4sdp"
             android:text="100k"
-            app:layout_constraintStart_toEndOf="@id/ivViewed"
+            app:layout_constraintBottom_toBottomOf="@id/ivViewed"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@id/ivViewed">
+            app:layout_constraintStart_toEndOf="@id/ivViewed"
+            app:layout_constraintTop_toTopOf="@id/ivViewed">
 
         </TextView>
     </androidx.constraintlayout.widget.ConstraintLayout>

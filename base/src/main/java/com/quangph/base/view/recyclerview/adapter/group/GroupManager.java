@@ -1,5 +1,6 @@
 package com.quangph.base.view.recyclerview.adapter.group;
 
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -54,7 +55,9 @@ public class GroupManager {
         mDataSet.add(index, data);
         if (data.getCount() == 0) {
             data.detach();
+            Log.i("Data detach", String.valueOf(data.getCount()));
         } else if (!data.isAttached()) {
+            Log.i("Data attach", String.valueOf(data.getCount()));
             data.attach();
             shiftAdapterPosition(data, data.getCount());
         }

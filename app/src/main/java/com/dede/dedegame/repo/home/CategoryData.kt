@@ -8,7 +8,7 @@ data class CategoryData(
     var id: Int? = null,
     @SerializedName("name")
     var name: String? = null,
-    @SerializedName("views")
+    @SerializedName("stories")
     var stories: List<StoryData>? = null,
 
 )

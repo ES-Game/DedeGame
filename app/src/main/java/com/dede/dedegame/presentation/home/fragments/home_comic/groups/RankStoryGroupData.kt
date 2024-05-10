@@ -63,15 +63,12 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
         GroupRclvVH<StoryDetail, RankStoryGroupData>(itemView) {
 
         private var ivThumb: ImageView
-        private var tvName: TextView
-        private var tvCreatedAt: TextView
         private var tvDes: TextView
 
         init {
 
             ivThumb = itemView.findViewById(R.id.ivThumb)
-            tvName = itemView.findViewById(R.id.tvStoryName)
-            tvCreatedAt = itemView.findViewById(R.id.tvCreateAt)
+
             tvDes = itemView.findViewById(R.id.tvDesc)
 
 
@@ -90,9 +87,9 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
                     .load(story.image)
                     .centerCrop()
                     .into(ivThumb);
-                tvName.text = story.title
+
                 tvDes.text = story.description
-                tvCreatedAt.text = story.createdAt
+
             }
 
         }

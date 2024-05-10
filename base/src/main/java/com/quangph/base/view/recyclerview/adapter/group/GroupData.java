@@ -1,7 +1,9 @@
 package com.quangph.base.view.recyclerview.adapter.group;
 
+import android.util.Log;
 import android.view.View;
 
+import com.google.gson.Gson;
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder;
 
 
@@ -32,6 +34,7 @@ public abstract class GroupData<T> {
 
     public void attach() {
         adapterPosition = mManager.findAdapterPositionForGroup(this);
+        Log.i("Adapter position", String.valueOf(adapterPosition));
     }
 
     public void attachAndNotify() {

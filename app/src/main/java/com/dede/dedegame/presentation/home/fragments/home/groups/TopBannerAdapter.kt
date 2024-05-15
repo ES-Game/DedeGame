@@ -9,7 +9,7 @@ import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
-import com.quangph.dedegame.domain.model.Story
+import com.dede.dedegame.domain.model.Story
 import com.quangph.jetpack.imageloader.ImageLoaderFactory
 
 

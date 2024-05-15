@@ -1,4 +1,4 @@
-package com.quangph.dedegame.extension.parcel
+package com.dede.dedegame.extension.parcel
 
 import android.os.Parcelable
 

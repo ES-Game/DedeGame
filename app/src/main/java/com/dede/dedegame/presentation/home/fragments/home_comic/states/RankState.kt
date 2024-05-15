@@ -9,7 +9,7 @@ import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragme
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.mvpcomponent.MVPState
-import com.quangph.dedegame.domain.model.Rank
+import com.dede.dedegame.domain.model.Rank
 import java.util.Calendar
 
 class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView): MVPState<HomeComicsFragment, HomeComicsFragmentView>(stateContext, view){

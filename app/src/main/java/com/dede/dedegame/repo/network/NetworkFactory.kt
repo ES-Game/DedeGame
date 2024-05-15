@@ -1,7 +1,7 @@
-package com.quangph.dedegame.repo.network
+package com.dede.dedegame.repo.network
 
 import android.util.Log
-import com.quangph.dedegame.repo.ApiConfig
+import com.dede.dedegame.repo.ApiConfig
 import retrofit2.Retrofit
 import java.util.concurrent.ConcurrentHashMap
 

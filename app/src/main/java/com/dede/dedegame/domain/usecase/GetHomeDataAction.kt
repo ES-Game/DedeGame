@@ -1,9 +1,9 @@
 package com.dede.dedegame.domain.usecase
 
 import com.quangph.base.mvp.action.Action
-import com.quangph.dedegame.domain.model.Home
-import com.quangph.dedegame.domain.repo.IDedeGameRepo
-import com.quangph.dedegame.domain.repo.RepoFactory
+import com.dede.dedegame.domain.model.Home
+import com.dede.dedegame.domain.repo.IDedeGameRepo
+import com.dede.dedegame.domain.repo.RepoFactory
 
 class GetHomeDataAction : Action<GetHomeDataAction.RV, Home>() {
 

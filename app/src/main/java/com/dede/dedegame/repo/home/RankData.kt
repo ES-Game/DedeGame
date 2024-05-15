@@ -1,8 +1,8 @@
-package com.quangph.dedegame.repo.home
+package com.dede.dedegame.repo.home
 
 
 import com.google.gson.annotations.SerializedName
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryDetail
 
 data class RankData(
     @SerializedName("all")

@@ -6,8 +6,8 @@ import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
 import com.dede.dedegame.R
-import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.presentation.chapter.ChapterView
+import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.presentation.chapter.ChapterView
 import com.quangph.jetpack.IScreenData
 
 @Layout(R.layout.activity_chapter)

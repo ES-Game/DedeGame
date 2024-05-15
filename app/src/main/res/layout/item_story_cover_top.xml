@@ -47,8 +47,8 @@
                     android:layout_height="wrap_content"
                     android:minHeight="48dp"
                     android:textColor="@color/white"
-                    android:textStyle="bold"
                     android:text="@string/story_cover_top_read_now"
+                    android:fontFamily="@font/montserrat_semi_bold"
                     android:textSize="@dimen/size_text_medium"
                     android:textAllCaps="true"
                     android:background="@color/orange_300_opacity_80"
@@ -62,8 +62,8 @@
                     android:textColor="@color/white"
                     android:textSize="@dimen/size_text_medium"
                     android:textAllCaps="true"
-                    android:textStyle="bold"
                     android:text="@string/story_cover_top_read_later"
+                    android:fontFamily="@font/montserrat_semi_bold"
                     android:gravity="center"
                     android:layout_weight="1"
                     android:background="@color/black_opacity_80"/>
@@ -92,7 +92,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/orange_300"
-            android:textStyle="bold"
+            android:fontFamily="@font/montserrat_bold"
             android:textAllCaps="true"
             android:textSize="@dimen/size_text_large"
             app:layout_constraintEnd_toEndOf="parent"
@@ -124,12 +124,13 @@
                     android:id="@+id/imvFavorite"
                     android:layout_width="@dimen/size_icon_medium"
                     android:layout_height="@dimen/size_icon_medium"
-                    android:background="@drawable/ic_game_tab"/>
+                    android:background="@drawable/ic_lock"/>
 
                 <TextView
                     android:id="@+id/txtFavCount"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
                     android:layout_marginStart="@dimen/margin_small_between_part_in_item"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_medium" />
@@ -151,12 +152,13 @@
                     android:id="@+id/imvIconViewer"
                     android:layout_width="@dimen/size_icon_medium"
                     android:layout_height="@dimen/size_icon_medium"
-                    android:background="@drawable/ic_game_tab"/>
+                    android:background="@drawable/ic_lock"/>
 
                 <TextView
                     android:id="@+id/txtCountViewer"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
                     android:layout_marginStart="@dimen/margin_small_between_part_in_item"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_medium" />
@@ -179,7 +181,7 @@
                     android:id="@+id/imvCmt"
                     android:layout_width="@dimen/size_icon_medium"
                     android:layout_height="@dimen/size_icon_medium"
-                    android:background="@drawable/ic_game_tab"
+                    android:background="@drawable/ic_lock"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -192,6 +194,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_medium"
                     android:text="00"
+                    android:fontFamily="@font/montserrat_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imvCmt"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -204,6 +207,7 @@
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_very_small"
                     android:text="@string/story_cover_top_comment_label"
+                    android:fontFamily="@font/montserrat_regular"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imvCmt"
@@ -232,6 +236,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textColor="@color/black"
+                   android:fontFamily="@font/montserrat_regular"
                    android:textSize="@dimen/size_text_small"/>
 
                <TextView
@@ -239,6 +244,7 @@
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textColor="@color/black"
+                   android:fontFamily="@font/montserrat_regular"
                    android:textSize="@dimen/size_text_small"/>
 
            </LinearLayout>
@@ -253,6 +259,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
                 <TextView
@@ -260,6 +267,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
             </LinearLayout>
@@ -274,6 +282,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
                 <TextView
@@ -281,6 +290,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
             </LinearLayout>
@@ -295,12 +305,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
                 <TextView
                     android:id="@+id/txtAlter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_small"/>
 
@@ -316,6 +328,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
                 <TextView
@@ -323,6 +336,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
             </LinearLayout>
@@ -337,12 +351,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textSize="@dimen/size_text_small"/>
 
                 <TextView
                     android:id="@+id/txtType"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/montserrat_regular"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_small"/>
 

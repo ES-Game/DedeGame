@@ -1,5 +1,6 @@
-package com.quangph.dedegame
+package com.dede.dedegame
 
 object AppConfig {
-    val PAGE_SIZE = 20
+    const val clientId: Int = 2
+    const val clientSecret: String = "3iViUlfrGPtnqLWKSTJch7jBKJMf8gSX9AzALZTz"
 }

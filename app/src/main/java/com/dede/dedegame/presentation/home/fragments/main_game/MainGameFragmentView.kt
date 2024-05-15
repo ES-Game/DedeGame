@@ -11,8 +11,8 @@ import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListStoryG
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.quangph.dedegame.domain.model.Story
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.Story
+import com.dede.dedegame.domain.model.StoryDetail
 
 class MainGameFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
 

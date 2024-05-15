@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="InputEditText">
+        <attr name="input_color" format="color"/>
+        <attr name="hint_color" format="color"/>
+        <attr name="input_content" format="string"/>
+        <attr name="hint_content" format="string"/>
+        <attr name="error_content" format="string"/>
+        <attr name="text_error_color" format="color"/>
+        <attr name="image_icon" format="reference|color" />
+    </declare-styleable>
+</resources>

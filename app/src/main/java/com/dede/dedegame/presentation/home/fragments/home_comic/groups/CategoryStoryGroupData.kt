@@ -1,23 +1,21 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic.groups
 
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.bumptech.glide.Glide
+import com.dede.dedegame.R
+import com.dede.dedegame.presentation.widget.InputEditText
+import com.dede.dedegame.presentation.widget.RoundedTextView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
-import com.quangph.dedegame.domain.model.Category
-import com.quangph.dedegame.domain.model.Story
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.Category
+import com.dede.dedegame.domain.model.Story
+import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.presentation.common.LogUtil
 
 
 class CategoryStoryGroupData(category: Category) :
@@ -31,7 +29,7 @@ class CategoryStoryGroupData(category: Category) :
         if (position == 0) {
             return data.name
         }
-        return data.stories!!.get(position -1)
+        return data.stories!!.get(position - 1)
     }
 
     override fun getCount(): Int {
@@ -76,6 +74,7 @@ class CategoryStoryGroupData(category: Category) :
         private var ivThumb: ImageView
 
         private var tvDes: TextView
+        private val tvRankIndex by lazy { itemView.findViewById<RoundedTextView>(R.id.tvRankIndex) }
 
         init {
 
@@ -88,11 +87,14 @@ class CategoryStoryGroupData(category: Category) :
 
         override fun onBind(vhData: Story?) {
             super.onBind(vhData)
-//            clickOn(itemView) {
-//                if (vhData != null) {
-//                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
-//                }
-//            }
+            LogUtil.getInstance().e("Tap  ====> onBind")
+            clickOn(itemView) {
+                LogUtil.getInstance().e("Tap")
+                vhData?.id?.let {
+                    groupData.onClickStoryItem?.onClickStoryItem(it)
+                }
+            }
+            tvRankIndex.visibility = View.GONE
             vhData?.let { story ->
                 Glide
                     .with(ivThumb.context)
@@ -120,13 +122,16 @@ class CategoryStoryGroupData(category: Category) :
 
         override fun onBind(vhData: String) {
             super.onBind(vhData)
-                tvName.text = vhData
-
+            tvName.text = vhData
+            LogUtil.getInstance().e("Tap  ====> onBind")
+            clickOn(itemView) {
+                LogUtil.getInstance().e("Tap")
+            }
         }
 
     }
 
     interface OnClickStoryItem {
-        fun onClickStoryItem(item: StoryDetail)
+        fun onClickStoryItem(id: Int)
     }
 }

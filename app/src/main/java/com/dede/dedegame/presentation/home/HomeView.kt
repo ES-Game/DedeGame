@@ -3,12 +3,15 @@ package com.dede.dedegame.presentation.home
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
-import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.HomeAdapter
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.dede.dedegame.presentation.common.DimensUtil
+import com.dede.dedegame.presentation.widget.bottomNavigationView.GridSpacingItemDecoration
+import com.dede.dedegame.presentation.widget.bottomNavigationView.CustomBottomNavigationAdapter
+import com.dede.dedegame.presentation.widget.bottomNavigationView.CustomBottomNavigationItem
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.jetpack.JetActivity
 
@@ -16,7 +19,7 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
 
     private lateinit var adapter: HomeAdapter
     private lateinit var vpMain: ViewPager2
-    private lateinit var bnvMain: BottomNavigationView
+    private lateinit var bnvMain: RecyclerView
 
     override fun onInitView() {
         super.onInitView()
@@ -27,28 +30,34 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         vpMain.adapter = adapter
         vpMain.isUserInputEnabled = false
 
-        bnvMain.setOnItemSelectedListener(BottomNavigationView.OnNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.home_tab -> {
-                    vpMain.currentItem = 0
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.story_tab -> {
-                    vpMain.currentItem = 1
-                    return@OnNavigationItemSelectedListener true
-                }
-                R.id.game_tab -> {
-                    vpMain.currentItem = 2
-                    return@OnNavigationItemSelectedListener true
-                }
-
-                R.id.store_tab -> {
-                    vpMain.currentItem = 3
-                    return@OnNavigationItemSelectedListener true
+        val items = listOf(
+            CustomBottomNavigationItem(R.drawable.ic_tab_home, "Home"),
+            CustomBottomNavigationItem(R.drawable.ic_tab_comic, "Story"),
+            CustomBottomNavigationItem(R.drawable.ic_tab_game, "Game"),
+            CustomBottomNavigationItem(R.drawable.ic_tab_store, "Store"),
+        )
+        val adapter = CustomBottomNavigationAdapter(context, items)
+        bnvMain.layoutManager = GridLayoutManager(context, items.size)
+        bnvMain.addItemDecoration(GridSpacingItemDecoration(context, items.size, DimensUtil.dpToPx(10), false))
+        adapter.setOnItemSelectedListener(object : CustomBottomNavigationAdapter.OnEventListener{
+            override fun OnNavigationItemSelectedListener(pos: Int) {
+                when (pos) {
+                    0 -> {
+                        vpMain.currentItem = 0
+                    }
+                    1 -> {
+                        vpMain.currentItem = 1
+                    }
+                    2 -> {
+                        vpMain.currentItem = 2
+                    }
+                    3 -> {
+                        vpMain.currentItem = 3
+                    }
                 }
             }
-            false
         })
+        bnvMain.adapter = adapter
     }
 
     private fun setupToolbar(){
@@ -59,13 +68,6 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         txtStartTitle.text = "Home"
     }
 
-    fun showHomeFragment() {
-        adapter.notifyItemChanged(0)
-    }
-
-    fun changeToTabId(tabId: Int) {
-        bnvMain.selectedItemId = tabId
-    }
 }
 
 

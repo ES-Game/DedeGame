@@ -1,6 +1,6 @@
-package com.quangph.dedegame.repo.network
+package com.dede.dedegame.repo.network
 
-import com.quangph.dedegame.repo.ApiConfig
+import com.dede.dedegame.repo.ApiConfig
 import okhttp3.HttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.quangph.dedegame.presentation.chapter.ChapterView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.dede.dedegame.presentation.chapter.ChapterView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -20,7 +20,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:textColor="@color/orange_300"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_bold"
         android:textAllCaps="true"
         android:textSize="@dimen/size_text_large"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,7 +36,6 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tvStoryNameDetail">
@@ -79,4 +78,4 @@
     </WebView>
 
 
-</com.quangph.dedegame.presentation.chapter.ChapterView>
+</com.dede.dedegame.presentation.chapter.ChapterView>

@@ -1,7 +1,6 @@
-package com.quangph.dedegame.repo.home
+package com.dede.dedegame.repo.home
 
 
-import com.google.gson.annotations.SerializedName
-import com.quangph.dedegame.repo.network.BaseAPIResponse
+import com.dede.dedegame.repo.network.BaseAPIResponse
 
-class StoryDetailResponse(): BaseAPIResponse<StoryDetailData>()
+class StoryDetailResponse() : BaseAPIResponse<StoryDetailData>()

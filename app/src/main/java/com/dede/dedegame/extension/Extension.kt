@@ -1,6 +1,7 @@
-package com.quangph.dedegame.extension
+package com.dede.dedegame.extension
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResult
 import com.quangph.base.common.ActivityNavi
@@ -45,5 +46,39 @@ inline fun <reified Output: IScreenData> returnData(data: Output): Intent {
     val itn = Intent()
     itn.putExtra(Output::class.java.name, data)
     return itn
+}
+
+fun Context.startActivity(activityClass: Class<out Activity>, extras: Intent.() -> Unit = {}) {
+    val intent = Intent(this, activityClass)
+    intent.extras()
+    startActivity(intent)
+}
+
+fun String.hasLeastOneUpperCase(): Boolean {
+    val regularExpressionForPassword = ".*[A-Z]+.*"
+    val stringInput = Regex(regularExpressionForPassword)
+    return stringInput.containsMatchIn(this)
+}
+
+fun String.hasLeastOneLowerCase(): Boolean {
+    val regularExpressionForPassword = ".*[a-z]+.*"
+    val stringInput = Regex(regularExpressionForPassword)
+    return stringInput.containsMatchIn(this)
+}
+
+fun String.hasLeastOneSpecialCharacter(): Boolean {
+    val specialCharacters = setOf('!', '"', '#', '$', '%', '&', '\'', '(', ')', '*', '+', ',', '-', '.', '/', ':', ';', '<', '=', '>', '?', '@', '[', '\\', ']', '^', '_', '`', '{', '|', '}', '~')
+    return any { it in specialCharacters }
+}
+
+fun String.checkMinium6Length(): Boolean {
+    val regularExpressionForPassword = ".{6,}$"
+    val stringInput = Regex(regularExpressionForPassword)
+    return stringInput.matches(this)
+}
+
+fun String.validateEmail(): Boolean {
+    val emailRegex = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}"
+    return Regex(emailRegex).matches(this)
 }
 

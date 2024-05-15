@@ -1,17 +1,11 @@
-package com.quangph.dedegame.repo.home
+package com.dede.dedegame.repo.home
 
 import com.dede.dedegame.repo.convert.ListConverter
 import com.dede.dedegame.repo.convert.IConverter
-import com.quangph.dedegame.domain.model.Author
-import com.quangph.dedegame.domain.model.Book
-import com.quangph.dedegame.domain.model.Category
-import com.quangph.dedegame.domain.model.Chapter
-import com.quangph.dedegame.domain.model.Story
-import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.domain.model.Tag
-import com.quangph.dedegame.repo.StoryDataToStory
-import com.quangph.dedegame.repo.home.CategoryData
-import com.quangph.dedegame.repo.home.StoryData
+import com.dede.dedegame.domain.model.Author
+import com.dede.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.Tag
 
 
 class StoryDetailDataToStoryDetail: IConverter<StoryDetailData, StoryDetail> {

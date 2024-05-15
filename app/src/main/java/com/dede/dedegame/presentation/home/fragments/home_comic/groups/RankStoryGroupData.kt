@@ -1,22 +1,19 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic.groups
 
-import android.os.Handler
-import android.os.Looper
+import android.graphics.Color
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
+import com.dede.dedegame.R
+import com.dede.dedegame.presentation.widget.RoundedTextView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
-import com.quangph.dedegame.domain.model.Story
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryDetail
 
 
 class RankStoryGroupData(listStory: List<StoryDetail>?) :
@@ -64,7 +61,7 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
 
         private var ivThumb: ImageView
         private var tvDes: TextView
-
+        private val tvRankIndex by lazy { itemView.findViewById<RoundedTextView>(R.id.tvRankIndex) }
         init {
 
             ivThumb = itemView.findViewById(R.id.ivThumb)
@@ -77,16 +74,19 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
         override fun onBind(vhData: StoryDetail?) {
             super.onBind(vhData)
             clickOn(itemView) {
-                if (vhData != null) {
-                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
+                vhData?.id?.let {
+                    groupData.onClickStoryItem?.onClickStoryItem(it)
                 }
             }
+            tvRankIndex.visibility = View.VISIBLE
+            tvRankIndex.text = (adapterPosition + 1).toString()
+            fillColorIndex(adapterPosition)
             vhData?.let { story ->
                 Glide
                     .with(ivThumb.context)
                     .load(story.image)
                     .centerCrop()
-                    .into(ivThumb);
+                    .into(ivThumb)
 
                 tvDes.text = story.description
 
@@ -94,9 +94,22 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
 
         }
 
+        private fun fillColorIndex(positionInGroup: Int) {
+            tvRankIndex.visibility = if (positionInGroup > 5) View.INVISIBLE else View.VISIBLE
+            when (positionInGroup) {
+                0 -> tvRankIndex.setSolidColorInt(Color.parseColor("#f04e29"))
+                1 -> tvRankIndex.setSolidColorInt(Color.parseColor("#fcaf17"))
+                2 -> tvRankIndex.setSolidColorInt(Color.parseColor("#2bb673"))
+                3 -> tvRankIndex.setSolidColorInt(Color.parseColor("#3c9cd7"))
+                4 -> tvRankIndex.setSolidColorInt(Color.parseColor("#3c9cd7"))
+                5 -> tvRankIndex.setSolidColorInt(Color.parseColor("#3c9cd7"))
+                else -> {}
+            }
+        }
+
     }
 
     interface OnClickStoryItem {
-        fun onClickStoryItem(item: StoryDetail)
+        fun onClickStoryItem(id: Int)
     }
 }

@@ -11,7 +11,7 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
-import com.quangph.dedegame.domain.model.Story
+import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.presentation.commom.IndicatorView
 
 class TopBannerGroupData(listStory: List<Story>?) :

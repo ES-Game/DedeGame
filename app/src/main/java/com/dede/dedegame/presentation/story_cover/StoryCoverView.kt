@@ -13,7 +13,7 @@ import com.dede.dedegame.presentation.story_cover.groups.SummaryGroupData
 import com.dede.dedegame.presentation.story_cover.groups.TopCoverGroupData
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryDetail
 
 class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
 

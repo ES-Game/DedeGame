@@ -6,8 +6,8 @@ import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.viewbinder.Layout
-import com.quangph.dedegame.domain.model.StoryDetail
-import com.quangph.dedegame.domain.usecase.GetStoryDetailAction
+import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.quangph.jetpack.JetActivity
 

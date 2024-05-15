@@ -1,4 +1,4 @@
-package com.quangph.dedegame.presentation.chapter
+package com.dede.dedegame.presentation.chapter
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -22,7 +22,7 @@ import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
 import com.dede.dedegame.presentation.story_cover.StoryCoverView
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
-import com.quangph.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.Chapter
 
 class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
 

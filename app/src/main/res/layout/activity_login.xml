@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dede.dedegame.presentation.login.LoginView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_white_toolbar"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout6"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/orange_300"
+        android:paddingStart="@dimen/margin_left_right_layout"
+        android:paddingTop="10dp"
+        android:paddingEnd="@dimen/margin_left_right_layout"
+        android:paddingBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="Đăng nhập"
+            android:fontFamily="@font/montserrat_bold"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/size_text_xx_large"
+            app:layout_constraintBottom_toTopOf="@+id/textView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:fontFamily="@font/montserrat_medium"
+            android:text="Chào mừng bạn đến với Dede"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/size_text_large"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.dede.dedegame.presentation.widget.InputEditText
+        android:id="@+id/edtUser"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:hint_content="Nhập Email/ Username"
+        app:error_content="*Note"
+        app:image_icon="@drawable/ic_mail"
+        android:layout_marginStart="@dimen/margin_left_right_layout"
+        android:layout_marginEnd="@dimen/margin_left_right_layout"
+        app:layout_constraintBottom_toTopOf="@+id/edtPassword"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout6"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <com.dede.dedegame.presentation.widget.InputEditText
+        android:id="@+id/edtPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_5sdp"
+        app:error_content="*Note"
+        app:hint_content="Nhập mật khẩu"
+        app:image_icon="@drawable/ic_lock"
+        android:layout_marginStart="@dimen/margin_left_right_layout"
+        android:layout_marginEnd="@dimen/margin_left_right_layout"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edtUser" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.5" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnLogin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_corner_orange_button"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:text="Đăng nhập"
+        android:textSize="@dimen/size_text_large_18sp"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/guideline4" />
+
+    <TextView
+        android:id="@+id/txtForgetPassword"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/orange_300"
+        android:fontFamily="@font/montserrat_medium"
+        android:textSize="@dimen/size_text_medium"
+        android:paddingTop="@dimen/_5sdp"
+        android:paddingBottom="@dimen/_5sdp"
+        android:gravity="center"
+        android:text="Quên mật khẩu"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/margin_left_right_layout"
+        android:layout_marginEnd="@dimen/margin_left_right_layout"
+        app:layout_constraintTop_toBottomOf="@+id/btnLogin"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/orange_300"
+        android:textSize="@dimen/size_text_large"
+        android:gravity="center"
+        android:fontFamily="@font/montserrat_medium"
+        android:text="Chưa có tài khoản"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="@dimen/margin_left_right_layout"
+        android:layout_marginEnd="@dimen/margin_left_right_layout"
+        app:layout_constraintBottom_toTopOf="@+id/btnRegister"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_corner_orange_button"
+        android:text="Đăng ký ngay"
+        android:textSize="@dimen/size_text_large_18sp"
+        android:fontFamily="@font/montserrat_semi_bold"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:paddingTop="2dp"
+        android:paddingBottom="2dp"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline5" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+
+</com.dede.dedegame.presentation.login.LoginView>

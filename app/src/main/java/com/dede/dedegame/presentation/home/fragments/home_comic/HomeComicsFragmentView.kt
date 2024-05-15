@@ -4,30 +4,28 @@ import android.content.Context
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
-import android.widget.Button
+import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.Category
+import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.presentation.common.LogUtil
-import com.dede.dedegame.presentation.home.fragments.home_comic.groups.CategoriesStoryGroupData
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.CategoryStoryGroupData
-import com.dede.dedegame.presentation.home.fragments.home_comic.groups.CategoryTitleGroupData
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.HomeComicItemViewType
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.RankStoryGroupData
 import com.dede.dedegame.presentation.widget.CatalogueGridSpacingItemDecoration
-import com.google.gson.Gson
+import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.quangph.dedegame.domain.model.Category
-import com.quangph.dedegame.domain.model.StoryDetail
 
-class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
+class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
+    BaseConstraintView(context, attrs) {
 
     lateinit var rvContent: RecyclerView
-    private var btnCategory: Button? = null
-    private var btnRankList: Button? = null
+    private var btnCategory: AppCompatButton? = null
+    private var btnRankList: AppCompatButton? = null
     private var vRankIcons: View? = null
 
     private val homeContentAdapter = GroupRclvAdapter()
@@ -39,6 +37,10 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
     override fun onInitView() {
         super.onInitView()
         btnCategory = findViewById(R.id.btn_category)
+        btnRankList = findViewById(R.id.btn_rank_list)
+        vRankIcons = findViewById(R.id.llIcon)
+        rvContent = findViewById<RecyclerView>(R.id.rvContent)
+
         setupCategoryBtnState(true)
         setupRankListBtnState(false)
         btnCategory?.setOnClickListener {
@@ -48,7 +50,7 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
             mPresenter.executeCommand(OnclickCategoryCmd())
         }
 
-        btnRankList = findViewById(R.id.btn_rank_list)
+
         btnRankList?.setOnClickListener {
             setupCategoryBtnState(false)
             setupRankListBtnState(true)
@@ -56,23 +58,18 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
             mPresenter.executeCommand(OnclickRankCmd())
         }
 
-
-        vRankIcons = findViewById(R.id.llIcon)
-
-        rvContent = findViewById<RecyclerView>(R.id.rvContent)
-
         val spacingInPixels = 16
-        rvContent.addItemDecoration(CatalogueGridSpacingItemDecoration(spacingInPixels));
+        rvContent.addItemDecoration(CatalogueGridSpacingItemDecoration(spacingInPixels))
 
 
-        rvContent!!.adapter = homeContentAdapter
+        rvContent.adapter = homeContentAdapter
 
     }
 
     fun setupCategoryLayout() {
 
         vRankIcons?.visibility = View.GONE
-        rvContent!!.layoutManager = layoutManager
+        rvContent.layoutManager = layoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 var vh = rvContent.findViewHolderForAdapterPosition(position)
@@ -89,41 +86,59 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) : BaseCons
 
     fun setupRankLayout() {
         vRankIcons?.visibility = View.VISIBLE
-        rvContent!!.layoutManager = layoutManager1
+        rvContent.layoutManager = layoutManager1
 
     }
 
-    fun showStoryCategories(stories: List<Category>) {
-        homeContentAdapter.clear()
-        for ((index, cate) in stories.withIndex()) {
-            val categoryGroup = CategoryStoryGroupData(cate)
-            homeContentAdapter.addRawGroupAtIndex(index, categoryGroup)
-            categoryGroup.show()
-            Log.i("Current cate index: ", index.toString())
-            Log.i("Current adapter index: ", categoryGroup.adapterPosition.toString())
-
+    fun showStoryCategories(category: Category) {
+        val categoryGroup = CategoryStoryGroupData(category)
+        homeContentAdapter.addGroup(categoryGroup)
+        categoryGroup.reset(category)
+        categoryGroup.show()
+        categoryGroup.onClickStoryItem = object : CategoryStoryGroupData.OnClickStoryItem{
+            override fun onClickStoryItem(id: Int) {
+                mPresenter.executeCommand(GotoStoryDetailCmd(id))
+            }
         }
+
         rvContent.visibility = View.VISIBLE
     }
 
     fun showStoryRankList(stories: List<StoryDetail>) {
         homeContentAdapter.clear()
         homeContentAdapter.addGroup(rankGroupData)
+        rankGroupData.onClickStoryItem = object : RankStoryGroupData.OnClickStoryItem {
+            override fun onClickStoryItem(id: Int) {
+                mPresenter.executeCommand(GotoStoryDetailCmd(id))
+            }
+        }
         rankGroupData.reset(stories)
         rvContent.visibility = View.VISIBLE
     }
 
     private fun setupCategoryBtnState(isSelected: Boolean) {
         btnCategory?.isSelected = isSelected
+        if (isSelected) {
+            btnCategory?.background = ContextCompat.getDrawable(context, R.drawable.shape_radius)
+        } else {
+            btnCategory?.background =
+                ContextCompat.getDrawable(context, R.drawable.shape_radius_disable)
+        }
     }
 
     private fun setupRankListBtnState(isSelected: Boolean) {
         btnRankList?.isSelected = isSelected
+        if (isSelected) {
+            btnRankList?.background = ContextCompat.getDrawable(context, R.drawable.shape_radius)
+        } else {
+            btnRankList?.background =
+                ContextCompat.getDrawable(context, R.drawable.shape_radius_disable)
+        }
     }
 
-    class GotoStoryDetailCmd(val item: StoryDetail) : ICommand
-    class OnclickCategoryCmd: ICommand
-    class OnclickRankCmd: ICommand
+    class GotoStoryDetailCmd(val id: Int) : ICommand
+    class OnclickCategoryCmd : ICommand
+    class OnclickRankCmd : ICommand
 }
 
 

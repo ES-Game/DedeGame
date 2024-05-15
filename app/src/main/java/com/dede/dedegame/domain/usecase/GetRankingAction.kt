@@ -1,9 +1,9 @@
 package com.dede.dedegame.domain.usecase
 
 import com.quangph.base.mvp.action.Action
-import com.quangph.dedegame.domain.model.Rank
-import com.quangph.dedegame.domain.repo.IDedeGameRepo
-import com.quangph.dedegame.domain.repo.RepoFactory
+import com.dede.dedegame.domain.model.Rank
+import com.dede.dedegame.domain.repo.IDedeGameRepo
+import com.dede.dedegame.domain.repo.RepoFactory
 
 class GetRankingAction : Action<GetRankingAction.RV, Rank>() {
 

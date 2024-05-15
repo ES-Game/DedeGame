@@ -10,7 +10,7 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
-import com.quangph.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryDetail
 
 
 class ListStoryGroupData(listStory: List<StoryDetail>?) :

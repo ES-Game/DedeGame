@@ -1,8 +1,8 @@
-package com.quangph.dedegame.domain.model
+package com.dede.dedegame.domain.model
 
 import android.os.Parcel
-import com.quangph.dedegame.extension.parcel.KParcelable
-import com.quangph.dedegame.extension.parcel.parcelableCreator
+import com.dede.dedegame.extension.parcel.KParcelable
+import com.dede.dedegame.extension.parcel.parcelableCreator
 
 class StoryDetail() : KParcelable {
     var id: Int? = null

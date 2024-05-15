@@ -1,5 +1,6 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic.states
 
+import android.util.Log
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
 import com.dede.dedegame.presentation.home.fragments.home.HomeFragment
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragment
@@ -7,7 +8,8 @@ import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragme
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.mvpcomponent.MVPState
-import com.quangph.dedegame.domain.model.Home
+import com.dede.dedegame.domain.model.Home
+import com.dede.dedegame.presentation.common.LogUtil
 
 
 class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView): MVPState<HomeComicsFragment, HomeComicsFragmentView>(stateContext, view){
@@ -30,7 +32,11 @@ class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentVi
                 mStateContext.hideLoading()
                 if (responseValue != null) {
                     responseValue.categories?.let {
-                        mView.showStoryCategories(it)
+                        it.forEach { category ->
+                            Log.e("Iterator List", "")
+                            mView.showStoryCategories(category)
+                        }
+
                     }
                 }
             }

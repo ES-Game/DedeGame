@@ -19,7 +19,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Tab Title"
-        android:textStyle="bold"
+        android:fontFamily="@font/montserrat_semi_bold"
         android:textColor="@color/orange_300"
         android:textSize="@dimen/size_text_medium"
         android:layout_marginTop="@dimen/margin_small_to_medium_between_part_in_item"

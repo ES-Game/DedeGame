@@ -1,4 +1,4 @@
-package com.quangph.dedegame.repo.home
+package com.dede.dedegame.repo.home
 
 
 import com.google.gson.annotations.SerializedName

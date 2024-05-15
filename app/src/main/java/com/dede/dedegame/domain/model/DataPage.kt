@@ -1,4 +1,4 @@
-package com.quangph.dedegame.domain.model
+package com.dede.dedegame.domain.model
 
 abstract class DataPage<T> {
     var dataList: List<T> = emptyList()

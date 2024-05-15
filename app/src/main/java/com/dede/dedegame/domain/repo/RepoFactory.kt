@@ -1,6 +1,6 @@
-package com.quangph.dedegame.domain.repo
+package com.dede.dedegame.domain.repo
 
-import com.quangph.dedegame.repo.DedeGameRepoImpl
+import com.dede.dedegame.repo.DedeGameRepoImpl
 
 object RepoFactory {
 

@@ -1,14 +1,13 @@
 package com.dede.dedegame.domain.repo
 
-import com.dede.dedegame.domain.model.Home
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.User
 import com.dede.dedegame.domain.model.UserInfo
+import com.dede.dedegame.domain.model.home.Home
 
 interface IDedeGameRepo {
 
-    fun getHomeData(limit: Int): Home
+    fun getHomeData(): Home
     fun getRanking(from: String, to: String, categoryId: Int, limit: Int): Rank
     fun getStoryDetail(storyId: Int): StoryDetail
     fun login(

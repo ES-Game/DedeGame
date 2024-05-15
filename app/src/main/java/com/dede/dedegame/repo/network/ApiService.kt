@@ -15,8 +15,8 @@ import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
-    @GET("home")
-    fun getHomeData(@Query("limit") limit: Int): Call<HomeResponse>
+    @GET("index")
+    fun getHomeData(): Call<HomeResponse>
 
     @GET("ranking")
     fun getRanking(

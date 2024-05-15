@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import androidx.activity.result.ActivityResult
+import com.dede.dedegame.domain.model.home.Slider
 import com.quangph.base.common.ActivityNavi
 import com.quangph.jetpack.IScreenData
 import com.quangph.jetpack.JetActivity
@@ -82,3 +83,10 @@ fun String.validateEmail(): Boolean {
     return Regex(emailRegex).matches(this)
 }
 
+fun String.stringToEnum(): Slider.Type? {
+    return try {
+        Slider.Type.valueOf(this)
+    } catch (e: IllegalArgumentException) {
+        null
+    }
+}

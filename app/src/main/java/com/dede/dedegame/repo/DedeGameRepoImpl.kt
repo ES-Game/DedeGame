@@ -1,52 +1,70 @@
 package com.dede.dedegame.repo
 
 import com.dede.dedegame.domain.model.Author
-import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Chapter
-import com.dede.dedegame.domain.model.Home
 import com.dede.dedegame.domain.model.Rank
-import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.UserInfo
+import com.dede.dedegame.domain.model.home.Article
+import com.dede.dedegame.domain.model.home.ComingGame
+import com.dede.dedegame.domain.model.home.Home
+import com.dede.dedegame.domain.model.home.OpenedGame
+import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.repo.IDedeGameRepo
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
-import com.dede.dedegame.repo.home.CategoryData
-import com.dede.dedegame.repo.home.CategoryDataToCategory
 import com.dede.dedegame.repo.home.ChapterData
 import com.dede.dedegame.repo.home.ChapterDataToChapter
-import com.dede.dedegame.repo.home.StoryData
 import com.dede.dedegame.repo.home.StoryDetailData
 import com.dede.dedegame.repo.home.StoryDetailDataToStoryDetail
 import com.dede.dedegame.repo.home.TagData
 import com.dede.dedegame.repo.home.TagDataToTag
 import com.dede.dedegame.repo.home.UserDataToUser
+import com.dede.dedegame.repo.home.temp.ArticleDataToArticleConvert
+import com.dede.dedegame.repo.home.temp.ComingGamesDataToComingGamesConvert
+import com.dede.dedegame.repo.home.temp.OpenedGamesDataToOpenedGamesConvert
+import com.dede.dedegame.repo.home.temp.SliderDataToSliderConvert
 import com.dede.dedegame.repo.network.APIException
 import com.dede.dedegame.repo.network.ApiService
 import com.dede.dedegame.repo.network.NetworkFactory.createDefaultService
 import com.dede.dedegame.repo.network.invokeApi
+import com.dede.dedegame.repo.temp.home.ArticleData
+import com.dede.dedegame.repo.temp.home.ComingGameData
+import com.dede.dedegame.repo.temp.home.OpenedGameData
+import com.dede.dedegame.repo.temp.home.SliderData
 import com.dede.dedegame.repo.user.AuthenTokenDataToAuthenToken
 
 class DedeGameRepoImpl : IDedeGameRepo {
 
-    override fun getHomeData(limit: Int): Home {
+    override fun getHomeData(): Home {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getHomeData(limit).invokeApi {
+        return service.getHomeData().invokeApi { response ->
             Home().apply {
-                if (it.data?.featuredStories != null) {
-                    this.featuredStories =
-                        com.dede.dedegame.repo.convert.ListConverter<StoryData, Story>(
-                            StoryDataToStory()
-                        ).convert(it.data?.featuredStories!!)
+                if (response.data?.articles != null) {
+                    this.articles =
+                        com.dede.dedegame.repo.convert.ListConverter<ArticleData, Article>(
+                            ArticleDataToArticleConvert()
+                        ).convert(response.data?.articles!!)
                 }
-
-                if (it.data?.categories != null) {
-                    this.categories =
-                        com.dede.dedegame.repo.convert.ListConverter<CategoryData, Category>(
-                            CategoryDataToCategory()
-                        ).convert(it.data?.categories!!)
+                if (response.data?.comingGames != null) {
+                    this.comingGames =
+                        com.dede.dedegame.repo.convert.ListConverter<ComingGameData, ComingGame>(
+                            ComingGamesDataToComingGamesConvert()
+                        ).convert(response.data?.comingGames!!)
+                }
+                if (response.data?.openedGames != null) {
+                    this.openedGames =
+                        com.dede.dedegame.repo.convert.ListConverter<OpenedGameData, OpenedGame>(
+                            OpenedGamesDataToOpenedGamesConvert()
+                        ).convert(response.data?.openedGames!!)
+                }
+                if (response.data?.sliders != null) {
+                    this.sliders =
+                        com.dede.dedegame.repo.convert.ListConverter<SliderData, Slider>(
+                            SliderDataToSliderConvert()
+                        ).convert(response.data?.sliders!!)
                 }
             }
         }

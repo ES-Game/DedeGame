@@ -15,6 +15,7 @@ import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.home.Slider
 
 class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
 
@@ -43,7 +44,7 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
 
     }
 
-    fun showTopBanner(data: List<Story>) {
+    fun showTopBanner(data: List<Slider>) {
         topBannerGroupData.reset(data)
         topBannerGroupData.show()
     }

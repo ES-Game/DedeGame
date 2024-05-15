@@ -26,25 +26,25 @@ class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentVi
             this.limit = 6
         }
 
-        mStateContext.actionManager.executeAction(GetHomeDataAction(), rv, object : Action.SimpleActionCallback<Home>() {
-            override fun onSuccess(responseValue: Home?) {
-                super.onSuccess(responseValue)
-                mStateContext.hideLoading()
-                if (responseValue != null) {
-                    responseValue.categories?.let {
-                        it.forEach { category ->
-                            Log.e("Iterator List", "")
-                            mView.showStoryCategories(category)
-                        }
-
-                    }
-                }
-            }
-
-            override fun onError(e: ActionException) {
-                super.onError(e)
-                mStateContext.hideLoading()
-            }
-        })
+//        mStateContext.actionManager.executeAction(GetHomeDataAction(), rv, object : Action.SimpleActionCallback<Home>() {
+//            override fun onSuccess(responseValue: Home?) {
+//                super.onSuccess(responseValue)
+//                mStateContext.hideLoading()
+//                if (responseValue != null) {
+//                    responseValue.categories?.let {
+//                        it.forEach { category ->
+//                            Log.e("Iterator List", "")
+//                            mView.showStoryCategories(category)
+//                        }
+//
+//                    }
+//                }
+//            }
+//
+//            override fun onError(e: ActionException) {
+//                super.onError(e)
+//                mStateContext.hideLoading()
+//            }
+//        })
     }
 }

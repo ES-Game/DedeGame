@@ -10,9 +10,9 @@ import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action.SimpleActionCallback
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.viewbinder.Layout
-import com.dede.dedegame.domain.model.Home
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.home.Home
 
 import com.quangph.jetpack.JetFragment
 import java.util.Calendar
@@ -49,9 +49,8 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
                 super.onSuccess(responseValue)
                 hideLoading()
                 if (responseValue != null) {
-                    responseValue.featuredStories?.let {
+                    responseValue.sliders?.let {
                         mvpView.showTopBanner(it)
-
                     }
                 }
             }

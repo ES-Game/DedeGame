@@ -42,8 +42,8 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelati
     }
 
     fun showTopBanner(data: List<Story>) {
-        topBannerGroupData.reset(data)
-        topBannerGroupData.show()
+//        topBannerGroupData.reset(data)
+//        topBannerGroupData.show()
     }
 
     fun showListStory(data: List<StoryDetail>) {

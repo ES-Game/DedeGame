@@ -19,7 +19,8 @@ import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 
-class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
+class
+HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
 
     private val rvContent by lazy { findViewById<RecyclerView>(R.id.rvContent) }
     private val homeContentAdapter = GroupRclvAdapter()
@@ -67,44 +68,51 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
         topBannerGroupData.show()
     }
 
-    fun showNewsData(data: List<Article>) {
+    fun validateNewsGroup() {
         if (rankGroupData.isAttached) {
             homeContentAdapter.removeGroup(rankGroupData)
         }
+
         if (listTrendGroupData.isAttached) {
             homeContentAdapter.removeGroup(listTrendGroupData)
         }
-
         homeContentAdapter.addGroup(newsGroupData)
+    }
+
+    fun showNewsData(data: List<Article>) {
         newsGroupData.reset(data)
         newsGroupData.show()
     }
 
-    fun showRankData(data: List<StoryDetail>) {
+    fun validateRankGroup() {
         if (newsGroupData.isAttached) {
             homeContentAdapter.removeGroup(newsGroupData)
         }
+
         if (listTrendGroupData.isAttached) {
             homeContentAdapter.removeGroup(listTrendGroupData)
         }
+        homeContentAdapter.addGroup(rankGroupData)
+    }
 
-        homeContentAdapter.addGroupDataAtIndex(2, rankGroupData)
+    fun showRankData(data: List<StoryDetail>) {
         rankGroupData.reset(data)
         rankGroupData.show()
 
     }
 
-    fun showTrendData(data: List<StoryDetail>) {
-        if (newsGroupData.isAttached) {
-            homeContentAdapter.remove(2)
+    fun validateTrendingGroup() {
+        if (rankGroupData.isAttached) {
+            homeContentAdapter.removeGroup(rankGroupData)
         }
 
         if (rankGroupData.isAttached) {
-            homeContentAdapter.remove(2)
-
+            homeContentAdapter.removeGroup(rankGroupData)
         }
-
         homeContentAdapter.addGroup(listTrendGroupData)
+    }
+
+    fun showTrendData(data: List<StoryDetail>) {
         listTrendGroupData.reset(data)
         listTrendGroupData.show()
     }

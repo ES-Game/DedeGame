@@ -17,6 +17,8 @@ class HomeTabGroupData(data: Unit?) :
     GroupData<Unit>(data) {
     var mPresenter: IPresenter? = null
 
+    var onClickListener: OnClickItemListener? = null
+
     override fun getDataInGroup(position: Int): Any? {
         return data
     }
@@ -78,11 +80,7 @@ class HomeTabGroupData(data: Unit?) :
             )
 
             tabLayout.setEvenListener { tabModel, pos ->
-                Toast.makeText(
-                    tabLayout.context,
-                    tabModel?.name,
-                    Toast.LENGTH_SHORT
-                ).show()
+                groupData.onClickListener?.onClickTab(pos)
             }
         }
 
@@ -91,5 +89,9 @@ class HomeTabGroupData(data: Unit?) :
 
         }
 
+    }
+
+    interface OnClickItemListener {
+        fun onClickTab(position: Int)
     }
 }

@@ -41,7 +41,11 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
                 mPresenter.executeCommand(GotoStoryDetailCmd(item))
             }
         }
-
+        homeTabGroupData.onClickListener = object : HomeTabGroupData.OnClickItemListener{
+            override fun onClickTab(position: Int) {
+                mPresenter.executeCommand(GotoTabCmd(position))
+            }
+        }
     }
 
     fun showTopBanner(data: List<Slider>) {
@@ -55,6 +59,7 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
     }
 
     class GotoStoryDetailCmd(val item: StoryDetail) : ICommand
+    class GotoTabCmd(val position: Int) : ICommand
 }
 
 

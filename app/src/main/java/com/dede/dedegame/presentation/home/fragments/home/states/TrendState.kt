@@ -11,11 +11,12 @@ class TrendState(stateContext: HomeFragment, view: HomeFragmentView) :
 
     override fun onEnter() {
         super.onEnter()
+
     }
 
-    var dataRank = listOf<StoryDetail>()
-
-    fun setData(list: List<StoryDetail>) {
-        this.dataRank = list
+    fun setData(listTrend: List<StoryDetail>) {
+        mView.showTrendData(listTrend)
     }
+
+
 }

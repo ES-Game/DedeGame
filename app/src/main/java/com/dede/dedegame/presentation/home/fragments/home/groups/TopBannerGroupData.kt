@@ -11,11 +11,11 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.Story
+import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.presentation.commom.IndicatorView
 
-class TopBannerGroupData(listStory: List<Story>?) :
-    GroupData<List<Story>>(listStory) {
+class TopBannerGroupData(listStory: List<Slider>?) :
+    GroupData<List<Slider>>(listStory) {
     var mPresenter: IPresenter? = null
     var sliderHandler: Handler = Handler(Looper.getMainLooper())
     var currentBannerPosition = 1
@@ -55,7 +55,7 @@ class TopBannerGroupData(listStory: List<Story>?) :
     }
 
     private class TopBannerVH(itemView: View, val topBannerGroupData: TopBannerGroupData) :
-        GroupRclvVH<List<Story>, TopBannerGroupData>(itemView) {
+        GroupRclvVH<List<Slider>, TopBannerGroupData>(itemView) {
 
         private var vpHomeTopBannerItm: ViewPager2
         private var idvHomeTopBannerItm: IndicatorView
@@ -120,11 +120,11 @@ class TopBannerGroupData(listStory: List<Story>?) :
             })
         }
 
-        override fun onBind(vhData: List<Story>?) {
+        override fun onBind(vhData: List<Slider>?) {
             super.onBind(vhData)
-            vhData?.let { userPromotionList ->
+            vhData?.let { sliders ->
                 if (adapter.mDataSet.isNullOrEmpty()) {
-                    adapter.reset(userPromotionList)
+                    adapter.reset(sliders)
                 }
                 if (adapter.itemCount > 1) {
                     when {

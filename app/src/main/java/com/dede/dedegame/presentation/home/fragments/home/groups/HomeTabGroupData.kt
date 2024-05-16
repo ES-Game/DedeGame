@@ -2,9 +2,7 @@ package com.dede.dedegame.presentation.home.fragments.home.groups
 
 import android.util.Log
 import android.view.View
-import android.widget.Toast
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
 import com.dede.dedegame.presentation.widget.customTab.CustomTabView
 import com.dede.dedegame.presentation.widget.customTab.TabModel
 import com.quangph.base.mvp.IPresenter

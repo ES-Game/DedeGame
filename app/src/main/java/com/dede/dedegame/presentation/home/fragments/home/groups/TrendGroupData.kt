@@ -10,11 +10,11 @@ import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.domain.model.home.Article
+import com.dede.dedegame.domain.model.StoryDetail
 
 
-class NewsGroupData(listArticle: List<Article>?) :
-    GroupData<List<Article>>(listArticle) {
+class TrendGroupData(listTrend: List<StoryDetail>?) :
+    GroupData<List<StoryDetail>>(listTrend) {
     var mPresenter: IPresenter? = null
 
     var onClickStoryItem: OnClickStoryItem? = null
@@ -31,21 +31,21 @@ class NewsGroupData(listArticle: List<Article>?) :
     }
 
     override fun getItemViewType(positionInGroup: Int): Int {
-        return ItemViewType.TAB_NEWS
+        return ItemViewType.TAB_TREND
     }
 
     override fun onCreateVH(itemView: View, viewType: Int): BaseRclvHolder<*>? {
         Log.i("onCreateVH_LIST_STORY", viewType.toString())
-        if (viewType == ItemViewType.TAB_NEWS) {
+        if (viewType == ItemViewType.TAB_TREND) {
             Log.i("onCreateVH", "LIST_STORY")
-            return NewsItemVH(itemView, this)
+            return TrendItemVH(itemView, this)
         }
         return null
     }
 
 
     override fun getLayoutResource(viewType: Int): Int {
-        return if (viewType == ItemViewType.TAB_NEWS) {
+        return if (viewType == ItemViewType.TAB_TREND) {
             R.layout.item_home_story
         } else {
             INVALID_RESOURCE
@@ -53,8 +53,8 @@ class NewsGroupData(listArticle: List<Article>?) :
     }
 
 
-    private class NewsItemVH(itemView: View, val newsGroupData: NewsGroupData) :
-        GroupRclvVH<Article?, NewsGroupData>(itemView) {
+    private class TrendItemVH(itemView: View, val trendGroupData: TrendGroupData) :
+        GroupRclvVH<StoryDetail, TrendGroupData>(itemView) {
 
         private var ivThumb: ImageView
         private var tvName: TextView
@@ -71,22 +71,22 @@ class NewsGroupData(listArticle: List<Article>?) :
 
         }
 
-        override fun onBind(vhData: Article?) {
+        override fun onBind(vhData: StoryDetail?) {
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
                     groupData.onClickStoryItem?.onClickStoryItem(vhData)
                 }
             }
-            vhData?.let { article ->
+            vhData?.let { story ->
                 Glide
                     .with(ivThumb.context)
-                    .load(article.image)
+                    .load(story.image)
                     .centerCrop()
                     .into(ivThumb);
-                tvName.text = article.title
-                tvDes.text = article.description
-                tvCreatedAt.text = article.date
+                tvName.text = story.title
+                tvDes.text = story.description
+                tvCreatedAt.text = story.createdAt
             }
 
         }
@@ -94,6 +94,6 @@ class NewsGroupData(listArticle: List<Article>?) :
     }
 
     interface OnClickStoryItem {
-        fun onClickStoryItem(item: Article)
+        fun onClickStoryItem(item: StoryDetail)
     }
 }

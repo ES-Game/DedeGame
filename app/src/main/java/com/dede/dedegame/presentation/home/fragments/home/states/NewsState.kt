@@ -13,13 +13,10 @@ class NewsState(stateContext: HomeFragment, view: HomeFragmentView) :
 
     override fun onEnter() {
         super.onEnter()
-        LogUtil.getInstance().e("Theo doi data =================>    " + Gson().toJson(dataNews))
     }
 
-    var dataNews = listOf<Article>()
+    fun setData(listArticle: List<Article>) {
 
-    fun setData(list: List<Article>) {
-        this.dataNews = list
+        mView.showNewsData(listArticle)
     }
-
 }

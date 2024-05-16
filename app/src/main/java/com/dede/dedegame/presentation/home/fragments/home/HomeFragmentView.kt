@@ -2,46 +2,60 @@ package com.dede.dedegame.presentation.home.fragments.home
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.home.Article
+import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.home.fragments.home.groups.HomeTabGroupData
-
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListStoryGroupData
-
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.NewsGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.RankGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.TopBannerGroupData
+import com.dede.dedegame.presentation.home.fragments.home.groups.TrendGroupData
+import com.google.gson.Gson
+import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.dede.dedegame.domain.model.Story
-import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.home.Slider
 
 class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
 
-    private var rvContent: RecyclerView? = null
-
+    private val rvContent by lazy { findViewById<RecyclerView>(R.id.rvContent) }
     private val homeContentAdapter = GroupRclvAdapter()
     private val topBannerGroupData = TopBannerGroupData(null)
     private val homeTabGroupData = HomeTabGroupData(null)
-    private val listStoryGroupData = ListStoryGroupData(null)
+
+    private val newsGroupData = NewsGroupData(null)
+    private val rankGroupData = RankGroupData(null)
+    private val listTrendGroupData = TrendGroupData(null)
 
     override fun onInitView() {
         super.onInitView()
 
-        rvContent = findViewById<RecyclerView>(R.id.rvContent)
-        rvContent!!.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
-        rvContent!!.adapter = homeContentAdapter
+        val layoutManager = GridLayoutManager(context, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position == 0 || position == 1 || position == 2) {
+                    2
+                } else {
+                    1
+                }
+            }
+
+        }
+        rvContent.layoutManager = layoutManager
+        rvContent.adapter = homeContentAdapter
+
         homeContentAdapter.addGroup(topBannerGroupData)
         homeContentAdapter.addGroup(homeTabGroupData)
         homeTabGroupData.show()
-        homeContentAdapter.addGroup(listStoryGroupData)
-        listStoryGroupData.onClickStoryItem = object : ListStoryGroupData.OnClickStoryItem {
+        rankGroupData.onClickStoryItem = object : RankGroupData.OnClickStoryItem {
             override fun onClickStoryItem(item: StoryDetail) {
                 mPresenter.executeCommand(GotoStoryDetailCmd(item))
             }
         }
-        homeTabGroupData.onClickListener = object : HomeTabGroupData.OnClickItemListener{
+        homeTabGroupData.onClickListener = object : HomeTabGroupData.OnClickItemListener {
             override fun onClickTab(position: Int) {
                 mPresenter.executeCommand(GotoTabCmd(position))
             }
@@ -53,9 +67,46 @@ class HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeVi
         topBannerGroupData.show()
     }
 
-    fun showListStory(data: List<StoryDetail>) {
-        listStoryGroupData.reset(data)
-        listStoryGroupData.show()
+    fun showNewsData(data: List<Article>) {
+        if (rankGroupData.isAttached) {
+            homeContentAdapter.removeGroup(rankGroupData)
+        }
+        if (listTrendGroupData.isAttached) {
+            homeContentAdapter.removeGroup(listTrendGroupData)
+        }
+
+        homeContentAdapter.addGroup(newsGroupData)
+        newsGroupData.reset(data)
+        newsGroupData.show()
+    }
+
+    fun showRankData(data: List<StoryDetail>) {
+        if (newsGroupData.isAttached) {
+            homeContentAdapter.removeGroup(newsGroupData)
+        }
+        if (listTrendGroupData.isAttached) {
+            homeContentAdapter.removeGroup(listTrendGroupData)
+        }
+
+        homeContentAdapter.addGroupDataAtIndex(2, rankGroupData)
+        rankGroupData.reset(data)
+        rankGroupData.show()
+
+    }
+
+    fun showTrendData(data: List<StoryDetail>) {
+        if (newsGroupData.isAttached) {
+            homeContentAdapter.remove(2)
+        }
+
+        if (rankGroupData.isAttached) {
+            homeContentAdapter.remove(2)
+
+        }
+
+        homeContentAdapter.addGroup(listTrendGroupData)
+        listTrendGroupData.reset(data)
+        listTrendGroupData.show()
     }
 
     class GotoStoryDetailCmd(val item: StoryDetail) : ICommand

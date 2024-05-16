@@ -6,7 +6,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
@@ -14,7 +13,7 @@ import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.domain.model.StoryDetail
 
 
-class ListStoryGroupData(listStory: List<StoryDetail>?) :
+class RankGroupData(listStory: List<StoryDetail>?) :
     GroupData<List<StoryDetail>>(listStory) {
     var mPresenter: IPresenter? = null
 
@@ -32,21 +31,21 @@ class ListStoryGroupData(listStory: List<StoryDetail>?) :
     }
 
     override fun getItemViewType(positionInGroup: Int): Int {
-        return ItemViewType.LIST_STORY
+        return ItemViewType.TAB_RANK
     }
 
     override fun onCreateVH(itemView: View, viewType: Int): BaseRclvHolder<*>? {
         Log.i("onCreateVH_LIST_STORY", viewType.toString())
-        if (viewType == ItemViewType.LIST_STORY) {
+        if (viewType == ItemViewType.TAB_RANK) {
             Log.i("onCreateVH", "LIST_STORY")
-            return ListStoryVH(itemView, this)
+            return RankItemVH(itemView, this)
         }
         return null
     }
 
 
     override fun getLayoutResource(viewType: Int): Int {
-        return if (viewType == ItemViewType.LIST_STORY) {
+        return if (viewType == ItemViewType.TAB_RANK) {
             R.layout.item_home_story
         } else {
             INVALID_RESOURCE
@@ -54,8 +53,8 @@ class ListStoryGroupData(listStory: List<StoryDetail>?) :
     }
 
 
-    private class ListStoryVH(itemView: View, val listStoryGroupData: ListStoryGroupData) :
-        GroupRclvVH<StoryDetail, ListStoryGroupData>(itemView) {
+    private class RankItemVH(itemView: View, val rankGroupData: RankGroupData) :
+        GroupRclvVH<StoryDetail, RankGroupData>(itemView) {
 
         private var ivThumb: ImageView
         private var tvName: TextView

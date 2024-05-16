@@ -9,8 +9,7 @@ import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
-import com.dede.dedegame.domain.model.Story
-import com.quangph.jetpack.imageloader.ImageLoaderFactory
+import com.dede.dedegame.domain.model.home.Slider
 
 
 class TopBannerAdapter : BaseRclvAdapter(){
@@ -25,7 +24,7 @@ class TopBannerAdapter : BaseRclvAdapter(){
     override fun getItemDataAtPosition(position: Int): Any? = mDataSet?.get(position)
 
     private class TopBannerVH(itemView: View, val adapter: TopBannerAdapter) :
-        BaseRclvHolder<Story>(itemView) {
+        BaseRclvHolder<Slider>(itemView) {
 
         private var ivBanner: ImageView
 
@@ -40,12 +39,12 @@ class TopBannerAdapter : BaseRclvAdapter(){
         }
 
         @SuppressLint("ResourceAsColor")
-        override fun onBind(vhData: Story?) {
+        override fun onBind(vhData: Slider?) {
             super.onBind(vhData)
             vhData?.let {
                 Glide
                     .with(ivBanner.context)
-                    .load(it.urlImage)
+                    .load(it.image)
                     .centerCrop()
                     .into(ivBanner);
                 try {

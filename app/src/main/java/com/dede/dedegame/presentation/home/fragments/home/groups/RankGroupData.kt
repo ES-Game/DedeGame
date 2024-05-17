@@ -1,16 +1,17 @@
 package com.dede.dedegame.presentation.home.fragments.home.groups
 
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.StoryDetail
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.domain.model.StoryDetail
 
 
 class RankGroupData(listStory: List<StoryDetail>?) :
@@ -20,7 +21,7 @@ class RankGroupData(listStory: List<StoryDetail>?) :
     var onClickStoryItem: OnClickStoryItem? = null
 
 
-    override fun getDataInGroup(position: Int): Any? {
+    override fun getDataInGroup(position: Int): Any {
         return data[position]
     }
 
@@ -68,7 +69,6 @@ class RankGroupData(listStory: List<StoryDetail>?) :
             tvCreatedAt = itemView.findViewById(R.id.tvCreateAt)
             tvDes = itemView.findViewById(R.id.tvDesc)
 
-
         }
 
         override fun onBind(vhData: StoryDetail?) {
@@ -83,12 +83,24 @@ class RankGroupData(listStory: List<StoryDetail>?) :
                     .with(ivThumb.context)
                     .load(story.image)
                     .centerCrop()
-                    .into(ivThumb);
+                    .into(ivThumb)
                 tvName.text = story.title
                 tvDes.text = story.description
                 tvCreatedAt.text = story.createdAt
+
+                tvDes.post {
+                    val maxLines = getMaxLinesForHeight(tvDes, tvDes.height)
+                    tvDes.setMaxLines(maxLines)
+                    tvDes.ellipsize = TextUtils.TruncateAt.END
+                }
             }
 
+        }
+
+        private fun getMaxLinesForHeight(textView: TextView, height: Int): Int {
+            val textPaint = textView.paint
+            val lineHeight = textPaint.getFontMetrics(null)
+            return (height / lineHeight).toInt()
         }
 
     }

@@ -72,12 +72,11 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
         rvContent.layoutManager = layoutManager
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
-                var vh = rvContent.findViewHolderForAdapterPosition(position)
                 val itemViewType = homeContentAdapter.getItemViewType(position)
-                if (itemViewType == HomeComicItemViewType.CATEGORY_TITLE) {
-                    return 3
+                return if (itemViewType == HomeComicItemViewType.CATEGORY_TITLE) {
+                    3
                 } else {
-                    return 1
+                    1
                 }
             }
 
@@ -91,6 +90,9 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
     }
 
     fun showStoryCategories(category: Category) {
+        if (rankGroupData.isAttached) {
+            homeContentAdapter.removeGroup(rankGroupData)
+        }
         val categoryGroup = CategoryStoryGroupData(category)
         homeContentAdapter.addGroup(categoryGroup)
         categoryGroup.reset(category)

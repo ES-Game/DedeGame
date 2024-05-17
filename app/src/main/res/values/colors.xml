@@ -18,4 +18,6 @@
     <color name="brown_300">#902400</color>
     <color name="errorColor">#FF1E1D</color>
 
+    <color name="color_grey_divider_list">#B9B9B9</color>
+
 </resources>

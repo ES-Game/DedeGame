@@ -3,6 +3,7 @@ package com.dede.dedegame.repo.network
 import com.dede.dedegame.repo.home.HomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
+import com.dede.dedegame.repo.payment.PaymentResponse
 import com.dede.dedegame.repo.user.AuthenTokenData
 import com.dede.dedegame.repo.user.UserResponse
 import retrofit2.Call
@@ -50,4 +51,7 @@ interface ApiService {
         @Field("client_id") clientId: Int,
         @Field("client_secret") clientSecret: String
     ): Call<UserResponse>
+
+    @POST("fetch-payment-link")
+    fun fetchPayment() : Call<PaymentResponse>
 }

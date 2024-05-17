@@ -21,7 +21,7 @@ class CategoryState(stateContext: HomeComicsFragment, view: HomeComicsFragmentVi
     }
 
     private fun getHomeData() {
-        mStateContext.showLoading()
+        mStateContext.hideLoading()
         val rv = GetHomeDataAction.RV().apply {
             this.limit = 6
         }

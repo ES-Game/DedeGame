@@ -20,7 +20,7 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView):
     }
 
     private fun getRanking() {
-        mStateContext.showLoading()
+        mStateContext.hideLoading()
         mStateContext.actionManager.stopAction(GetRankingAction::class.java)
         val previousDate = Calendar.getInstance()
         previousDate.add(Calendar.DAY_OF_YEAR, -14)

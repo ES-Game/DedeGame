@@ -11,7 +11,9 @@ import com.dede.dedegame.domain.model.home.ComingGame
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.domain.model.payment.Payment
 import com.dede.dedegame.domain.repo.IDedeGameRepo
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
 import com.dede.dedegame.repo.home.ChapterData
@@ -34,6 +36,7 @@ import com.dede.dedegame.repo.temp.home.ComingGameData
 import com.dede.dedegame.repo.temp.home.OpenedGameData
 import com.dede.dedegame.repo.temp.home.SliderData
 import com.dede.dedegame.repo.user.AuthenTokenDataToAuthenToken
+import com.google.gson.Gson
 
 class DedeGameRepoImpl : IDedeGameRepo {
 
@@ -66,6 +69,16 @@ class DedeGameRepoImpl : IDedeGameRepo {
                             SliderDataToSliderConvert()
                         ).convert(response.data?.sliders!!)
                 }
+            }
+        }
+    }
+
+    override fun fetchPayment(): Payment {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.fetchPayment().invokeApi { response ->
+            Payment().apply {
+                this.link = response.data?.link
             }
         }
     }

@@ -4,10 +4,12 @@ import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.home.Home
+import com.dede.dedegame.domain.model.payment.Payment
 
 interface IDedeGameRepo {
 
     fun getHomeData(): Home
+    fun fetchPayment(): Payment
     fun getRanking(from: String, to: String, categoryId: Int, limit: Int): Rank
     fun getStoryDetail(storyId: Int): StoryDetail
     fun login(

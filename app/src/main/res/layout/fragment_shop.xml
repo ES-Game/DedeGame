@@ -2,53 +2,66 @@
 <com.dede.dedegame.presentation.home.fragments.shop.ShopFragmentView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/bg_gradient_for_shop">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.05" />
-
-    <TextView
-        android:id="@+id/txtLabel"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="@string/shop_screen_label"
-        android:background="@drawable/bg_top_start_end_corner"
-        android:fontFamily="@font/montserrat_bold"
-        android:gravity="center"
-        android:textAllCaps="true"
-        android:textColor="@color/brown_300"
-        android:paddingTop="@dimen/margin_small_between_part_in_item"
-        android:paddingBottom="@dimen/margin_small_between_part_in_item"
-        android:layout_marginStart="@dimen/margin_left_right_layout"
-        android:layout_marginEnd="@dimen/margin_left_right_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/guideline" />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rcvPackages"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_bottom_start_end_corner"
-        android:layout_marginStart="@dimen/margin_left_right_layout"
-        android:layout_marginEnd="@dimen/margin_left_right_layout"
-        app:layout_constraintBottom_toTopOf="@+id/guideline2"
+    <WebView
+        android:id="@+id/wvContent"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLabel"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/guideline2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.77" />
+    </WebView>
+
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_percent="0.05" />-->
+
+<!--    <TextView-->
+<!--        android:id="@+id/txtLabel"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="@string/shop_screen_label"-->
+<!--        android:background="@drawable/bg_top_start_end_corner"-->
+<!--        android:fontFamily="@font/montserrat_bold"-->
+<!--        android:gravity="center"-->
+<!--        android:textAllCaps="true"-->
+<!--        android:textColor="@color/brown_300"-->
+<!--        android:paddingTop="@dimen/margin_small_between_part_in_item"-->
+<!--        android:paddingBottom="@dimen/margin_small_between_part_in_item"-->
+<!--        android:layout_marginStart="@dimen/margin_left_right_layout"-->
+<!--        android:layout_marginEnd="@dimen/margin_left_right_layout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.5"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/guideline" />-->
+
+<!--    <androidx.recyclerview.widget.RecyclerView-->
+<!--        android:id="@+id/rcvPackages"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@drawable/bg_bottom_start_end_corner"-->
+<!--        android:layout_marginStart="@dimen/margin_left_right_layout"-->
+<!--        android:layout_marginEnd="@dimen/margin_left_right_layout"-->
+<!--        app:layout_constraintBottom_toTopOf="@+id/guideline2"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/txtLabel"-->
+<!--        app:layout_constraintVertical_bias="0.0" />-->
+
+<!--    <androidx.constraintlayout.widget.Guideline-->
+<!--        android:id="@+id/guideline2"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintGuide_percent="0.77" />-->
 
 </com.dede.dedegame.presentation.home.fragments.shop.ShopFragmentView>

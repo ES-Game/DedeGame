@@ -1,6 +1,7 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic.states
 
 
+import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragment
@@ -8,10 +9,10 @@ import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragme
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.mvpcomponent.MVPState
-import com.dede.dedegame.domain.model.Rank
 import java.util.Calendar
 
-class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView): MVPState<HomeComicsFragment, HomeComicsFragmentView>(stateContext, view){
+class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView) :
+    MVPState<HomeComicsFragment, HomeComicsFragmentView>(stateContext, view) {
 
     override fun onEnter() {
         super.onEnter()
@@ -20,8 +21,7 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView):
     }
 
     private fun getRanking() {
-        mStateContext.hideLoading()
-        mStateContext.actionManager.stopAction(GetRankingAction::class.java)
+        mStateContext.showLoading()
         val previousDate = Calendar.getInstance()
         previousDate.add(Calendar.DAY_OF_YEAR, -14)
         val currentDate = Calendar.getInstance()
@@ -34,19 +34,22 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView):
             this.limit = 6
         }
 
-        mStateContext.actionManager.executeAction(GetRankingAction(), rv, object : Action.SimpleActionCallback<Rank>() {
-            override fun onSuccess(responseValue: Rank?) {
-                super.onSuccess(responseValue)
-                mStateContext.hideLoading()
-                if (responseValue != null) {
-                    responseValue.all?.let { mView.showStoryRankList(it) }
+        mStateContext.actionManager.executeAction(
+            GetRankingAction(),
+            rv,
+            object : Action.SimpleActionCallback<Rank>() {
+                override fun onSuccess(responseValue: Rank?) {
+                    super.onSuccess(responseValue)
+                    mStateContext.hideLoading()
+                    if (responseValue != null) {
+                        responseValue.all?.let { mView.showStoryRankList(it) }
+                    }
                 }
-            }
 
-            override fun onError(e: ActionException) {
-                super.onError(e)
-                mStateContext.hideLoading()
-            }
-        })
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    mStateContext.hideLoading()
+                }
+            })
     }
 }

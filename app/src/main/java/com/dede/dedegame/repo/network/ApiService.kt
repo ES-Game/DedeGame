@@ -1,6 +1,7 @@
 package com.dede.dedegame.repo.network
 
 import com.dede.dedegame.repo.home.HomeResponse
+import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
@@ -18,6 +19,9 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("index")
     fun getHomeData(): Call<HomeResponse>
+
+    @GET("home")
+    fun getCategoriesData(@Query("limit") limit: Int): Call<OldHomeResponse>
 
     @GET("ranking")
     fun getRanking(

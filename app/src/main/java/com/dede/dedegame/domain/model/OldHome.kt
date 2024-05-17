@@ -4,7 +4,7 @@ import android.os.Parcel
 import com.dede.dedegame.extension.parcel.KParcelable
 import com.dede.dedegame.extension.parcel.parcelableCreator
 
-class Home() : KParcelable {
+class OldHome() : KParcelable {
     var featuredStories: List<Story>? = null
     var categories: List<Category>? = null
 
@@ -23,6 +23,6 @@ class Home() : KParcelable {
 
     companion object {
         @JvmField
-        val CREATOR = parcelableCreator(::Home)
+        val CREATOR = parcelableCreator(::OldHome)
     }
 }

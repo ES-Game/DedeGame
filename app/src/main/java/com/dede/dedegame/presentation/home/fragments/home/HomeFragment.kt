@@ -5,15 +5,14 @@ import android.util.Log
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
 import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.common.TimeUtil
-import com.dede.dedegame.presentation.home.fragments.home.states.NewsState
-import com.dede.dedegame.presentation.home.fragments.home.states.RankState
-import com.dede.dedegame.presentation.home.fragments.home.states.TrendState
+import com.dede.dedegame.presentation.home.fragments.home.states.NewsTabState
+import com.dede.dedegame.presentation.home.fragments.home.states.RankTabState
+import com.dede.dedegame.presentation.home.fragments.home.states.TrendTabState
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action.SimpleActionCallback
@@ -34,14 +33,14 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
         const val TREND = "TREND_TAB"
     }
 
-    lateinit var newsState : NewsState
-    lateinit var rankState : RankState
-    lateinit var trendState : TrendState
+    lateinit var newsState : NewsTabState
+    lateinit var rankState : RankTabState
+    lateinit var trendTabState : TrendTabState
 
     override fun onPresenterReady() {
         super.onPresenterReady()
         setupStates()
-        getData()
+        getHomeData()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -71,24 +70,22 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
     }
 
     private fun setupStates() {
-        newsState = NewsState(this@HomeFragment, mvpView)
-        rankState = RankState(this@HomeFragment, mvpView)
-        trendState = TrendState(this@HomeFragment, mvpView)
+        newsState = NewsTabState(this@HomeFragment, mvpView)
+        rankState = RankTabState(this@HomeFragment, mvpView)
+        trendTabState = TrendTabState(this@HomeFragment, mvpView)
         addState(StateName.NEWS, newsState)
         addState(StateName.RANK, rankState)
-        addState(StateName.TREND, trendState)
+        addState(StateName.TREND, trendTabState)
         initState(StateName.NEWS)
     }
 
-
-    private fun getData() {
+    private fun getHomeData() {
         showLoading()
-        val homeDataCallback = object : SimpleActionCallback<Home>() {
+        val callback = object  : SimpleActionCallback<Home>() {
             override fun onSuccess(responseValue: Home?) {
                 super.onSuccess(responseValue)
                 hideLoading()
-                LogUtil.getInstance()
-                    .e("homeDataCallback ===================================================================================")
+
                 if (responseValue != null) {
                     responseValue.sliders?.let {
                         mvpView.showTopBanner(it)
@@ -105,59 +102,13 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
             }
         }
 
-        val rankDataCallback = object : SimpleActionCallback<Rank>() {
-            override fun onSuccess(responseValue: Rank?) {
-                super.onSuccess(responseValue)
-                hideLoading()
-                LogUtil.getInstance()
-                    .e("rankDataCallback ===================================================================================")
-                if (responseValue != null) {
-                    responseValue.all?.let {
-                        rankState.setData(it)
-                        trendState.setData(it)
-                    }
-                }
-            }
-
-            override fun onError(e: ActionException) {
-                super.onError(e)
-                hideLoading()
-            }
-        }
-
-        val rvHome = GetHomeDataAction.RV().apply {
-            this.limit = 6
-        }
-
-        val previousDate = Calendar.getInstance()
-        previousDate.add(Calendar.DAY_OF_YEAR, -14)
-        val currentDate = Calendar.getInstance()
-
-        val rvRank = GetRankingAction.RV().apply {
-            contextName = HomeFragment::class.java.name
-            this.from = TimeUtil.format2(previousDate.time)
-            this.to = TimeUtil.format2(currentDate.time)
-            this.categoryId = 0
-            this.limit = 6
-        }
-        val callbackCompound = object : CompoundCallback() {
-            override fun onCompletedAll() {
-                super.onCompletedAll()
-                LogUtil.getInstance()
-                    .e("===================================================================================")
-                Log.e("Api service", "Done")
-                hideLoading()
-            }
-        }
+        val rv = GetHomeDataAction.RV()
         actionManager.executeAction(
             GetHomeDataAction(),
-            rvHome,
-            homeDataCallback,
+            rv,
+            callback,
             AsyncTaskScheduler()
         )
-            .add(GetRankingAction(), rvRank, rankDataCallback, AsyncTaskScheduler())
-            .onCompound(callbackCompound)
-
     }
 
     private fun goToStoryDetail(storyDetail: StoryDetail) {

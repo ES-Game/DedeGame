@@ -1,8 +1,11 @@
 package com.dede.dedegame.repo
 
 import com.dede.dedegame.domain.model.Author
+import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
+import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.UserInfo
@@ -16,8 +19,11 @@ import com.dede.dedegame.domain.repo.IDedeGameRepo
 import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
+import com.dede.dedegame.repo.home.CategoryData
+import com.dede.dedegame.repo.home.CategoryDataToCategory
 import com.dede.dedegame.repo.home.ChapterData
 import com.dede.dedegame.repo.home.ChapterDataToChapter
+import com.dede.dedegame.repo.home.StoryData
 import com.dede.dedegame.repo.home.StoryDetailData
 import com.dede.dedegame.repo.home.StoryDetailDataToStoryDetail
 import com.dede.dedegame.repo.home.TagData
@@ -79,6 +85,28 @@ class DedeGameRepoImpl : IDedeGameRepo {
         return service.fetchPayment().invokeApi { response ->
             Payment().apply {
                 this.link = response.data?.link
+            }
+        }
+    }
+
+    override fun getCategies(limit: Int): OldHome {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getCategoriesData(limit).invokeApi {
+            OldHome().apply {
+                if (it.data?.featuredStories != null) {
+                    this.featuredStories =
+                        com.dede.dedegame.repo.convert.ListConverter<StoryData, Story>(
+                            StoryDataToStory()
+                        ).convert(it.data?.featuredStories!!)
+                }
+
+                if (it.data?.categories != null) {
+                    this.categories =
+                        com.dede.dedegame.repo.convert.ListConverter<CategoryData, Category>(
+                            CategoryDataToCategory()
+                        ).convert(it.data?.categories!!)
+                }
             }
         }
     }

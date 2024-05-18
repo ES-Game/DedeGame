@@ -7,7 +7,6 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.news.Article
 import com.dede.dedegame.domain.model.news.RelatedArticle
 import com.dede.dedegame.presentation.home.news.groups.OtherNewsGroupData
@@ -18,6 +17,9 @@ import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 
 class NewsDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
     private val rcvInfo by lazy { findViewById<RecyclerView>(R.id.rcvInfo) }
+    private val containerBack by lazy { findViewById<View>(R.id.containerBack) }
+    private val txtStartTitle by lazy { findViewById<TextView>(R.id.txtStartTitle) }
+    private val txtCenterTitle by lazy { findViewById<TextView>(R.id.txtCenterTitle) }
     private val newsDetailAdapter = GroupRclvAdapter()
     private var ownNewsGroupData: OwnNewsGroupData = OwnNewsGroupData(null)
     private var otherNewsGroupData: OtherNewsGroupData = OtherNewsGroupData(null)
@@ -27,33 +29,39 @@ class NewsDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
         setupToolbar()
         rcvInfo?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         rcvInfo?.adapter = newsDetailAdapter
+
+        otherNewsGroupData.onClickListener = object : OtherNewsGroupData.OnClickListener {
+            override fun onClickOtherNews(item: RelatedArticle) {
+                mPresenter.executeCommand(GotoNewsDetailCmd(item))
+            }
+        }
+        newsDetailAdapter.addGroup(ownNewsGroupData)
     }
 
     private fun setupToolbar() {
-        val containerBack: View = findViewById(R.id.containerBack)
-        val txtStartTitle: TextView = findViewById(R.id.txtStartTitle)
-        val txtCenterTitle: TextView = findViewById(R.id.txtCenterTitle)
         txtStartTitle.text = "News Detail"
         containerBack.setOnClickListener {
             mPresenter.executeCommand(OnBackCmd())
         }
     }
 
+    fun setTitleToolbar(title: String) {
+        txtStartTitle.text = title
+    }
+
     fun fillOwnNewsToGroup(article: Article) {
-        ownNewsGroupData = OwnNewsGroupData(article)
-        newsDetailAdapter.addGroup(ownNewsGroupData)
         ownNewsGroupData.reset(article)
         ownNewsGroupData.show()
     }
 
     fun fillOtherNewsToGroup(stories: List<RelatedArticle>) {
-        otherNewsGroupData = OtherNewsGroupData(stories)
         newsDetailAdapter.addGroup(otherNewsGroupData)
         otherNewsGroupData.reset(stories)
         otherNewsGroupData.show()
     }
 
     class OnBackCmd() : ICommand
+    class GotoNewsDetailCmd(val item: RelatedArticle) : ICommand
 }
 
 

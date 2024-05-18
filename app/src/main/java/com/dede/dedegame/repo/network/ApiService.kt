@@ -6,6 +6,7 @@ import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
 import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
+import com.dede.dedegame.repo.temp.mainGame.gameDetail.GameDetailResponse
 import com.dede.dedegame.repo.temp.news.NewsDetailResponse
 import com.dede.dedegame.repo.user.UserResponse
 import retrofit2.Call
@@ -64,4 +65,7 @@ interface ApiService {
 
     @GET("games/{type}")
     fun getGamesByType(@Path("type") articleId: Int, @Query("page") page: Int): Call<ListGameResponse>
+
+    @GET("game/{gameId}")
+    fun getGameDetail(@Path("gameId") gameId: Int): Call<GameDetailResponse>
 }

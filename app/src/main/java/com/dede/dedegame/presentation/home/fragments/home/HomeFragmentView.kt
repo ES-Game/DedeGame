@@ -100,7 +100,7 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
     fun showNewsData(data: List<Article>) {
         newsGroupData.reset(data)
         newsGroupData.show()
-        rvContent.scrollToPosition(0);
+        rvContent.scrollToPosition(0)
     }
 
     fun validateRankGroup() {

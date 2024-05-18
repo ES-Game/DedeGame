@@ -2,7 +2,6 @@ package com.dede.dedegame.presentation.home.fragments.home_comic
 
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.content.ContextCompat
@@ -11,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.CategoryStoryGroupData
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.HomeComicItemViewType
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.RankStoryGroupData
@@ -97,7 +95,7 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
         homeContentAdapter.addGroup(categoryGroup)
         categoryGroup.reset(category)
         categoryGroup.show()
-        categoryGroup.onClickStoryItem = object : CategoryStoryGroupData.OnClickStoryItem{
+        categoryGroup.onClickStoryItem = object : CategoryStoryGroupData.OnClickStoryItem {
             override fun onClickStoryItem(id: Int) {
                 mPresenter.executeCommand(GotoStoryDetailCmd(id))
             }

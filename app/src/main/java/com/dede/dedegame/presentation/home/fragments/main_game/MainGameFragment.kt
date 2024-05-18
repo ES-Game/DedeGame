@@ -1,14 +1,9 @@
 package com.dede.dedegame.presentation.home.fragments.main_game
 
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.usecase.GetGamesByType
-import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.presentation.home.game.GameDetailActivity
-import com.dede.dedegame.presentation.home.game.GameDetailView
-import com.dede.dedegame.presentation.home.news.NewsDetailActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
@@ -30,8 +25,10 @@ class MainGameFragment : JetFragment<MainGameFragmentView>() {
             is MainGameFragmentView.GotoGameDetailCmd -> {
                 GameDetailActivity.launchScreen(activity, command.item.id)
             }
+
             is MainGameFragmentView.DownloadIOSGameCmd -> {
             }
+
             is MainGameFragmentView.DownloadIOSGameCmd -> {
             }
         }

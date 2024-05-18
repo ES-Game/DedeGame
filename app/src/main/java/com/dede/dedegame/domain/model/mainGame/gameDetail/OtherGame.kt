@@ -1,17 +1,18 @@
-package com.dede.dedegame.domain.model.mainGame
+package com.dede.dedegame.domain.model.mainGame.gameDetail
 
 import android.os.Build
 import android.os.Parcel
 import com.dede.dedegame.extension.parcel.KParcelable
 import com.dede.dedegame.extension.parcel.parcelableCreator
 
-class Game() : KParcelable {
+class OtherGame() : KParcelable {
     var id: Int? = null
     var title: String? = null
     var statusOpen: Int? = null
     var image: String? = null
     var description: String? = null
     var tags: List<String>? = null
+
 
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()
@@ -37,6 +38,6 @@ class Game() : KParcelable {
 
     companion object {
         @JvmField
-        val CREATOR = parcelableCreator(::Game)
+        val CREATOR = parcelableCreator(::OtherGame)
     }
 }

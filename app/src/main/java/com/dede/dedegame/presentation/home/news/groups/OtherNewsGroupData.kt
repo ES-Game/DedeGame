@@ -15,7 +15,7 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
     GroupData<List<RelatedArticle>>(data) {
     var mPresenter: IPresenter? = null
 
-    var onClickTopCoverItem: OnClickTopCoverItem? = null
+    var onClickListener: OnClickListener? = null
 
     override fun getDataInGroup(position: Int): Any? {
         return data[position]
@@ -58,6 +58,11 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
 
         override fun onBind(vhData: RelatedArticle?) {
             super.onBind(vhData)
+            clickOn(itemView) {
+                if (vhData != null) {
+                    groupData.onClickListener?.onClickOtherNews(vhData)
+                }
+            }
             vhData?.let {
                 txtTitleNews.text = if (it.title.isNullOrEmpty()) "" else it.title
             }
@@ -65,8 +70,7 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
 
     }
 
-    interface OnClickTopCoverItem {
-        fun onClickReadNow(item: StoryDetail)
-        fun onClickReadLater(item: StoryDetail)
+    interface OnClickListener {
+        fun onClickOtherNews(item: RelatedArticle)
     }
 }

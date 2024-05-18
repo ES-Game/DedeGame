@@ -15,7 +15,11 @@ class NewsDetail() : KParcelable {
 
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.writeParcelable(article, flags)
-        dest.writeTypedList(relatedArticles, flags)
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            dest.writeTypedList(relatedArticles, flags)
+        } else {
+            dest.writeTypedList(relatedArticles)
+        }
     }
 
     companion object {

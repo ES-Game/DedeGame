@@ -4,17 +4,10 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.news.Article
-import com.dede.dedegame.domain.model.news.RelatedArticle
-import com.dede.dedegame.presentation.home.news.groups.OtherNewsGroupData
-import com.dede.dedegame.presentation.home.news.groups.OwnNewsGroupData
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
-import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
 
 class GameDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
     private val rcvInfo by lazy { findViewById<RecyclerView>(R.id.rcvInfo) }

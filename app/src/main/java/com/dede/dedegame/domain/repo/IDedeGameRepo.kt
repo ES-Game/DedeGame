@@ -6,6 +6,7 @@ import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.mainGame.ListGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.model.payment.Payment
 import retrofit2.http.Path
@@ -38,4 +39,6 @@ interface IDedeGameRepo {
 
     fun getNewsDetail(articleId: Int): NewsDetail
     fun getGamesByType(type: Int, page: Int): ListGame
+
+    fun getGameDetail(gameId: Int): GameDetail
 }

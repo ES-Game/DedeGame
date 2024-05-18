@@ -16,6 +16,8 @@ import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.ListGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
+import com.dede.dedegame.domain.model.mainGame.gameDetail.OtherGame
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.model.news.RelatedArticle
 import com.dede.dedegame.domain.model.payment.Payment
@@ -47,6 +49,8 @@ import com.dede.dedegame.repo.temp.home.SliderData
 import com.dede.dedegame.repo.temp.mainGame.GameData
 import com.dede.dedegame.repo.temp.mainGame.GameDataToGame
 import com.dede.dedegame.repo.temp.mainGame.PaginationDataToPagination
+import com.dede.dedegame.repo.temp.mainGame.gameDetail.OtherGameData
+import com.dede.dedegame.repo.temp.mainGame.gameDetail.OtherGameDataToOtherGame
 import com.dede.dedegame.repo.temp.news.ArticleDataToNewsArticle
 import com.dede.dedegame.repo.temp.news.RelatedArticleData
 import com.dede.dedegame.repo.temp.news.RelatedArticleDataToRelateArticle
@@ -271,6 +275,23 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 this.games = it.data?.games?.let { it1 ->
                     com.dede.dedegame.repo.convert.ListConverter<GameData, Game>(
                         GameDataToGame()
+                    ).convert(it1)
+                }
+            }
+        }
+    }
+
+    override fun getGameDetail(gameId: Int): GameDetail {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getGameDetail(gameId).invokeApi {
+            GameDetail().apply {
+                this.game = it.data?.game?.let { it1 ->
+                    com.dede.dedegame.repo.temp.mainGame.gameDetail.GameDataToGame().convert(it1)
+                }
+                this.otherGames = it.data?.otherGames?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<OtherGameData, OtherGame>(
+                        OtherGameDataToOtherGame()
                     ).convert(it1)
                 }
             }

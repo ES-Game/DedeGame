@@ -9,15 +9,15 @@
         android:id="@+id/cardView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginEnd="@dimen/margin_small_between_part_in_item"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="10dp"
         app:cardElevation="0dp"
-        android:layout_marginEnd="@dimen/margin_small_between_part_in_item"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="3:4"
         app:layout_constraintEnd_toStartOf="@+id/constraintLayout"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" >
+        app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -28,10 +28,10 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:scaleType="centerCrop"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -45,28 +45,28 @@
                     android:id="@+id/txtReadNow"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:minHeight="48dp"
-                    android:textColor="@color/white"
-                    android:text="@string/story_cover_top_read_now"
-                    android:fontFamily="@font/montserrat_semi_bold"
-                    android:textSize="@dimen/size_text_medium"
-                    android:textAllCaps="true"
+                    android:layout_weight="1"
                     android:background="@color/orange_300_opacity_80"
+                    android:fontFamily="@font/montserrat_semi_bold"
                     android:gravity="center"
-                    android:layout_weight="1" />
+                    android:minHeight="48dp"
+                    android:text="@string/story_cover_top_read_now"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_text_medium" />
 
                 <TextView
                     android:id="@+id/txtReadLater"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:textColor="@color/white"
-                    android:textSize="@dimen/size_text_medium"
-                    android:textAllCaps="true"
-                    android:text="@string/story_cover_top_read_later"
+                    android:layout_weight="1"
+                    android:background="@color/black_opacity_80"
                     android:fontFamily="@font/montserrat_semi_bold"
                     android:gravity="center"
-                    android:layout_weight="1"
-                    android:background="@color/black_opacity_80"/>
+                    android:text="@string/story_cover_top_read_later"
+                    android:textAllCaps="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/size_text_medium" />
 
             </LinearLayout>
 
@@ -299,6 +299,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small_to_medium_between_part_in_item"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <TextView
@@ -321,6 +322,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:layout_marginTop="@dimen/margin_small_to_medium_between_part_in_item"
                 android:orientation="vertical">
 
@@ -345,6 +347,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/margin_small_to_medium_between_part_in_item"
+                android:visibility="gone"
                 android:orientation="vertical">
 
                 <TextView

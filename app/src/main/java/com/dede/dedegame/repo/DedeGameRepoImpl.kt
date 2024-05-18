@@ -14,9 +14,12 @@ import com.dede.dedegame.domain.model.home.ComingGame
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.domain.model.mainGame.Game
+import com.dede.dedegame.domain.model.mainGame.ListGame
+import com.dede.dedegame.domain.model.news.NewsDetail
+import com.dede.dedegame.domain.model.news.RelatedArticle
 import com.dede.dedegame.domain.model.payment.Payment
 import com.dede.dedegame.domain.repo.IDedeGameRepo
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
 import com.dede.dedegame.repo.home.CategoryData
@@ -41,8 +44,13 @@ import com.dede.dedegame.repo.temp.home.ArticleData
 import com.dede.dedegame.repo.temp.home.ComingGameData
 import com.dede.dedegame.repo.temp.home.OpenedGameData
 import com.dede.dedegame.repo.temp.home.SliderData
+import com.dede.dedegame.repo.temp.mainGame.GameData
+import com.dede.dedegame.repo.temp.mainGame.GameDataToGame
+import com.dede.dedegame.repo.temp.mainGame.PaginationDataToPagination
+import com.dede.dedegame.repo.temp.news.ArticleDataToNewsArticle
+import com.dede.dedegame.repo.temp.news.RelatedArticleData
+import com.dede.dedegame.repo.temp.news.RelatedArticleDataToRelateArticle
 import com.dede.dedegame.repo.user.AuthenTokenDataToAuthenToken
-import com.google.gson.Gson
 
 class DedeGameRepoImpl : IDedeGameRepo {
 
@@ -230,6 +238,40 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 }
                 this.user = it.data?.user?.let { it1 ->
                     UserDataToUser().convert(it1)
+                }
+            }
+        }
+    }
+
+    override fun getNewsDetail(articleId: Int): NewsDetail {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getNewsDetail(articleId).invokeApi {
+            NewsDetail().apply {
+                this.article = it.data?.article?.let { it1 ->
+                    ArticleDataToNewsArticle().convert(it1)
+                }
+                this.relatedArticles = it.data?.relatedArticles?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<RelatedArticleData, RelatedArticle>(
+                        RelatedArticleDataToRelateArticle()
+                    ).convert(it1)
+                }
+            }
+        }
+    }
+
+    override fun getGamesByType(type: Int, page: Int): ListGame {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getGamesByType(type, page).invokeApi {
+            ListGame().apply {
+                this.pagination = it.data?.pagination?.let { it1 ->
+                    PaginationDataToPagination().convert(it1)
+                }
+                this.games = it.data?.games?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<GameData, Game>(
+                        GameDataToGame()
+                    ).convert(it1)
                 }
             }
         }

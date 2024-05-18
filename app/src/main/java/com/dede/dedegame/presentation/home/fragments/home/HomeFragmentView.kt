@@ -63,6 +63,12 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
         homeContentAdapter.addGroup(topBannerGroupData)
         homeContentAdapter.addGroup(homeTabGroupData)
         homeTabGroupData.show()
+
+        newsGroupData.onClickNewsListener = object : NewsGroupData.OnClickNewsListener {
+            override fun onClickNewsItem(item: Article) {
+                mPresenter.executeCommand(GotoNewsDetailCmd(item))
+            }
+        }
         rankGroupData.onClickStoryItem = object : RankGroupData.OnClickStoryItem {
             override fun onClickStoryItem(item: StoryDetail) {
                 mPresenter.executeCommand(GotoStoryDetailCmd(item))
@@ -130,6 +136,7 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
         listTrendGroupData.show()
     }
 
+    class GotoNewsDetailCmd(val item: Article) : ICommand
     class GotoStoryDetailCmd(val item: StoryDetail) : ICommand
     class GotoTabCmd(val position: Int) : ICommand
 }

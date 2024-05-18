@@ -107,6 +107,9 @@ public class CustomTabView extends LinearLayout {
         containerItem.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (disableClick){
+                    return;
+                }
                 int position = indexOfChild(v);
                 if (!listData.get(position).isSelect()) {
                     listData.get(position).setSelect(true);
@@ -130,6 +133,16 @@ public class CustomTabView extends LinearLayout {
             }
         });
         addView(containerItem);
+    }
+
+    private Boolean disableClick;
+
+    public void setDisableClick(Boolean disableClick) {
+        this.disableClick = disableClick;
+    }
+
+    public Boolean getDisableClick() {
+        return disableClick;
     }
 
     public void setEvenListener(OnEventListener listener) {

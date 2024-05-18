@@ -13,6 +13,7 @@ import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.home.fragments.home.states.NewsTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.RankTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.TrendTabState
+import com.dede.dedegame.presentation.home.news.NewsDetailActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action.SimpleActionCallback
@@ -65,6 +66,10 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
                         transitToState(StateName.TREND)
                     }
                 }
+            }
+
+            is HomeFragmentView.GotoNewsDetailCmd -> {
+                NewsDetailActivity.launchScreen(activity, command.item.id)
             }
         }
     }

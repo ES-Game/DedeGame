@@ -84,6 +84,24 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name="com.dede.dedegame.presentation.home.news.NewsDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name="com.dede.dedegame.presentation.home.game.GameDetailActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
     </application>
 
 </manifest>

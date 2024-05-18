@@ -18,7 +18,7 @@ class NewsGroupData(listArticle: List<Article>?) :
     GroupData<List<Article>>(listArticle) {
     var mPresenter: IPresenter? = null
 
-    var onClickStoryItem: OnClickStoryItem? = null
+    var onClickNewsListener: OnClickNewsListener? = null
 
 
     override fun getDataInGroup(position: Int): Any? {
@@ -76,7 +76,7 @@ class NewsGroupData(listArticle: List<Article>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
+                    groupData.onClickNewsListener?.onClickNewsItem(vhData)
                 }
             }
             vhData?.let { article ->
@@ -106,7 +106,7 @@ class NewsGroupData(listArticle: List<Article>?) :
 
     }
 
-    interface OnClickStoryItem {
-        fun onClickStoryItem(item: Article)
+    interface OnClickNewsListener {
+        fun onClickNewsItem(item: Article)
     }
 }

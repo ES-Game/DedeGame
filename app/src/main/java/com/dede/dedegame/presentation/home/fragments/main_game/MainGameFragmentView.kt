@@ -2,56 +2,79 @@ package com.dede.dedegame.presentation.home.fragments.main_game
 
 import android.content.Context
 import android.util.AttributeSet
-import androidx.recyclerview.widget.LinearLayoutManager
+import android.widget.Toast
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.mainGame.Game
+import com.dede.dedegame.presentation.common.CustomItemMainGameDecoration
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.GameTabGroupData
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListStoryGroupData
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListGameGroupData
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
+import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
-import com.dede.dedegame.domain.model.Story
-import com.dede.dedegame.domain.model.StoryDetail
 
-class MainGameFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(context, attrs) {
+class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
+    BaseRelativeView(context, attrs) {
 
-    private var rvContent: RecyclerView? = null
-
+    private val rvContent by lazy { findViewById<RecyclerView>(R.id.rvContent) }
     private val homeContentAdapter = GroupRclvAdapter()
     private val topBannerGroupData = TopBannerGroupData(null)
     private val homeTabGroupData = GameTabGroupData(null)
-    private val listStoryGroupData = ListStoryGroupData(null)
+    private var listGameGroupData = ListGameGroupData(null)
 
     override fun onInitView() {
         super.onInitView()
+        val layoutManager =
+            GridLayoutManager(context, 2)
+        rvContent.layoutManager = layoutManager
+        rvContent.adapter = homeContentAdapter
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                val itemViewType = homeContentAdapter.getItemViewType(position)
+                return if (itemViewType == ItemViewType.LIST_GAME) {
+                    1
+                } else {
+                    2
+                }
+            }
 
-        rvContent = findViewById(R.id.rvContent)
-        rvContent!!.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL ,false)
-        rvContent!!.adapter = homeContentAdapter
+        }
+        val space = resources.getDimensionPixelSize(R.dimen.margin_left_right_layout)
+        val decoration = CustomItemMainGameDecoration(space)
+        rvContent.addItemDecoration(decoration)
+
         homeContentAdapter.addGroup(topBannerGroupData)
         homeContentAdapter.addGroup(homeTabGroupData)
         homeTabGroupData.show()
-        homeContentAdapter.addGroup(listStoryGroupData)
-        listStoryGroupData.onClickStoryItem = object : ListStoryGroupData.OnClickStoryItem {
-            override fun onClickStoryItem(item: StoryDetail) {
-                mPresenter.executeCommand(GotoStoryDetailCmd(item))
+
+        listGameGroupData.onClickGameListener = object : ListGameGroupData.OnClickGameListener {
+            override fun onClickGameItem(item: Game) {
+                mPresenter.executeCommand(GotoGameDetailCmd(item))
             }
+
+            override fun onClickIOSGame(item: Game) {
+                mPresenter.executeCommand(DownloadIOSGameCmd(item))
+            }
+
+            override fun onClickAndroidGame(item: Game) {
+                mPresenter.executeCommand(DownloadAndroidGameCmd(item))
+            }
+
         }
-
+        homeContentAdapter.addGroup(listGameGroupData)
     }
 
-    fun showTopBanner(data: List<Story>) {
-//        topBannerGroupData.reset(data)
-//        topBannerGroupData.show()
+    fun fillGamesToGroup(games: List<Game>) {
+        listGameGroupData.reset(games)
+        listGameGroupData.show()
     }
 
-    fun showListStory(data: List<StoryDetail>) {
-        listStoryGroupData.reset(data)
-        listStoryGroupData.show()
-    }
-
-    class GotoStoryDetailCmd(val item: StoryDetail) : ICommand
+    class GotoGameDetailCmd(val item: Game) : ICommand
+    class DownloadIOSGameCmd(val item: Game) : ICommand
+    class DownloadAndroidGameCmd(val item: Game) : ICommand
 }
 
 

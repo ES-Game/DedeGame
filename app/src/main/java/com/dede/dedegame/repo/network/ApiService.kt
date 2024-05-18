@@ -5,14 +5,14 @@ import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
-import com.dede.dedegame.repo.user.AuthenTokenData
+import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
+import com.dede.dedegame.repo.temp.news.NewsDetailResponse
 import com.dede.dedegame.repo.user.UserResponse
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.POST
-import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -56,6 +56,12 @@ interface ApiService {
         @Field("client_secret") clientSecret: String
     ): Call<UserResponse>
 
+    @GET("article/{articleId}")
+    fun getNewsDetail(@Path("articleId") articleId: Int): Call<NewsDetailResponse>
+
     @POST("fetch-payment-link")
-    fun fetchPayment() : Call<PaymentResponse>
+    fun fetchPayment(): Call<PaymentResponse>
+
+    @GET("games/{type}")
+    fun getGamesByType(@Path("type") articleId: Int, @Query("page") page: Int): Call<ListGameResponse>
 }

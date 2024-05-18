@@ -55,7 +55,7 @@ class GameTabGroupData(data: Unit?) :
                     tabLayout.context.getString(R.string.event_title),
                     R.drawable.event,
                     R.drawable.event_unselect,
-                    true
+                    false
                 )
             )
             tabLayout.addItemTab(
@@ -71,10 +71,10 @@ class GameTabGroupData(data: Unit?) :
                     tabLayout.context.getString(R.string.game_title),
                     R.drawable.gaming,
                     R.drawable.gaming_unselect,
-                    false
+                    true
                 )
             )
-
+            tabLayout.disableClick = true
             tabLayout.setEvenListener { tabModel, pos ->
                 Toast.makeText(
                     tabLayout.context,

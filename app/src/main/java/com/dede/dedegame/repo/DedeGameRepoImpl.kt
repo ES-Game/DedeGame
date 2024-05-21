@@ -1,5 +1,6 @@
 package com.dede.dedegame.repo
 
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.domain.model.Author
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Chapter
@@ -94,11 +95,12 @@ class DedeGameRepoImpl : IDedeGameRepo {
     override fun fetchPayment(): Payment {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.fetchPayment().invokeApi { response ->
-            Payment().apply {
-                this.link = response.data?.link
+        return service.fetchPayment("Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!)
+            .invokeApi { response ->
+                Payment().apply {
+                    this.link = response.data?.link
+                }
             }
-        }
     }
 
     override fun getCategies(limit: Int): OldHome {

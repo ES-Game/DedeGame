@@ -62,19 +62,11 @@ class ListGameGroupData(listGame: List<Game>?) :
 
         override fun onBind(vhData: Game?) {
             super.onBind(vhData)
+            imvAppleLabel.visibility = View.GONE
+            imvAndroidLabel.visibility = View.GONE
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickGameListener?.onClickGameItem(vhData)
-                }
-            }
-            clickOn(imvAppleLabel) {
-                if (vhData != null) {
-                    groupData.onClickGameListener?.onClickIOSGame(vhData)
-                }
-            }
-            clickOn(imvAndroidLabel) {
-                if (vhData != null) {
-                    groupData.onClickGameListener?.onClickAndroidGame(vhData)
+                    vhData.id?.let { it1 -> groupData.onClickGameListener?.onClickGameItem(it1) }
                 }
             }
             vhData?.let { story ->
@@ -90,8 +82,6 @@ class ListGameGroupData(listGame: List<Game>?) :
     }
 
     interface OnClickGameListener {
-        fun onClickGameItem(item: Game)
-        fun onClickIOSGame(item: Game)
-        fun onClickAndroidGame(item: Game)
+        fun onClickGameItem(item: Int)
     }
 }

@@ -2,16 +2,17 @@ package com.dede.dedegame.presentation.home.game
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.usecase.GetGameDetailAction
-import com.dede.dedegame.presentation.common.LogUtil
-import com.google.gson.Gson
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
+
 
 @Layout(R.layout.activity_game_detail)
 class GameDetailActivity : JetActivity<GameDetailView>() {
@@ -39,22 +40,47 @@ class GameDetailActivity : JetActivity<GameDetailView>() {
             is GameDetailView.OnBackCmd -> {
                 onBackPressedDispatcher.onBackPressed()
             }
-//            is HomeView.SubmitBookCmd -> {
-//                val book = Book().apply {
-//                    this.title = command.bookTitle
-//                    this.displayTitle = command.bookTitle
-//                    this.author = command.bookAuthor
-//                    this.publisher = command.bookPublisher
-//                    this.description = command.bookDes
-//                }
-//
-//                val intent = Intent(this, ListBookActivity::class.java).apply {
-//                    this.action = ListBookActivity.EXTRA_BOOK_ADDED_ACTION
-//                    this.putExtra(ListBookActivity.EXTRA_BOOK_ADDED_KEY, book)
-//                    this.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-//                }
-//
-//                startActivity(intent)
+
+            is GameDetailView.GotoOtherGameDetailCmd -> {
+                launchScreen(this@GameDetailActivity, command.item.id)
+                finish()
+            }
+
+            is GameDetailView.DownloadIOSGameCmd -> {
+                if (command.item.statusOpen == 1) {
+                    val webpage = Uri.parse(command.item.linkIos)
+                    val intent = Intent(Intent.ACTION_VIEW, webpage)
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(
+                            this@GameDetailActivity,
+                            "No browser is installed!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(this@GameDetailActivity, "Sắp ra mắt", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            is GameDetailView.DownloadAndroidGameCmd -> {
+                if (command.item.statusOpen == 1) {
+                    val webpage = Uri.parse(command.item.linkAndroid)
+                    val intent = Intent(Intent.ACTION_VIEW, webpage)
+                    if (intent.resolveActivity(packageManager) != null) {
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(
+                            this@GameDetailActivity,
+                            "No browser is installed!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                } else {
+                    Toast.makeText(this@GameDetailActivity, "Sắp ra mắt", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
@@ -73,17 +99,17 @@ class GameDetailActivity : JetActivity<GameDetailView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     responseValue?.let { responseValue ->
-                        LogUtil.getInstance().e(
-                            "Theo doi du lieu game detail ======>   " + Gson().toJson(responseValue)
-                        )
-//                        responseValue.article?.let { article -> mvpView.fillOwnNewsToGroup(article) }
-//                        responseValue.relatedArticles?.let { articles -> mvpView.fillOtherNewsToGroup(articles) }
+                        responseValue.game?.title?.let {
+                            mvpView.setupTitleToolbar(it)
+                        }
+                        mvpView.fillGameDetailToGroup(responseValue)
                     }
                 }
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
                     hideLoading()
+                    Toast.makeText(this@GameDetailActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

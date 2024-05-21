@@ -8,6 +8,8 @@ import com.bumptech.glide.Glide
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.news.Article
+import com.dede.dedegame.extension.loadImageFromUrl
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.widget.CustomWebView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
@@ -59,7 +61,7 @@ class OwnNewsGroupData(data: Article?) :
         override fun onBind(vhData: Article?) {
             super.onBind(vhData)
             vhData?.let {
-                Glide.with(itemView.context).load(it.image).into(ivImageNews)
+                ivImageNews.loadImageFromUrl(it.image)
                 txtDateTime.text = if (it.date.isNullOrEmpty()) "" else it.date
                 txtTitleNews.text = if (it.title.isNullOrEmpty()) "" else it.title
                 it.content?.let { htmlCode ->

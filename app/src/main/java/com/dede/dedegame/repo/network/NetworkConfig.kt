@@ -1,9 +1,8 @@
 package com.dede.dedegame.repo.network
 
-import com.dede.dedegame.BuildConfig
-import com.dede.dedegame.DedeSharedPref
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.dede.dedegame.BuildConfig
 import okhttp3.Authenticator
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -40,18 +39,7 @@ abstract class BaseNetworkConfig {
             logging.level = HttpLoggingInterceptor.Level.NONE
         }
 
-        val builder = OkHttpClient.Builder().addInterceptor {
-            val original = it.request()
-            var token = ""
-            if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!){
-                token = DedeSharedPref.getUserInfo()?.authen?.accessToken!!
-            }
-            val request = original.newBuilder().addHeader("Authorization",
-                String.format("Bearer %s", token))
-            .build()
-            val response = it.proceed(request)
-            response
-        }.addInterceptor(logging)
+        val builder = OkHttpClient.Builder().addInterceptor(logging)
 
         getInterceptors()?.let {
             it.forEach { interceptor ->

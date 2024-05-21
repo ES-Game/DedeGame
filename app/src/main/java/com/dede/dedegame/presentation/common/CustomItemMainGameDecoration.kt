@@ -1,14 +1,17 @@
 package com.dede.dedegame.presentation.common
 
-import android.graphics.Canvas
-import android.graphics.Paint
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class CustomItemMainGameDecoration(private val space: Int) : RecyclerView.ItemDecoration() {
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
         val position = parent.getChildAdapterPosition(view)
         val layoutManager = parent.layoutManager as? GridLayoutManager
         layoutManager?.let {
@@ -21,6 +24,8 @@ class CustomItemMainGameDecoration(private val space: Int) : RecyclerView.ItemDe
                 // Các phần tử có spanSize là 2
                 outRect.left = space
                 outRect.right = space
+                outRect.top = space / 2
+                outRect.bottom = space / 2
             } else {
                 // Các phần tử có spanSize là 1
                 if (column == 0) {
@@ -33,7 +38,11 @@ class CustomItemMainGameDecoration(private val space: Int) : RecyclerView.ItemDe
                     outRect.right = space
                 }
                 if (position >= spanCount - 1) {
-                    outRect.top = space
+//                    if (spanSizeLookup.getSpanSize(position - 1) == 2){
+//                        outRect.top = 0
+//                    } else{
+                        outRect.top = space/2
+//                    }
                 }
             }
         }

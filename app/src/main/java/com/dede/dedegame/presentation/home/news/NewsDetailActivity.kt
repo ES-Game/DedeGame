@@ -2,6 +2,7 @@ package com.dede.dedegame.presentation.home.news
 
 import android.content.Context
 import android.content.Intent
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.usecase.GetNewsDetailAction
@@ -75,6 +76,7 @@ class NewsDetailActivity : JetActivity<NewsDetailView>() {
                 override fun onError(e: ActionException) {
                     super.onError(e)
                     hideLoading()
+                    Toast.makeText(this@NewsDetailActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

@@ -10,6 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.extension.removeItemDecorations
+import com.dede.dedegame.presentation.common.GridSpacingItemDecoration
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.CategoryStoryGroupData
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.HomeComicItemViewType
 import com.dede.dedegame.presentation.home.fragments.home_comic.groups.RankStoryGroupData
@@ -56,9 +58,6 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
             mPresenter.executeCommand(OnclickRankCmd())
         }
 
-        val spacingInPixels = 16
-        rvContent.addItemDecoration(CatalogueGridSpacingItemDecoration(spacingInPixels))
-
 
         rvContent.adapter = homeContentAdapter
 
@@ -79,19 +78,22 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
             }
 
         }
+        rvContent.removeItemDecorations()
+        rvContent.addItemDecoration(CatalogueGridSpacingItemDecoration(16))
     }
 
     fun setupRankLayout() {
         vRankIcons?.visibility = View.VISIBLE
         rvContent.layoutManager = layoutManager1
-
+        rvContent.removeItemDecorations()
+        rvContent.addItemDecoration(GridSpacingItemDecoration(3, 16, true))
     }
 
     fun showStoryCategories(category: Category) {
         if (rankGroupData.isAttached) {
             homeContentAdapter.removeGroup(rankGroupData)
         }
-        val categoryGroup = CategoryStoryGroupData(category)
+        val categoryGroup = CategoryStoryGroupData(null)
         homeContentAdapter.addGroup(categoryGroup)
         categoryGroup.reset(category)
         categoryGroup.show()

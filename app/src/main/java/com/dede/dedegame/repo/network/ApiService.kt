@@ -1,5 +1,6 @@
 package com.dede.dedegame.repo.network
 
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.repo.home.HomeResponse
 import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
@@ -13,6 +14,8 @@ import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -61,7 +64,7 @@ interface ApiService {
     fun getNewsDetail(@Path("articleId") articleId: Int): Call<NewsDetailResponse>
 
     @POST("fetch-payment-link")
-    fun fetchPayment(): Call<PaymentResponse>
+    fun fetchPayment(@Header("Authorization") authToken: String): Call<PaymentResponse>
 
     @GET("games/{type}")
     fun getGamesByType(@Path("type") articleId: Int, @Query("page") page: Int): Call<ListGameResponse>

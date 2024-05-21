@@ -1,6 +1,7 @@
 package com.dede.dedegame.presentation.story_cover
 
 import android.content.Intent
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
@@ -60,6 +61,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                 override fun onError(e: ActionException) {
                     super.onError(e)
                     hideLoading()
+                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

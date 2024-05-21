@@ -4,22 +4,20 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.widget.InputEditText
+import com.dede.dedegame.domain.model.Category
+import com.dede.dedegame.domain.model.Story
+import com.dede.dedegame.extension.loadImageFromUrl
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.widget.RoundedTextView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.domain.model.Category
-import com.dede.dedegame.domain.model.Story
-import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.presentation.common.LogUtil
 
 
-class CategoryStoryGroupData(category: Category) :
-    GroupData<Category>(category) {
+class CategoryStoryGroupData(category: Category?) :
+    GroupData<Category?>(category) {
     var mPresenter: IPresenter? = null
 
     var onClickStoryItem: OnClickStoryItem? = null
@@ -27,13 +25,13 @@ class CategoryStoryGroupData(category: Category) :
 
     override fun getDataInGroup(position: Int): Any? {
         if (position == 0) {
-            return data.name
+            return data?.name
         }
-        return data.stories!!.get(position - 1)
+        return data?.stories!!.get(position - 1)
     }
 
     override fun getCount(): Int {
-        return (data.stories?.size ?: 0) + 1
+        return (data?.stories?.size ?: 0) + 1
     }
 
     override fun getItemViewType(positionInGroup: Int): Int {
@@ -96,18 +94,10 @@ class CategoryStoryGroupData(category: Category) :
             }
             tvRankIndex.visibility = View.GONE
             vhData?.let { story ->
-                Glide
-                    .with(ivThumb.context)
-                    .load(story.urlImage)
-                    .centerCrop()
-                    .into(ivThumb);
                 tvDes.text = story.title
-
+                ivThumb.loadImageFromUrl(story.urlImage)
             }
-
         }
-
-
     }
 
     class CategoryNameViewHolder(itemView: View, val listStoryGroupData: CategoryStoryGroupData) :

@@ -47,6 +47,7 @@ public class CustomTabView extends LinearLayout {
     private void init() {
         setGravity(Gravity.CENTER);
         setOrientation(HORIZONTAL);
+        setDisableClick(false);
     }
 
     public void addItemTab(TabModel tabModel) {

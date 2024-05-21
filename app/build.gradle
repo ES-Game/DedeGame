@@ -52,6 +52,7 @@ dependencies {
     implementation ("jp.co.cyberagent.android:gpuimage:2.1.0")
     implementation "androidx.cardview:cardview:1.0.0"
     retrofit()
+    implementation 'com.google.android.flexbox:flexbox:3.0.0'
 //    implementation project(path: ':base')
 }
 

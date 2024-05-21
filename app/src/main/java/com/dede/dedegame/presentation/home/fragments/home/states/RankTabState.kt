@@ -2,7 +2,6 @@ package com.dede.dedegame.presentation.home.fragments.home.states
 
 
 import com.dede.dedegame.domain.model.Rank
-import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
 import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.dede.dedegame.presentation.common.TimeUtil
@@ -22,6 +21,7 @@ class RankTabState(stateContext: HomeFragment, view: HomeFragmentView) :
         mView.validateRankGroup()
         getRanking()
     }
+
     private fun getRanking() {
         mStateContext.showLoading()
 
@@ -39,7 +39,7 @@ class RankTabState(stateContext: HomeFragment, view: HomeFragmentView) :
 
             override fun onError(e: ActionException) {
                 super.onError(e)
-                    mStateContext.hideLoading()
+                mStateContext.hideLoading()
             }
         }
 
@@ -57,7 +57,12 @@ class RankTabState(stateContext: HomeFragment, view: HomeFragmentView) :
             this.limit = 6
         }
 
-        mStateContext.actionManager.executeAction(GetRankingAction(), rvRank, rankDataCallback, AsyncTaskScheduler())
+        mStateContext.actionManager.executeAction(
+            GetRankingAction(),
+            rvRank,
+            rankDataCallback,
+            AsyncTaskScheduler()
+        )
     }
 
 }

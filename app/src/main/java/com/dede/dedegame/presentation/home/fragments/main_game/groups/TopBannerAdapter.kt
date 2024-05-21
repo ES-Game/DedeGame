@@ -9,13 +9,14 @@ import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.extension.loadImageFromUrl
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
 
 
 class TopBannerAdapter : BaseRclvAdapter(){
     var presenter: IPresenter? = null
 
-    override fun getLayoutResource(p0: Int): Int = R.layout.item_home_top_slider
+    override fun getLayoutResource(p0: Int): Int = R.layout.item_main_game_slider
 
     override fun onCreateVH(p0: View?, p1: Int): BaseRclvHolder<*> = TopBannerVH(p0!!, this)
 
@@ -42,11 +43,7 @@ class TopBannerAdapter : BaseRclvAdapter(){
         override fun onBind(vhData: Slider?) {
             super.onBind(vhData)
             vhData?.let {
-                Glide
-                    .with(ivBanner.context)
-                    .load(it.image)
-                    .centerCrop()
-                    .into(ivBanner);
+                ivBanner.loadImageFromUrl(it.image)
                 try {
                     ivBanner.setBackgroundColor(R.color.gray_300)
                 } catch (e: Exception) {

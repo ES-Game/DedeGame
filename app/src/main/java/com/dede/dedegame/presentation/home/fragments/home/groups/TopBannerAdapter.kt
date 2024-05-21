@@ -3,6 +3,7 @@ package com.dede.dedegame.presentation.home.fragments.home.groups
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.quangph.base.mvp.IPresenter
@@ -10,6 +11,7 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
 import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.presentation.common.LogUtil
 
 
 class TopBannerAdapter : BaseRclvAdapter(){
@@ -42,6 +44,9 @@ class TopBannerAdapter : BaseRclvAdapter(){
         override fun onBind(vhData: Slider?) {
             super.onBind(vhData)
             vhData?.let {
+                clickOn(itemView) {
+                    LogUtil.getInstance().e("fsdafsadf ============>                 ")
+                }
                 Glide
                     .with(ivBanner.context)
                     .load(it.image)

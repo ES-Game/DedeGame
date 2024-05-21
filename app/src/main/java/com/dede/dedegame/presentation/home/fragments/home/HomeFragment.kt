@@ -2,6 +2,7 @@ package com.dede.dedegame.presentation.home.fragments.home
 
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
@@ -104,6 +105,7 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
             override fun onError(e: ActionException) {
                 super.onError(e)
                 hideLoading()
+                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
             }
         }
 

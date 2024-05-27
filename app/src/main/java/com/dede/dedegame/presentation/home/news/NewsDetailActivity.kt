@@ -41,7 +41,6 @@ class NewsDetailActivity : JetActivity<NewsDetailView>() {
 
             is NewsDetailView.GotoNewsDetailCmd -> {
                 launchScreen(this@NewsDetailActivity, command.item.id)
-                finish()
             }
         }
     }

@@ -5,8 +5,8 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.mainGame.OpenTempGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.extension.loadImageFromUrl
 import com.dede.dedegame.presentation.common.LogUtil
 import com.quangph.base.mvp.IPresenter
@@ -66,13 +66,13 @@ class OpenGamesGroupData(category: OpenTempGame?) :
 
 
     class GridStoryVH(itemView: View, val listStoryGroupData: OpenGamesGroupData) :
-        GroupRclvVH<OpenedGame, OpenGamesGroupData>(itemView) {
+        GroupRclvVH<GameInfo, OpenGamesGroupData>(itemView) {
 
         private val imvAvatar by lazy { itemView.findViewById<ImageView>(R.id.imvAvatar) }
         private val imvAppleLabel by lazy { itemView.findViewById<ImageView>(R.id.imvAppleLabel) }
         private val imvAndroidLabel by lazy { itemView.findViewById<ImageView>(R.id.imvAndroidLabel) }
 
-        override fun onBind(vhData: OpenedGame?) {
+        override fun onBind(vhData: GameInfo?) {
             super.onBind(vhData)
             LogUtil.getInstance().e("Tap  ====> onBind")
             clickOn(itemView) {

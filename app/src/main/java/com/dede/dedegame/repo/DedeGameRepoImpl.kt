@@ -11,16 +11,13 @@ import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.home.Article
-import com.dede.dedegame.domain.model.home.ComingGame
 import com.dede.dedegame.domain.model.home.Home
-import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
-import com.dede.dedegame.domain.model.mainGame.gameDetail.OtherGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.domain.model.news.NewsDetail
-import com.dede.dedegame.domain.model.news.RelatedArticle
 import com.dede.dedegame.domain.model.payment.Payment
 import com.dede.dedegame.domain.repo.IDedeGameRepo
 import com.dede.dedegame.repo.home.AuthorData
@@ -72,13 +69,13 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 }
                 if (response.data?.comingGames != null) {
                     this.comingGames =
-                        com.dede.dedegame.repo.convert.ListConverter<ComingGameData, ComingGame>(
+                        com.dede.dedegame.repo.convert.ListConverter<ComingGameData, GameInfo>(
                             ComingGamesDataToComingGamesConvert()
                         ).convert(response.data?.comingGames!!)
                 }
                 if (response.data?.openedGames != null) {
                     this.openedGames =
-                        com.dede.dedegame.repo.convert.ListConverter<OpenedGameData, OpenedGame>(
+                        com.dede.dedegame.repo.convert.ListConverter<OpenedGameData, GameInfo>(
                             OpenedGamesDataToOpenedGamesConvert()
                         ).convert(response.data?.openedGames!!)
                 }
@@ -258,7 +255,7 @@ class DedeGameRepoImpl : IDedeGameRepo {
                     ArticleDataToNewsArticle().convert(it1)
                 }
                 this.relatedArticles = it.data?.relatedArticles?.let { it1 ->
-                    com.dede.dedegame.repo.convert.ListConverter<RelatedArticleData, RelatedArticle>(
+                    com.dede.dedegame.repo.convert.ListConverter<RelatedArticleData, Article>(
                         RelatedArticleDataToRelateArticle()
                     ).convert(it1)
                 }
@@ -292,7 +289,7 @@ class DedeGameRepoImpl : IDedeGameRepo {
                     com.dede.dedegame.repo.temp.mainGame.gameDetail.GameDataToGame().convert(it1)
                 }
                 this.otherGames = it.data?.otherGames?.let { it1 ->
-                    com.dede.dedegame.repo.convert.ListConverter<OtherGameData, OtherGame>(
+                    com.dede.dedegame.repo.convert.ListConverter<OtherGameData, GameInfo>(
                         OtherGameDataToOtherGame()
                     ).convert(it1)
                 }

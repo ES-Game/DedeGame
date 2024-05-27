@@ -11,7 +11,11 @@ class SliderDataToSliderConvert : IConverter<SliderData, Slider> {
         return Slider().apply {
             this.sid = source.sid
             this.image = source.image
-            this.type = source.type?.stringToEnum()
+            if (source.type == "comic_category"){
+                this.type = Slider.Type.COMIC_CATEGORY
+            } else {
+                this.type = Slider.Type.GAME_DETAIL
+            }
 
         }
     }

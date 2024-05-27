@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
+import android.os.Parcel
 import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.recyclerview.widget.RecyclerView
@@ -155,4 +156,12 @@ fun RecyclerView.removeItemDecorations() {
     while (this.itemDecorationCount > 0) {
         this.removeItemDecorationAt(0)
     }
+}
+
+inline fun <reified T : Enum<T>> Parcel.readEnum(): T {
+    return enumValues<T>()[readInt()]
+}
+
+inline fun <reified T : Enum<T>> Parcel.writeEnum(value: T) {
+    writeInt(value.ordinal)
 }

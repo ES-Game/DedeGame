@@ -4,10 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
 import androidx.appcompat.widget.AppCompatTextView;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;

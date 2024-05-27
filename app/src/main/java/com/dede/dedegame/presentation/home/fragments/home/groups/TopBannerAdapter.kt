@@ -3,7 +3,6 @@ package com.dede.dedegame.presentation.home.fragments.home.groups
 import android.annotation.SuppressLint
 import android.view.View
 import android.widget.ImageView
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.bumptech.glide.Glide
 import com.quangph.base.mvp.IPresenter
@@ -11,11 +10,12 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.dede.dedegame.R
 import com.quangph.base.view.recyclerview.adapter.BaseRclvAdapter
 import com.dede.dedegame.domain.model.home.Slider
-import com.dede.dedegame.presentation.common.LogUtil
 
 
 class TopBannerAdapter : BaseRclvAdapter(){
     var presenter: IPresenter? = null
+
+    var onEvenSliderListener: OnEvenSliderListener? = null
 
     override fun getLayoutResource(p0: Int): Int = R.layout.item_home_top_slider
 
@@ -33,11 +33,6 @@ class TopBannerAdapter : BaseRclvAdapter(){
         init {
             ivBanner = itemView.findViewById(R.id.ivHomeTopSliderItmBanner)
 
-            ivBanner.setOnClickListener {
-//                adapter.presenter?.executeCommand(
-//
-//                )
-            }
         }
 
         @SuppressLint("ResourceAsColor")
@@ -45,7 +40,7 @@ class TopBannerAdapter : BaseRclvAdapter(){
             super.onBind(vhData)
             vhData?.let {
                 clickOn(itemView) {
-                    LogUtil.getInstance().e("fsdafsadf ============>                 ")
+                    adapter.onEvenSliderListener?.onClickSliderItem(vhData)
                 }
                 Glide
                     .with(ivBanner.context)
@@ -60,5 +55,9 @@ class TopBannerAdapter : BaseRclvAdapter(){
                 }
             }
         }
+    }
+
+    interface OnEvenSliderListener {
+        fun onClickSliderItem(item: Slider)
     }
 }

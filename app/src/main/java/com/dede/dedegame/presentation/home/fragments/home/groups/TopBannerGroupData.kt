@@ -6,19 +6,21 @@ import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
+import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.presentation.common.IndicatorView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
-import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.home.Slider
-import com.dede.dedegame.presentation.commom.IndicatorView
 
 class TopBannerGroupData(listStory: List<Slider>?) :
     GroupData<List<Slider>>(listStory) {
     var mPresenter: IPresenter? = null
     var sliderHandler: Handler = Handler(Looper.getMainLooper())
-    var currentBannerPosition = 1
+    var onEvenSliderListener: OnEvenSliderListener? = null
+    private val delayMillis: Long = 3000
+    private var runnable: Runnable? = null
 
     override fun getDataInGroup(position: Int): Any? {
         return data
@@ -60,64 +62,22 @@ class TopBannerGroupData(listStory: List<Slider>?) :
         private var vpHomeTopBannerItm: ViewPager2
         private var idvHomeTopBannerItm: IndicatorView
         private var adapter: TopBannerAdapter
-        private var sliderRun: Runnable
-        private val delaySlideTime = 5000L
 
         init {
             vpHomeTopBannerItm = itemView.findViewById(R.id.vpHomeTopBannerItm)
             idvHomeTopBannerItm = itemView.findViewById(R.id.idvHomeTopBannerItm)
 
             adapter = TopBannerAdapter()
+            adapter.onEvenSliderListener = object : TopBannerAdapter.OnEvenSliderListener {
+                override fun onClickSliderItem(item: Slider) {
+                    topBannerGroupData.onEvenSliderListener?.onClickSliderItem(item)
+                }
+            }
             adapter.presenter = topBannerGroupData.mPresenter
             vpHomeTopBannerItm.adapter = adapter
 
-            sliderRun = Runnable {
-                if (adapter.itemCount > 1) {
-                    topBannerGroupData.currentBannerPosition = vpHomeTopBannerItm.currentItem + 1
-                    if (topBannerGroupData.currentBannerPosition >= adapter.itemCount - 1) {
-                        topBannerGroupData.currentBannerPosition = 1
-                        vpHomeTopBannerItm.setCurrentItem(
-                            topBannerGroupData.currentBannerPosition,
-                            false
-                        )
-                    } else {
-                        vpHomeTopBannerItm.currentItem = topBannerGroupData.currentBannerPosition
-                    }
-                }
-            }
-
             idvHomeTopBannerItm.setUpWithViewPager2(vpHomeTopBannerItm, false)
-
-            vpHomeTopBannerItm.registerOnPageChangeCallback(object : OnPageChangeCallback() {
-
-                override fun onPageScrollStateChanged(state: Int) {
-                    super.onPageScrollStateChanged(state)
-                    if (state == ViewPager2.SCROLL_STATE_IDLE && adapter.itemCount > 1) {
-                        when (vpHomeTopBannerItm.currentItem) {
-                            adapter.itemCount - 1 -> {
-                                topBannerGroupData.currentBannerPosition = 1
-                                vpHomeTopBannerItm.setCurrentItem(
-                                    topBannerGroupData.currentBannerPosition, false
-                                )
-                            }
-                            0 -> {
-                                topBannerGroupData.currentBannerPosition = adapter.itemCount - 2
-                                vpHomeTopBannerItm.setCurrentItem(
-                                    topBannerGroupData.currentBannerPosition, false
-                                )
-                            }
-
-                            else -> topBannerGroupData.currentBannerPosition =
-                                vpHomeTopBannerItm.currentItem
-                        }
-                    }
-                }
-
-                override fun onPageSelected(position: Int) {
-                    super.onPageSelected(position)
-                    slideBanner()
-                }
-            })
+            slideBanner()
         }
 
         override fun onBind(vhData: List<Slider>?) {
@@ -126,29 +86,34 @@ class TopBannerGroupData(listStory: List<Slider>?) :
                 if (adapter.mDataSet.isNullOrEmpty()) {
                     adapter.reset(sliders)
                 }
-                if (adapter.itemCount > 1) {
-                    when {
-                        topBannerGroupData.currentBannerPosition >= adapter.itemCount - 1 -> {
-                            topBannerGroupData.currentBannerPosition = 1
-                        }
-                        topBannerGroupData.currentBannerPosition == 0 -> {
-                            topBannerGroupData.currentBannerPosition = adapter.itemCount - 2
-                        }
-                    }
-                    vpHomeTopBannerItm.post {
-                        vpHomeTopBannerItm.setCurrentItem(
-                            topBannerGroupData.currentBannerPosition,
-                            false
-                        )
-                    }
-                    slideBanner()
-                }
             }
         }
 
         private fun slideBanner() {
-            topBannerGroupData.sliderHandler.removeCallbacks(sliderRun)
-            topBannerGroupData.sliderHandler.postDelayed(sliderRun, delaySlideTime)
+            topBannerGroupData.runnable = object : Runnable {
+                override fun run() {
+                    val currentItem = vpHomeTopBannerItm.currentItem
+                    val nextItem = if (currentItem == adapter.itemCount - 1) 0 else currentItem + 1
+                    vpHomeTopBannerItm.setCurrentItem(nextItem, true)
+                    topBannerGroupData.sliderHandler.postDelayed(this, topBannerGroupData.delayMillis)
+                }
+            }
+            topBannerGroupData.sliderHandler.postDelayed(topBannerGroupData.runnable!!, topBannerGroupData.delayMillis)
+
+            vpHomeTopBannerItm.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageScrollStateChanged(state: Int) {
+                    super.onPageScrollStateChanged(state)
+                    if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
+                        topBannerGroupData.sliderHandler.removeCallbacks(topBannerGroupData.runnable!!)
+                    } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
+                        topBannerGroupData.sliderHandler.postDelayed(topBannerGroupData.runnable!!, topBannerGroupData.delayMillis)
+                    }
+                }
+            })
         }
+    }
+
+    interface OnEvenSliderListener {
+        fun onClickSliderItem(item: Slider)
     }
 }

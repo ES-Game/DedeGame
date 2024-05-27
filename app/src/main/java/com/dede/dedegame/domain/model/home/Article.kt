@@ -12,6 +12,7 @@ class Article() : KParcelable {
     var id: Int? = null
     var image: String? = null
     var title: String? = null
+    var content: String? = null
 
     constructor(parcel: Parcel) : this() {
         category = parcel.readString()
@@ -20,6 +21,7 @@ class Article() : KParcelable {
         id = parcel.readInt()
         image = parcel.readString()
         title = parcel.readString()
+        content = parcel.readString()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -29,7 +31,7 @@ class Article() : KParcelable {
         parcel.writeInt(id ?: 0)
         parcel.writeString(image)
         parcel.writeString(title)
-
+        parcel.writeString(content)
     }
 
     companion object {

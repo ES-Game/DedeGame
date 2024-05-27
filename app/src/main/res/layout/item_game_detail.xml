@@ -6,7 +6,8 @@
     android:paddingStart="@dimen/margin_left_right_layout"
     android:paddingTop="@dimen/margin_left_right_layout"
     android:paddingEnd="@dimen/margin_left_right_layout"
-    android:paddingBottom="8dp">
+    android:paddingBottom="8dp"
+    android:background="@drawable/background_app_common">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout7"

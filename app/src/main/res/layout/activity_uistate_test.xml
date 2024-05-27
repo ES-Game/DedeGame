@@ -3,7 +3,8 @@
     android:id="@+id/parentV"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background_app_common">
 
     <Button
         android:id="@+id/btn1"

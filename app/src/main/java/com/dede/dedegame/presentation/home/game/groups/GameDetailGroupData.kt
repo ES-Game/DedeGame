@@ -4,21 +4,17 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.mainGame.gameDetail.Game
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
-import com.dede.dedegame.domain.model.mainGame.gameDetail.OtherGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.extension.loadImageFromUrl
+import com.dede.dedegame.presentation.common.DimensUtil
+import com.dede.dedegame.presentation.common.HorizontalSpaceItemDecoration
 import com.dede.dedegame.presentation.common.JustifiedTextView
 import com.dede.dedegame.presentation.widget.htmltextview.HtmlTextView
-import com.google.android.flexbox.FlexDirection
-import com.google.android.flexbox.FlexWrap
-import com.google.android.flexbox.FlexboxItemDecoration
-import com.google.android.flexbox.FlexboxLayoutManager
-import com.google.android.flexbox.JustifyContent
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
@@ -97,10 +93,11 @@ class GameDetailGroupData(gameDetail: GameDetail?) :
                 rvOtherGames.layoutManager =
                     LinearLayoutManager(rvOtherGames.context, RecyclerView.HORIZONTAL, false)
                 rvOtherGames.adapter = otherGamesAdapter
+                rvOtherGames.addItemDecoration(HorizontalSpaceItemDecoration(DimensUtil.dpToPx(4)));
                 gameOtherGroupData = GameOtherGroupData(null)
                 gameOtherGroupData.onClickOtherGameListener =
                     object : GameOtherGroupData.OnClickOtherGameListener {
-                        override fun onClickGameItem(item: OtherGame) {
+                        override fun onClickGameItem(item: GameInfo) {
                             gameDetailGroupData.onEvenGameDetailListener?.onClickOtherGameItem(item)
                         }
                     }
@@ -130,7 +127,7 @@ class GameDetailGroupData(gameDetail: GameDetail?) :
     }
 
     interface OnEvenGameDetailListener {
-        fun onClickOtherGameItem(item: OtherGame)
+        fun onClickOtherGameItem(item: GameInfo)
         fun onClickAndroidDownload(item: Game)
         fun onClickIOSDownload(item: Game)
     }

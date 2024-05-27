@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginEnd="@dimen/margin_left_right_layout"
-    android:layout_marginStart="@dimen/margin_left_right_layout">
+    android:layout_marginStart="@dimen/margin_left_right_layout"
+    android:background="@drawable/background_app_common">
 
     <ImageView
         android:id="@+id/ivHomeTopSliderItmBanner"

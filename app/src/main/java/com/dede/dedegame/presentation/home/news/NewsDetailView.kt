@@ -7,8 +7,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.news.Article
-import com.dede.dedegame.domain.model.news.RelatedArticle
+import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.presentation.home.news.groups.OtherNewsGroupData
 import com.dede.dedegame.presentation.home.news.groups.OwnNewsGroupData
 import com.quangph.base.mvp.ICommand
@@ -27,11 +26,11 @@ class NewsDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
     override fun onInitView() {
         super.onInitView()
         setupToolbar()
-        rcvInfo?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-        rcvInfo?.adapter = newsDetailAdapter
+        rcvInfo.layoutManager = LinearLayoutManager(context)
+        rcvInfo.adapter = newsDetailAdapter
 
         otherNewsGroupData.onClickListener = object : OtherNewsGroupData.OnClickListener {
-            override fun onClickOtherNews(item: RelatedArticle) {
+            override fun onClickOtherNews(item: Article) {
                 mPresenter.executeCommand(GotoNewsDetailCmd(item))
             }
         }
@@ -54,14 +53,14 @@ class NewsDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
         ownNewsGroupData.show()
     }
 
-    fun fillOtherNewsToGroup(stories: List<RelatedArticle>) {
+    fun fillOtherNewsToGroup(stories: List<Article>) {
         newsDetailAdapter.addGroup(otherNewsGroupData)
         otherNewsGroupData.reset(stories)
         otherNewsGroupData.show()
     }
 
     class OnBackCmd() : ICommand
-    class GotoNewsDetailCmd(val item: RelatedArticle) : ICommand
+    class GotoNewsDetailCmd(val item: Article) : ICommand
 }
 
 

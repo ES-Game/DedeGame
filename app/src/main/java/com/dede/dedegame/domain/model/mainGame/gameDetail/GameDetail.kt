@@ -6,11 +6,11 @@ import com.dede.dedegame.extension.parcel.parcelableCreator
 
 class GameDetail() : KParcelable {
     var game: Game? = null
-    var otherGames: List<OtherGame>? = null
+    var otherGames: List<GameInfo>? = null
 
     constructor(parcel: Parcel) : this() {
         game = parcel.readTypedObject(Game.CREATOR)
-        otherGames = parcel.createTypedArrayList(OtherGame.CREATOR)
+        otherGames = parcel.createTypedArrayList(GameInfo.CREATOR)
     }
 
     override fun writeToParcel(dest: Parcel, flags: Int) {

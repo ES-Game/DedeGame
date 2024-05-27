@@ -28,6 +28,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.widget.TextView;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 /**
  * <p/>
  * A {@link TextView} that insert spaces around its text spans where needed to prevent
@@ -44,7 +46,7 @@ import android.widget.TextView;
  * <p/>
  * From https://gist.github.com/pyricau/3424004 with fix from comments
  */
-public class JellyBeanSpanFixTextView extends TextView {
+public class JellyBeanSpanFixTextView extends AppCompatTextView {
 
     private static class FixingResult {
         public final boolean fixed;

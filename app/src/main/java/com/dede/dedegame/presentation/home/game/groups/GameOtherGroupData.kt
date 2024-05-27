@@ -4,15 +4,15 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.mainGame.gameDetail.OtherGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.extension.loadImageFromUrl
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 
-class GameOtherGroupData(tags: List<OtherGame>?) :
-    GroupData<List<OtherGame>>(tags) {
+class GameOtherGroupData(tags: List<GameInfo>?) :
+    GroupData<List<GameInfo>>(tags) {
     var mPresenter: IPresenter? = null
 
     var onClickOtherGameListener: OnClickOtherGameListener? = null
@@ -48,11 +48,11 @@ class GameOtherGroupData(tags: List<OtherGame>?) :
     }
 
     private class OtherGameVH(itemView: View, val gameOtherGroupData: GameOtherGroupData) :
-        GroupRclvVH<OtherGame, GameOtherGroupData>(itemView) {
+        GroupRclvVH<GameInfo, GameOtherGroupData>(itemView) {
 
         private val ivThumb by lazy { itemView.findViewById<ImageView>(R.id.ivThumb) }
 
-        override fun onBind(vhData: OtherGame?) {
+        override fun onBind(vhData: GameInfo?) {
             super.onBind(vhData)
             vhData?.let {
                 ivThumb.loadImageFromUrl(it.image)
@@ -65,6 +65,6 @@ class GameOtherGroupData(tags: List<OtherGame>?) :
     }
 
     interface OnClickOtherGameListener {
-        fun onClickGameItem(item: OtherGame)
+        fun onClickGameItem(item: GameInfo)
     }
 }

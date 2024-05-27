@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingTop="16dp"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp">
+    android:paddingEnd="16dp"
+    android:background="@drawable/background_app_common">
 
     <TextView
         android:id="@+id/txtTitleNews"

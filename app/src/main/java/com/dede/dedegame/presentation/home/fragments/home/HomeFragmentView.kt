@@ -59,7 +59,11 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
         )
         rvContent.addItemDecoration(decoration)
 
-
+        topBannerGroupData.onEvenSliderListener = object : TopBannerGroupData.OnEvenSliderListener {
+            override fun onClickSliderItem(item: Slider) {
+                mPresenter.executeCommand(GotoScreenByTypeCmd(item))
+            }
+        }
         homeContentAdapter.addGroup(topBannerGroupData)
         homeContentAdapter.addGroup(homeTabGroupData)
         homeTabGroupData.show()
@@ -136,6 +140,7 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
         listTrendGroupData.show()
     }
 
+    class GotoScreenByTypeCmd(val item: Slider) : ICommand
     class GotoNewsDetailCmd(val item: Article) : ICommand
     class GotoStoryDetailCmd(val item: StoryDetail) : ICommand
     class GotoTabCmd(val position: Int) : ICommand

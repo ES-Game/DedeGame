@@ -43,7 +43,6 @@ class GameDetailActivity : JetActivity<GameDetailView>() {
 
             is GameDetailView.GotoOtherGameDetailCmd -> {
                 launchScreen(this@GameDetailActivity, command.item.id)
-                finish()
             }
 
             is GameDetailView.DownloadIOSGameCmd -> {

@@ -2,14 +2,10 @@ package com.dede.dedegame.repo.home.temp
 
 import com.dede.dedegame.repo.convert.ListConverter
 import com.dede.dedegame.repo.convert.IConverter
-import com.dede.dedegame.domain.model.Author
-import com.dede.dedegame.domain.model.Chapter
-import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.home.Article
-import com.dede.dedegame.domain.model.home.ComingGame
 import com.dede.dedegame.domain.model.home.Home
-import com.dede.dedegame.domain.model.home.OpenedGame
 import com.dede.dedegame.domain.model.home.Slider
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.repo.temp.home.ArticleData
 import com.dede.dedegame.repo.temp.home.ComingGameData
 import com.dede.dedegame.repo.temp.home.HomeData
@@ -26,12 +22,12 @@ class HomeDataToHomeConvert: IConverter<HomeData, Home> {
                 )
             }
             this.comingGames = source.comingGames?.let {
-                ListConverter<ComingGameData, ComingGame>(ComingGamesDataToComingGamesConvert()).convert(
+                ListConverter<ComingGameData, GameInfo>(ComingGamesDataToComingGamesConvert()).convert(
                     it
                 )
             }
             this.openedGames = source.openedGames?.let {
-                ListConverter<OpenedGameData, OpenedGame>(OpenedGamesDataToOpenedGamesConvert()).convert(
+                ListConverter<OpenedGameData, GameInfo>(OpenedGamesDataToOpenedGamesConvert()).convert(
                     it
                 )
             }

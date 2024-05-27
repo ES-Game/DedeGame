@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.mainGame.gameDetail.Game
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
-import com.dede.dedegame.domain.model.mainGame.gameDetail.OtherGame
+import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.presentation.home.game.groups.GameDetailGroupData
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
@@ -47,7 +47,7 @@ class GameDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
         gameDetailGroupData = GameDetailGroupData(gameDetail)
         gameDetailGroupData.onEvenGameDetailListener =
             object : GameDetailGroupData.OnEvenGameDetailListener {
-                override fun onClickOtherGameItem(item: OtherGame) {
+                override fun onClickOtherGameItem(item: GameInfo) {
                     mPresenter.executeCommand(GotoOtherGameDetailCmd(item))
                 }
 
@@ -67,7 +67,7 @@ class GameDetailView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
 
     class OnBackCmd() : ICommand
 
-    class GotoOtherGameDetailCmd(val item: OtherGame) : ICommand
+    class GotoOtherGameDetailCmd(val item: GameInfo) : ICommand
     class DownloadIOSGameCmd(val item: Game) : ICommand
     class DownloadAndroidGameCmd(val item: Game) : ICommand
 }

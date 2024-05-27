@@ -45,12 +45,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDateTime" />
 
-    <com.dede.dedegame.presentation.widget.CustomWebView
+    <com.dede.dedegame.presentation.widget.webview.CustomWebView
         android:id="@+id/wvContent"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
+        android:nestedScrollingEnabled="false"
         app:layout_constraintBottom_toTopOf="@+id/line"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

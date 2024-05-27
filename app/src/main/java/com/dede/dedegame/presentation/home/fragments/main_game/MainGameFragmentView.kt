@@ -28,9 +28,10 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
     private var listGameGroupData = ListGameGroupData(null)
     val comingGamesGroupData = ComingGamesGroupData(null)
     val openGamesGroupData = OpenGamesGroupData(null)
+    private lateinit var layoutManager: GridLayoutManager
     override fun onInitView() {
         super.onInitView()
-        val layoutManager =
+        layoutManager =
             GridLayoutManager(context, 2)
         rvContent.layoutManager = layoutManager
         rvContent.adapter = homeContentAdapter
@@ -64,7 +65,7 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         topBannerGroupData.show()
     }
 
-    fun fillOpenGamesToGroup(openTempGame: OpenTempGame){
+    fun fillOpenGamesToGroup(openTempGame: OpenTempGame) {
         homeContentAdapter.addGroup(openGamesGroupData)
         openGamesGroupData.reset(openTempGame)
         openGamesGroupData.show()
@@ -74,7 +75,8 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
             }
         }
     }
-    fun fillComingGamesToGroup(comingGame: ComingTempGame){
+
+    fun fillComingGamesToGroup(comingGame: ComingTempGame) {
         homeContentAdapter.addGroup(comingGamesGroupData)
         comingGamesGroupData.reset(comingGame)
         comingGamesGroupData.show()
@@ -88,6 +90,18 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
     fun fillGamesToGroup(games: List<Game>) {
         listGameGroupData.reset(games)
         listGameGroupData.show()
+    }
+
+    private var scrollPosition = 0
+
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        scrollPosition = layoutManager.findFirstVisibleItemPosition()
+    }
+
+    override fun onAttachedToWindow() {
+        super.onAttachedToWindow()
+        layoutManager.scrollToPosition(scrollPosition)
     }
 
     class GotoGameDetailCmd(val id: Int) : ICommand

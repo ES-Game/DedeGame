@@ -4,15 +4,14 @@ import android.util.Log
 import android.view.View
 import android.widget.TextView
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.news.RelatedArticle
+import com.dede.dedegame.domain.model.home.Article
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 
-class OtherNewsGroupData(data: List<RelatedArticle>?) :
-    GroupData<List<RelatedArticle>>(data) {
+class OtherNewsGroupData(data: List<Article>?) :
+    GroupData<List<Article>>(data) {
     var mPresenter: IPresenter? = null
 
     var onClickListener: OnClickListener? = null
@@ -48,7 +47,7 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
     }
 
     private class TopCoverVH(itemView: View, val homeTabGroupData: OtherNewsGroupData) :
-        GroupRclvVH<RelatedArticle, OtherNewsGroupData>(itemView) {
+        GroupRclvVH<Article, OtherNewsGroupData>(itemView) {
 
         private val txtTitleNews by lazy { itemView.findViewById<TextView>(R.id.txtTitleNews) }
 
@@ -56,7 +55,7 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
 
         }
 
-        override fun onBind(vhData: RelatedArticle?) {
+        override fun onBind(vhData: Article?) {
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
@@ -71,6 +70,6 @@ class OtherNewsGroupData(data: List<RelatedArticle>?) :
     }
 
     interface OnClickListener {
-        fun onClickOtherNews(item: RelatedArticle)
+        fun onClickOtherNews(item: Article)
     }
 }

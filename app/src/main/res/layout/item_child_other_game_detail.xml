@@ -6,7 +6,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
-        android:layout_width="@dimen/_80sdp"
+        android:layout_width="@dimen/_53sdp"
         android:layout_height="@dimen/_53sdp"
         app:cardBackgroundColor="@android:color/transparent"
         app:cardCornerRadius="8dp"
@@ -20,7 +20,7 @@
             android:id="@+id/ivThumb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerCrop" />
+            android:scaleType="fitXY" />
 
     </androidx.cardview.widget.CardView>
 

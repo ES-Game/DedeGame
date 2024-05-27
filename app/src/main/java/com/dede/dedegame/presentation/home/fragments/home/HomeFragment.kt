@@ -7,6 +7,7 @@ import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.home.Home
+import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
 import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.dede.dedegame.presentation.common.LogUtil
@@ -14,6 +15,7 @@ import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.home.fragments.home.states.NewsTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.RankTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.TrendTabState
+import com.dede.dedegame.presentation.home.game.GameDetailActivity
 import com.dede.dedegame.presentation.home.news.NewsDetailActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
@@ -71,6 +73,17 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
 
             is HomeFragmentView.GotoNewsDetailCmd -> {
                 NewsDetailActivity.launchScreen(activity, command.item.id)
+            }
+
+            is HomeFragmentView.GotoScreenByTypeCmd -> {
+                when(command.item.type){
+                    Slider.Type.COMIC_CATEGORY -> {
+
+                    }
+                    else -> {
+                        GameDetailActivity.launchScreen(activity, command.item.sid)
+                    }
+                }
             }
         }
     }

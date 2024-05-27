@@ -4,13 +4,11 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
-import com.dede.dedegame.domain.model.news.Article
+import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.extension.loadImageFromUrl
-import com.dede.dedegame.presentation.common.LogUtil
-import com.dede.dedegame.presentation.widget.CustomWebView
+import com.dede.dedegame.presentation.widget.webview.CustomWebView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
@@ -19,8 +17,6 @@ import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 class OwnNewsGroupData(data: Article?) :
     GroupData<Article>(data) {
     var mPresenter: IPresenter? = null
-
-    var onClickTopCoverItem: OnClickTopCoverItem? = null
 
     override fun getDataInGroup(position: Int): Any? {
         return data
@@ -67,7 +63,6 @@ class OwnNewsGroupData(data: Article?) :
                 it.content?.let { htmlCode ->
                     wvContent.visibility = View.VISIBLE
                     wvContent.loadHtml(htmlCode)
-                    wvContent.setScrollingEnabled(false)
                 } ?: {
                     wvContent.visibility = View.GONE
                 }

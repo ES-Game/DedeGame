@@ -1,4 +1,4 @@
-package com.dede.dedegame.presentation.commom
+package com.dede.dedegame.presentation.common
 
 import android.content.Context
 import android.graphics.drawable.Drawable
@@ -8,9 +8,11 @@ import android.widget.ImageView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
-import androidx.recyclerview.widget.RecyclerView.AdapterDataObserver
+import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
+import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
+import com.dede.dedegame.presentation.widget.carouselView.CarouselView
 
 class IndicatorView : ConstraintLayout {
 
@@ -38,7 +40,8 @@ class IndicatorView : ConstraintLayout {
     private var dotCount = -1
     private var isInfiniteViewPager = false
 
-    private var viewPager: ViewPager2? = null
+    private var viewPager2: ViewPager2? = null
+    private var viewPager: CarouselView? = null
 
     init {
         selectedIcon =
@@ -50,10 +53,29 @@ class IndicatorView : ConstraintLayout {
         iconSpace = context.resources.getDimensionPixelSize(com.intuit.sdp.R.dimen._4sdp)
     }
 
+    fun setUpWithViewPager(viewPager: CarouselView?, isInfinite: Boolean = false) {
+        this.isInfiniteViewPager = isInfinite
+        this.viewPager = viewPager
+        this.viewPager2 = null
+        viewPager?.let { vp ->
+            vp.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {}
+
+                override fun onPageSelected(position: Int) {
+                    selectDotHighlight(if (isInfiniteViewPager) position - 1 else position)
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {}
+            })
+            populateDotsFromPagerAdapter()
+        }
+    }
+
     fun setUpWithViewPager2(viewPager2: ViewPager2?, isInfinite: Boolean = false) {
         this.isInfiniteViewPager = isInfinite
-        viewPager = viewPager2
-        viewPager?.let { vp ->
+        this.viewPager2 = viewPager2
+        this.viewPager = null
+        viewPager2?.let { vp ->
             registerAdapterDataObserver()
             populateDotsFromPagerAdapter()
             vp.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -105,7 +127,7 @@ class IndicatorView : ConstraintLayout {
 
     private fun populateDotsFromPagerAdapter() {
         removeAllViews()
-        dotCount = viewPager?.adapter?.itemCount ?: 0
+        dotCount = viewPager2?.adapter?.itemCount ?: viewPager?.containerViewPager?.adapter?.count ?: 0
         if (isInfiniteViewPager) {
             dotCount -= 2
         }
@@ -141,7 +163,7 @@ class IndicatorView : ConstraintLayout {
                 addSliderView()
             }
             selectDotHighlight(
-                position = if (isInfiniteViewPager) viewPager!!.currentItem - 1 else viewPager!!.currentItem,
+                position = if (isInfiniteViewPager) (viewPager2?.currentItem ?: viewPager!!.currentItem) - 1 else (viewPager2?.currentItem ?: viewPager!!.currentItem),
                 isSmoothScroll = false
             )
         } else {
@@ -150,7 +172,7 @@ class IndicatorView : ConstraintLayout {
     }
 
     private fun registerAdapterDataObserver() {
-        viewPager?.adapter?.registerAdapterDataObserver(object : AdapterDataObserver() {
+        viewPager2?.adapter?.registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
             override fun onChanged() {
                 populateDotsFromPagerAdapter()
             }
@@ -236,7 +258,6 @@ class IndicatorView : ConstraintLayout {
             }
         }
     }
-
 
     enum class IndicatorType(val value: Int) {
         NONE(0), SLIDE(1);

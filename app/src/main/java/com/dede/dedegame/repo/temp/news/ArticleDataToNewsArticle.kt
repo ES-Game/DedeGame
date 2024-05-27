@@ -1,6 +1,6 @@
 package com.dede.dedegame.repo.temp.news
 
-import com.dede.dedegame.domain.model.news.Article
+import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.repo.convert.IConverter
 
 

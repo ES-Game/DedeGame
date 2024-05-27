@@ -73,7 +73,8 @@ class CategoryStoryGroupData(category: Category?) :
 
         private var tvDes: TextView
         private val tvRankIndex by lazy { itemView.findViewById<RoundedTextView>(R.id.tvRankIndex) }
-
+        private val tvLiked by lazy { itemView.findViewById<TextView>(R.id.tvLiked) }
+        private val tvViewed by lazy { itemView.findViewById<TextView>(R.id.tvViewed) }
         init {
 
             ivThumb = itemView.findViewById(R.id.ivThumb)
@@ -96,6 +97,8 @@ class CategoryStoryGroupData(category: Category?) :
             vhData?.let { story ->
                 tvDes.text = story.title
                 ivThumb.loadImageFromUrl(story.urlImage)
+                tvLiked.text = story.featured.toString()
+                tvViewed.text = story.views.toString()
             }
         }
     }

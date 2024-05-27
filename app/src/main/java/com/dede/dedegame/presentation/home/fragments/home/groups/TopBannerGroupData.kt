@@ -5,7 +5,6 @@ import android.os.Looper
 import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import androidx.viewpager2.widget.ViewPager2.OnPageChangeCallback
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.presentation.common.IndicatorView
@@ -19,8 +18,9 @@ class TopBannerGroupData(listStory: List<Slider>?) :
     var mPresenter: IPresenter? = null
     var sliderHandler: Handler = Handler(Looper.getMainLooper())
     var onEvenSliderListener: OnEvenSliderListener? = null
-    private val delayMillis: Long = 3000
+    private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
+    private val delayMillis: Long = 3000
 
     override fun getDataInGroup(position: Int): Any? {
         return data
@@ -77,7 +77,15 @@ class TopBannerGroupData(listStory: List<Slider>?) :
             vpHomeTopBannerItm.adapter = adapter
 
             idvHomeTopBannerItm.setUpWithViewPager2(vpHomeTopBannerItm, false)
-            slideBanner()
+
+            topBannerGroupData.runnable = object : Runnable {
+                override fun run() {
+                    val nextItem =
+                        if (vpHomeTopBannerItm.currentItem == adapter.itemCount - 1) 0 else vpHomeTopBannerItm.currentItem + 1
+                    vpHomeTopBannerItm.setCurrentItem(nextItem, true)
+                    topBannerGroupData.handler.postDelayed(this, topBannerGroupData.delayMillis)
+                }
+            }
         }
 
         override fun onBind(vhData: List<Slider>?) {
@@ -86,30 +94,21 @@ class TopBannerGroupData(listStory: List<Slider>?) :
                 if (adapter.mDataSet.isNullOrEmpty()) {
                     adapter.reset(sliders)
                 }
+                startAutoScrolling()
             }
         }
 
-        private fun slideBanner() {
-            topBannerGroupData.runnable = object : Runnable {
-                override fun run() {
-                    val currentItem = vpHomeTopBannerItm.currentItem
-                    val nextItem = if (currentItem == adapter.itemCount - 1) 0 else currentItem + 1
-                    vpHomeTopBannerItm.setCurrentItem(nextItem, true)
-                    topBannerGroupData.sliderHandler.postDelayed(this, topBannerGroupData.delayMillis)
-                }
+        private fun startAutoScrolling() {
+            topBannerGroupData.runnable?.let {
+                topBannerGroupData.handler.postDelayed(
+                    it,
+                    topBannerGroupData.delayMillis
+                )
             }
-            topBannerGroupData.sliderHandler.postDelayed(topBannerGroupData.runnable!!, topBannerGroupData.delayMillis)
+        }
 
-            vpHomeTopBannerItm.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                override fun onPageScrollStateChanged(state: Int) {
-                    super.onPageScrollStateChanged(state)
-                    if (state == ViewPager2.SCROLL_STATE_DRAGGING) {
-                        topBannerGroupData.sliderHandler.removeCallbacks(topBannerGroupData.runnable!!)
-                    } else if (state == ViewPager2.SCROLL_STATE_IDLE) {
-                        topBannerGroupData.sliderHandler.postDelayed(topBannerGroupData.runnable!!, topBannerGroupData.delayMillis)
-                    }
-                }
-            })
+        private fun stopAutoScrolling() {
+            topBannerGroupData?.runnable?.let { topBannerGroupData.handler.removeCallbacks(it) }
         }
     }
 

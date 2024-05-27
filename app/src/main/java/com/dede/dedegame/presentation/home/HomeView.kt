@@ -3,6 +3,7 @@ package com.dede.dedegame.presentation.home
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -64,8 +65,12 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         val containerBack : View = findViewById(R.id.containerBack)
         val txtStartTitle : TextView = findViewById(R.id.txtStartTitle)
         val txtCenterTitle : TextView = findViewById(R.id.txtCenterTitle)
+        val imvNoti : ImageView = findViewById(R.id.imvNoti)
+        val imvEnd : ImageView = findViewById(R.id.imvEnd)
         containerBack.visibility = View.GONE
         txtStartTitle.text = "Home"
+        imvNoti.setImageResource(R.drawable.ic_app_notification)
+        imvEnd.setImageResource(R.drawable.ic_app_email)
     }
 
 }

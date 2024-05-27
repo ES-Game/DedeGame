@@ -14,6 +14,7 @@ import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.extension.loadImageFromUrl
 
 
 class RankStoryGroupData(listStory: List<StoryDetail>?) :
@@ -62,6 +63,8 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
         private var ivThumb: ImageView
         private var tvDes: TextView
         private val tvRankIndex by lazy { itemView.findViewById<RoundedTextView>(R.id.tvRankIndex) }
+        private val tvLiked by lazy { itemView.findViewById<TextView>(R.id.tvLiked) }
+        private val tvViewed by lazy { itemView.findViewById<TextView>(R.id.tvViewed) }
         init {
 
             ivThumb = itemView.findViewById(R.id.ivThumb)
@@ -82,14 +85,10 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
             tvRankIndex.text = (adapterPosition + 1).toString()
             fillColorIndex(adapterPosition)
             vhData?.let { story ->
-                Glide
-                    .with(ivThumb.context)
-                    .load(story.image)
-                    .centerCrop()
-                    .into(ivThumb)
-
-                tvDes.text = story.description
-
+                ivThumb.loadImageFromUrl(story.image)
+                tvDes.text = story.title
+                tvLiked.text = story.likes.toString()
+                tvViewed.text = story.views.toString()
             }
 
         }

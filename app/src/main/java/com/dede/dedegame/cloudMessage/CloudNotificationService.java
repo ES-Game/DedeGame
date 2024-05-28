@@ -61,10 +61,6 @@ public class CloudNotificationService extends FirebaseMessagingService {
                 .setDefaults(Notification.DEFAULT_ALL)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
                 .setAutoCancel(true)
-                .setLargeIcon(getBitmapFromUrl(data.getNotification().getImageUrl().toString()))
-                .setStyle(new NotificationCompat.BigPictureStyle()
-                        .bigPicture(getBitmapFromUrl(data.getNotification().getImageUrl().toString()))
-                        .bigLargeIcon(null))
                 .setContentIntent(pendingIntent);
 
 

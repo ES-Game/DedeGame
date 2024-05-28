@@ -21,6 +21,7 @@ class StoryDetailDataToStoryDetail: IConverter<StoryDetailData, StoryDetail> {
             this.score = source.ratings?.score
             this.count = source.ratings?.count
             this.likes = source.likes
+            this.comments = source.comments
             this.follows = source.follows
             this.followed = source.followed
             this.liked = source.liked

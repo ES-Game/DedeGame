@@ -194,7 +194,7 @@
                     android:layout_marginStart="@dimen/margin_small_between_part_in_item"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_medium"
-                    android:text="00"
+                    android:text=""
                     android:fontFamily="@font/montserrat_regular"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/imvCmt"
@@ -207,7 +207,6 @@
                     android:layout_marginStart="@dimen/margin_small_between_part_in_item"
                     android:textColor="@color/black"
                     android:textSize="@dimen/size_text_very_small"
-                    android:text="@string/story_cover_top_comment_label"
                     android:fontFamily="@font/montserrat_regular"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -234,10 +233,13 @@
                android:orientation="vertical">
 
                <TextView
+                   android:id="@+id/txtStatusLabel"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textColor="@color/black"
                    android:fontFamily="@font/montserrat_regular"
+                   android:textStyle="bold"
+                   android:text="Author"
                    android:textSize="@dimen/size_text_small"/>
 
                <TextView

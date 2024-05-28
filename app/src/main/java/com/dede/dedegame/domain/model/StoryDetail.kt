@@ -15,6 +15,7 @@ class StoryDetail() : KParcelable {
     var score: Float? = null
     var count: Int? = null
     var likes: Int? = null
+    var comments: Int? = null
     var follows: Int? = null
     var followed: Int? = null
     var liked: Int? = null
@@ -36,6 +37,7 @@ class StoryDetail() : KParcelable {
         score = parcel.readFloat()
         count = parcel.readInt()
         likes = parcel.readInt()
+        comments = parcel.readInt()
         follows = parcel.readInt()
         followed = parcel.readInt()
         liked = parcel.readInt()
@@ -58,6 +60,7 @@ class StoryDetail() : KParcelable {
         parcel.writeFloat((score ?: 0) as Float)
         count?.let { parcel.writeInt(it) }
         likes?.let { parcel.writeInt(it) }
+        comments?.let { parcel.writeInt(it) }
         follows?.let { parcel.writeInt(it) }
         followed?.let { parcel.writeInt(it) }
         liked?.let { parcel.writeInt(it) }

@@ -31,6 +31,8 @@ data class StoryDetailData(
 
     @SerializedName("likes")
     var likes: Int? = null,
+    @SerializedName("comments")
+    var comments: Int? = null,
     @SerializedName("follows")
     var follows: Int? = null,
     @SerializedName("followed")

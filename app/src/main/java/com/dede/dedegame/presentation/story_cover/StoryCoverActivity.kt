@@ -10,6 +10,7 @@ import com.quangph.base.viewbinder.Layout
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.presentation.chapter.ChapterActivity
+import com.google.gson.Gson
 import com.quangph.jetpack.JetActivity
 
 @Layout(R.layout.activity_story_cover)
@@ -73,7 +74,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
     private fun gotoChapter(storyDetail: StoryDetail) {
         val intent = Intent(this, ChapterActivity:: class.java)
-        intent.putExtra("key_data_story", storyDetail)
+        intent.putExtra("key_data_story", Gson().toJson(storyDetail))
         startActivity(intent)
     }
 }

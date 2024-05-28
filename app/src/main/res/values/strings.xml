@@ -24,7 +24,8 @@
 
 
     <string name="story_cover_top_read_now">Đọc ngay</string>
-    <string name="story_cover_top_comment_label">Comments</string>
+    <string name="story_cover_top_comment_label">Comment</string>
+    <string name="story_cover_top_comments_label">Comments</string>
     <string name="story_cover_top_read_later">Đọc sau</string>
     <string name="story_cover_summary_title">Tóm tắt</string>
     <string name="view_more">Xem thêm</string>

@@ -163,6 +163,7 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 this.score = it.data?.ratings?.score
                 this.count = it.data?.ratings?.count
                 this.likes = it.data?.likes
+                this.comments = it.data?.comments
                 this.follows = it.data?.follows
                 this.followed = it.data?.followed
                 this.liked = it.data?.liked

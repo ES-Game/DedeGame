@@ -57,6 +57,10 @@ class TopCoverGroupData(data: StoryDetail?) :
         private var txtReadLater: TextView
         private var txtFavCount: TextView
         private var txtCountViewer: TextView
+        private var txtCountCmt: TextView
+        private var txtCmtLabel: TextView
+        private var txtStatusLabel: TextView
+        private var txtStatus: TextView
 
         init {
             imvThumbnail = itemView.findViewById(R.id.imvThumbnail)
@@ -65,6 +69,10 @@ class TopCoverGroupData(data: StoryDetail?) :
             txtReadLater = itemView.findViewById(R.id.txtReadLater)
             txtFavCount = itemView.findViewById(R.id.txtFavCount)
             txtCountViewer = itemView.findViewById(R.id.txtCountViewer)
+            txtCountCmt = itemView.findViewById(R.id.txtCountCmt)
+            txtCmtLabel = itemView.findViewById(R.id.txtCmtLabel)
+            txtStatusLabel = itemView.findViewById(R.id.txtStatusLabel)
+            txtStatus = itemView.findViewById(R.id.txtStatus)
 
         }
 
@@ -75,8 +83,20 @@ class TopCoverGroupData(data: StoryDetail?) :
                 txtStoryName.text = if (it.title.isNullOrEmpty()) "" else it.title
                 txtFavCount.text = if (it.likes != null && it.likes != 0) it.likes.toString() else "0"
                 txtCountViewer.text = if (it.views != null && it.views != 0) it.views.toString() else "0"
+                txtCountCmt.text = if (it.comments != null && it.comments != 0) it.comments.toString() else "0"
+                txtCmtLabel.text = if (it.comments != null && it.comments != 0 && it.comments!! > 1) itemView.context.getString(R.string.story_cover_top_comments_label) else itemView.context.getString(R.string.story_cover_top_comment_label)
+
                 txtReadNow.setOnClickListener {
                     groupData.onClickTopCoverItem?.onClickReadNow(vhData)
+                }
+
+                if (!it.authors.isNullOrEmpty()){
+                    txtStatusLabel.visibility = View.VISIBLE
+                    txtStatus.visibility = View.VISIBLE
+                    txtStatus.text = it.authors!![0].name
+                } else{
+                    txtStatusLabel.visibility = View.INVISIBLE
+                    txtStatus.visibility = View.INVISIBLE
                 }
             }
         }

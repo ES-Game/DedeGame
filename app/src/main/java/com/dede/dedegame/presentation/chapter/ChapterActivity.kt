@@ -8,6 +8,8 @@ import com.quangph.jetpack.JetActivity
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.presentation.chapter.ChapterView
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.quangph.jetpack.IScreenData
 
 @Layout(R.layout.activity_chapter)
@@ -16,7 +18,8 @@ class ChapterActivity : JetActivity<ChapterView>() {
     override fun onPresenterReady() {
         super.onPresenterReady()
 
-        val input : StoryDetail? = intent.getParcelableExtra("key_data_story")
+        val type = object : TypeToken<StoryDetail>() {}.type
+        val input : StoryDetail? = Gson().fromJson(intent.getStringExtra("key_data_story"), type)
         input?.let {
             it.title?.let { it1 -> mvpView.setStoryName(it1) }
             it.chapters?.reversed()?.let { it1 -> mvpView.fillDataToSpinner(it1) }

@@ -51,13 +51,6 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         rvContent.addItemDecoration(decoration)
 
         homeContentAdapter.addGroup(topBannerGroupData)
-
-//        listGameGroupData.onClickGameListener = object : ListGameGroupData.OnClickGameListener {
-//            override fun onClickGameItem(id: Int) {
-//                mPresenter.executeCommand(GotoGameDetailCmd(id))
-//            }
-//        }
-//        homeContentAdapter.addGroup(listGameGroupData)
     }
 
     fun showTopBanner(data: List<Slider>) {
@@ -70,8 +63,8 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         openGamesGroupData.reset(openTempGame)
         openGamesGroupData.show()
         openGamesGroupData.onClickStoryItem = object : OpenGamesGroupData.OnClickStoryItem {
-            override fun onClickStoryItem(id: Int) {
-                mPresenter.executeCommand(GotoGameDetailCmd(id))
+            override fun onClickStoryItem(id: Int, status: Int) {
+                mPresenter.executeCommand(GotoGameDetailCmd(id, status))
             }
         }
     }
@@ -81,8 +74,8 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         comingGamesGroupData.reset(comingGame)
         comingGamesGroupData.show()
         comingGamesGroupData.onClickStoryItem = object : ComingGamesGroupData.OnClickStoryItem {
-            override fun onClickStoryItem(id: Int) {
-                mPresenter.executeCommand(GotoGameDetailCmd(id))
+            override fun onClickStoryItem(id: Int, status: Int) {
+                mPresenter.executeCommand(GotoGameDetailCmd(id, status))
             }
         }
     }
@@ -104,7 +97,7 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         layoutManager.scrollToPosition(scrollPosition)
     }
 
-    class GotoGameDetailCmd(val id: Int) : ICommand
+    class GotoGameDetailCmd(val id: Int, val status: Int) : ICommand
 }
 
 

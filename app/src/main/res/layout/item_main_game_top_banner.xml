@@ -14,7 +14,7 @@
         app:indicatorMarginVertical="@dimen/_6sdp"
         app:pageColor="@android:color/transparent"
         app:radius="@dimen/_3sdp"
-        app:slideInterval="3000"
+        app:slideInterval="5000"
         app:strokeColor="@color/white"
         app:strokeWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"

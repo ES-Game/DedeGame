@@ -8,6 +8,7 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.extension.loadImageFromUrl
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
@@ -79,11 +80,7 @@ class RankGroupData(listStory: List<StoryDetail>?) :
                 }
             }
             vhData?.let { story ->
-                Glide
-                    .with(ivThumb.context)
-                    .load(story.image)
-                    .centerCrop()
-                    .into(ivThumb)
+                ivThumb.loadImageFromUrl(story.image)
                 tvName.text = story.title
                 tvDes.text = story.description
                 tvCreatedAt.text = story.createdAt

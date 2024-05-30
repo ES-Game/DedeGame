@@ -77,8 +77,8 @@ class OpenGamesGroupData(category: OpenTempGame?) :
             LogUtil.getInstance().e("Tap  ====> onBind")
             clickOn(itemView) {
                 LogUtil.getInstance().e("Tap")
-                vhData?.id?.let {
-                    groupData.onClickStoryItem?.onClickStoryItem(it)
+                vhData?.let { game ->
+                    game.id?.let { it1 -> groupData.onClickStoryItem?.onClickStoryItem(it1, 1) }
                 }
             }
             imvAppleLabel.visibility = View.GONE
@@ -111,6 +111,6 @@ class OpenGamesGroupData(category: OpenTempGame?) :
     }
 
     interface OnClickStoryItem {
-        fun onClickStoryItem(id: Int)
+        fun onClickStoryItem(id: Int, status: Int)
     }
 }

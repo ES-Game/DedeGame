@@ -2,14 +2,18 @@ package com.dede.dedegame.presentation.login
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.dede.dedegame.AppConfig
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.usecase.LoginAction
 import com.dede.dedegame.extension.startActivity
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.forget_password.ForgetPasswordActivity
 import com.dede.dedegame.presentation.home.HomeActivity
 import com.dede.dedegame.presentation.register.RegisterActivity
@@ -25,6 +29,7 @@ class LoginActivity : JetActivity<LoginView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
+        trackingOnLoginScreen()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -78,6 +83,7 @@ class LoginActivity : JetActivity<LoginView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     if (responseValue != null) {
+                        trackingTapBtnLogin()
                         goToHome()
                     }
                 }
@@ -104,5 +110,39 @@ class LoginActivity : JetActivity<LoginView>() {
         return super.dispatchTouchEvent(ev)
     }
 
+    private fun trackingOnLoginScreen() {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = EVENT_ON_LOGIN
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapBtnLogin() {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = EVENT_TAP_LOGIN_BTN
+            this.param = "user_id"
+            this.paramValue = DedeSharedPref.getUserInfo()?.user?.id.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+
+    inner class FirebaseLoginModel: DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@LoginActivity.javaClass.simpleName
+        var param :String = ""
+        var paramValue :String = ""
+
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+        }
+    }
+
+    companion object{
+        const val EVENT_ON_LOGIN = "event_on_login"
+        const val EVENT_TAP_LOGIN_BTN = "event_tap_login_btn"
+    }
 
 }

@@ -77,8 +77,8 @@ class ComingGamesGroupData(category: ComingTempGame?) :
             LogUtil.getInstance().e("Tap  ====> onBind")
             clickOn(itemView) {
                 LogUtil.getInstance().e("Tap")
-                vhData?.id?.let {
-                    groupData.onClickStoryItem?.onClickStoryItem(it)
+                vhData?.let {game ->
+                    game.id?.let { it1 -> groupData.onClickStoryItem?.onClickStoryItem(it1, 0) }
                 }
             }
             imvAppleLabel.visibility = View.GONE
@@ -111,6 +111,6 @@ class ComingGamesGroupData(category: ComingTempGame?) :
     }
 
     interface OnClickStoryItem {
-        fun onClickStoryItem(id: Int)
+        fun onClickStoryItem(id: Int, status: Int)
     }
 }

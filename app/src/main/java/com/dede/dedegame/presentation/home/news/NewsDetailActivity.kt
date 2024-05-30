@@ -2,10 +2,13 @@ package com.dede.dedegame.presentation.home.news
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.usecase.GetNewsDetailAction
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
@@ -16,6 +19,11 @@ import com.quangph.jetpack.JetActivity
 class NewsDetailActivity : JetActivity<NewsDetailView>() {
 
     companion object {
+
+        const val EVENT_ON_NEWS_DETAIL = "event_on_news_detail"
+        const val EVENT_TAP_OTHER_NEWS_ITEM = "event_tap_other_news_item"
+        const val PARAM_NEWS = "news_id"
+
         fun launchScreen(
             context: Context?,
             idArticle: Int?
@@ -29,6 +37,7 @@ class NewsDetailActivity : JetActivity<NewsDetailView>() {
     override fun onPresenterReady() {
         super.onPresenterReady()
         val articleId = intent.getIntExtra("articleId", -1)
+        trackingOnNewsDetailScreen(PARAM_NEWS, articleId)
         getNewsById(articleId)
     }
 
@@ -40,6 +49,7 @@ class NewsDetailActivity : JetActivity<NewsDetailView>() {
             }
 
             is NewsDetailView.GotoNewsDetailCmd -> {
+                trackingTapEventNewsDetail(EVENT_TAP_OTHER_NEWS_ITEM, PARAM_NEWS, command.item.id)
                 launchScreen(this@NewsDetailActivity, command.item.id)
             }
         }
@@ -79,4 +89,39 @@ class NewsDetailActivity : JetActivity<NewsDetailView>() {
                 }
             })
     }
+
+    private fun trackingOnNewsDetailScreen(param: String, paramValue: Any?) {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = EVENT_ON_NEWS_DETAIL
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+            this.param2 = param
+            this.paramValue2 = paramValue.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapEventNewsDetail(eventName: String, param: String, paramValue: Any?) {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = eventName
+            this.param = param
+            this.paramValue = paramValue.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    inner class FirebaseLoginModel : DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@NewsDetailActivity.javaClass.simpleName
+        var param: String = ""
+        var paramValue: String = ""
+        var param2: String = ""
+        var paramValue2: String = ""
+
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+            bundle.putString(param2, paramValue2)
+        }
+    }
+
 }

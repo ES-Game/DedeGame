@@ -20,7 +20,7 @@ class TopBannerGroupData(listStory: List<Slider>?) :
     var onEvenSliderListener: OnEvenSliderListener? = null
     private val handler = Handler(Looper.getMainLooper())
     private var runnable: Runnable? = null
-    private val delayMillis: Long = 3000
+    private val delayMillis: Long = 5000
 
     override fun getDataInGroup(position: Int): Any? {
         return data
@@ -94,6 +94,7 @@ class TopBannerGroupData(listStory: List<Slider>?) :
                 if (adapter.mDataSet.isNullOrEmpty()) {
                     adapter.reset(sliders)
                 }
+                stopAutoScrolling()
                 startAutoScrolling()
             }
         }
@@ -108,7 +109,7 @@ class TopBannerGroupData(listStory: List<Slider>?) :
         }
 
         private fun stopAutoScrolling() {
-            topBannerGroupData?.runnable?.let { topBannerGroupData.handler.removeCallbacks(it) }
+            topBannerGroupData.runnable?.let { topBannerGroupData.handler.removeCallbacks(it) }
         }
     }
 

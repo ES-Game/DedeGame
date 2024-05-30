@@ -28,4 +28,6 @@
         <attr name="dashWidth" format="dimension" />
         <attr name="dashGap" format="dimension" />
     </declare-styleable>
+
+    <style name="CommonDialog" />
 </resources>

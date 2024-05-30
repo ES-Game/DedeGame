@@ -1,7 +1,11 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic
 
 import android.content.Intent
+import android.os.Bundle
 import com.dede.dedegame.R
+import com.dede.dedegame.presentation.common.LogUtil
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.CategoryState
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.RankState
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
@@ -23,6 +27,7 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
         setupStates()
 //        getHomeData()
 //        getRanking()
+        trackingOnMainStoryScreen()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -30,6 +35,14 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
 
         when (command) {
             is HomeComicsFragmentView.GotoStoryDetailCmd -> {
+                when(stateMachine.currentStateName){
+                    StateName.CATEGORY -> {
+                        trackingTapEventMainStory(EVENT_TAP_STORY_IN_CATEGORY, PARAM_STORY, command.id)
+                    }
+                    StateName.RANK -> {
+                        trackingTapEventMainStory(EVENT_TAP_STORY_IN_RANK, PARAM_STORY, command.id)
+                    }
+                }
                 goToStoryDetail(command.id)
             }
 
@@ -57,6 +70,42 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
         val intent = Intent(activity, StoryCoverActivity::class.java)
         intent.putExtra("storyId", id)
         activity?.startActivity(intent)
+    }
+
+    private fun trackingOnMainStoryScreen() {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = EVENT_ON_MAIN_STORY
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapEventMainStory(eventName: String, param: String, paramValue: Any?) {
+        val fbModel = FirebaseLoginModel().apply {
+            this.eventName = eventName
+            this.param = param
+            this.paramValue = paramValue.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    inner class FirebaseLoginModel : DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@HomeComicsFragment.javaClass.simpleName
+        var param: String = ""
+        var paramValue: String = ""
+
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+        }
+    }
+
+    companion object {
+        const val EVENT_ON_MAIN_STORY = "event_on_main_story"
+        const val EVENT_TAP_STORY_IN_CATEGORY = "event_tap_story_in_category"
+        const val EVENT_TAP_STORY_IN_RANK = "event_tap_story_in_rank"
+        const val PARAM_STORY = "story_id"
     }
 
 }

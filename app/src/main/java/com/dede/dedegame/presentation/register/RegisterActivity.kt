@@ -2,14 +2,18 @@ package com.dede.dedegame.presentation.register
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.dede.dedegame.AppConfig
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.usecase.RegisterAction
 import com.dede.dedegame.extension.startActivity
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.HomeActivity
 import com.dede.dedegame.presentation.login.LoginActivity
 import com.quangph.base.mvp.ICommand
@@ -24,6 +28,7 @@ class RegisterActivity : JetActivity<RegisterView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
+        trackingOnRegisterScreen()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -79,6 +84,7 @@ class RegisterActivity : JetActivity<RegisterView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     if (responseValue != null) {
+                        trackingTapBtnRegister()
                         goToHome()
                     }
                 }
@@ -103,6 +109,41 @@ class RegisterActivity : JetActivity<RegisterView>() {
             imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }
         return super.dispatchTouchEvent(ev)
+    }
+
+    private fun trackingOnRegisterScreen() {
+        val fbModel = FirebaseRegisterModel().apply {
+            this.eventName = EVENT_ON_REGISTER
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapBtnRegister() {
+        val fbModel = FirebaseRegisterModel().apply {
+            this.eventName = EVENT_TAP_REGISTER_BTN
+            this.param = "user_id"
+            this.paramValue = DedeSharedPref.getUserInfo()?.user?.id.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+
+    inner class FirebaseRegisterModel: DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@RegisterActivity.javaClass.simpleName
+        var param :String = ""
+        var paramValue :String = ""
+
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+        }
+    }
+
+    companion object{
+        const val EVENT_ON_REGISTER = "event_on_login"
+        const val EVENT_TAP_REGISTER_BTN = "event_tap_login_btn"
     }
 
 }

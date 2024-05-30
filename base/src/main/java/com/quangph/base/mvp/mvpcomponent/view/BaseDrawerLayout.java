@@ -17,7 +17,7 @@ import com.quangph.base.viewbinder.ViewBinder;
  */
 public class BaseDrawerLayout extends DrawerLayout implements IView {
 
-    protected IPresenter mPresenter;
+    public IPresenter mPresenter;
     protected IView mParentMVPView;
     private int mStatus = Status.VIEW_CREATE;
     private boolean isPortrait;

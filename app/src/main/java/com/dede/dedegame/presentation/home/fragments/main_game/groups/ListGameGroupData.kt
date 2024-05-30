@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.mainGame.Game
+import com.dede.dedegame.extension.loadImageFromUrl
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
 import com.quangph.base.view.recyclerview.adapter.group.GroupData
@@ -70,11 +71,7 @@ class ListGameGroupData(listGame: List<Game>?) :
                 }
             }
             vhData?.let { story ->
-                Glide
-                    .with(imvAvatar.context)
-                    .load(story.image)
-                    .centerCrop()
-                    .into(imvAvatar)
+                imvAvatar.loadImageFromUrl(story.image)
             }
 
         }

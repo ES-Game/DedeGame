@@ -69,8 +69,8 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         val imvEnd : ImageView = findViewById(R.id.imvEnd)
         containerBack.visibility = View.GONE
         txtStartTitle.text = "Home"
-        imvNoti.setImageResource(R.drawable.ic_app_notification)
-        imvEnd.setImageResource(R.drawable.ic_app_email)
+//        imvNoti.setImageResource(R.drawable.ic_app_notification)
+//        imvEnd.setImageResource(R.drawable.ic_app_email)
     }
 
 }

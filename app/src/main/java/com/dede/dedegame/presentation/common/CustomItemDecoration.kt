@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Rect
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
+import com.dede.dedegame.presentation.story_cover.groups.CoverStoryViewType.Companion.LATEST_CHAPTER
 
 class CustomItemDecoration(
     context: Context,
@@ -25,22 +26,29 @@ class CustomItemDecoration(
         super.getItemOffsets(outRect, view, parent, state)
         val position = parent.getChildAdapterPosition(view)
         val itemCount = parent.adapter?.itemCount ?: 0
-
-        if (position == 0) {
+        val viewType = parent.adapter?.getItemViewType(position)
+        if (viewType == LATEST_CHAPTER) {
             outRect.left = leftSpace
             outRect.right = rightSpace
-            outRect.top = topSpace
-            outRect.bottom = bottomSpace / 2
-        } else if (position == itemCount - 1) {
-            outRect.left = leftSpace
-            outRect.right = rightSpace
-            outRect.top = topSpace / 2
-            outRect.bottom = bottomSpace
+            outRect.top = topSpace / 5
+            outRect.bottom = bottomSpace / 5
         } else {
-            outRect.left = leftSpace
-            outRect.right = rightSpace
-            outRect.top = topSpace / 2
-            outRect.bottom = bottomSpace / 2
+            if (position == 0) {
+                outRect.left = leftSpace
+                outRect.right = rightSpace
+                outRect.top = topSpace
+                outRect.bottom = bottomSpace / 2
+            } else if (position == itemCount - 1) {
+                outRect.left = leftSpace
+                outRect.right = rightSpace
+                outRect.top = topSpace / 2
+                outRect.bottom = bottomSpace
+            } else {
+                outRect.left = leftSpace
+                outRect.right = rightSpace
+                outRect.top = topSpace / 2
+                outRect.bottom = bottomSpace / 2
+            }
         }
     }
 }

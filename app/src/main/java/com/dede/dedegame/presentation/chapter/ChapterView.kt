@@ -17,12 +17,10 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
-import com.quangph.base.mvp.ICommand
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.story_cover.StoryCoverView
-import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 import com.dede.dedegame.domain.model.Chapter
+import com.quangph.base.mvp.ICommand
+import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
 
 class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
 
@@ -34,7 +32,6 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
         super.onInitView()
         tvChapterName = findViewById(R.id.tvStoryNameDetail)
         spListChapter = findViewById(R.id.spListChapter)
-        spListChapter.setSelection(0)
         setupToolbar()
 
         wvContent = findViewById(R.id.wvContent)
@@ -92,36 +89,46 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
 
     }
 
-    private fun setupToolbar(){
-        val containerBack : View = findViewById(R.id.containerBack)
-        val txtStartTitle : TextView = findViewById(R.id.txtStartTitle)
-        val txtCenterTitle : TextView = findViewById(R.id.txtCenterTitle)
+    private fun setupToolbar() {
+        val containerBack: View = findViewById(R.id.containerBack)
+        val txtStartTitle: TextView = findViewById(R.id.txtStartTitle)
+        val txtCenterTitle: TextView = findViewById(R.id.txtCenterTitle)
         txtCenterTitle.text = "Chapter"
         containerBack.setOnClickListener {
             mPresenter.executeCommand(OnBackCmd())
         }
     }
 
-    fun fillDataToSpinner(chapters: List<Chapter>) {
+    fun fillDataToSpinner(chapterId: Int, chapters: List<Chapter>) {
 
         val listChapterName = chapters.map { chapter: Chapter -> chapter.title }
 
-        val adapter = ArrayAdapter(context, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, listChapterName)
+        val adapter = ArrayAdapter(
+            context,
+            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
+            listChapterName
+        )
         adapter.setDropDownViewResource(R.layout.item_dropdown)
         spListChapter.adapter = adapter
 
         spListChapter.onItemSelectedListener = object :
             AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>,
-                                        view: View, position: Int, id: Long) {
+            override fun onItemSelected(
+                parent: AdapterView<*>,
+                view: View, position: Int, id: Long
+            ) {
 
                 spListChapter.setSelection(position)
                 mPresenter.executeCommand(chapters[position].id?.let { ChangeChapterCmd(it) })
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {
-                // write code to perform some action
             }
+        }
+        if (chapterId == -1) {
+            spListChapter.setSelection(0)
+        } else {
+            spListChapter.setSelection(chapters.indexOfFirst { it.id == chapterId })
         }
     }
 
@@ -133,7 +140,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
         wvContent?.loadUrl(storyUrl)
     }
 
-    class ChangeChapterCmd(val chapterId: Int): ICommand {}
+    class ChangeChapterCmd(val chapterId: Int) : ICommand {}
     class OnBackCmd() : ICommand
 }
 

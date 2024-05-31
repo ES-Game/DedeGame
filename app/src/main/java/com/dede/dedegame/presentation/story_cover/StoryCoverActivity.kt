@@ -35,6 +35,10 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                 gotoChapter(command.item)
             }
 
+            is StoryCoverView.GotoChapterBySelectChapterCmd -> {
+                gotoChapter(command.item, command.chapterId)
+            }
+
             is StoryCoverView.OnBackCmd -> {
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -60,6 +64,9 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     responseValue?.let {
                         mvpView.fillDataToTopGroup(it)
                         mvpView.fillDataToSummary(it)
+                        if (!it.chapters.isNullOrEmpty()) {
+                            mvpView.fillDataToLatestChapter(it, it.chapters!!.reversed())
+                        }
                     }
                 }
 
@@ -69,6 +76,13 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun gotoChapter(storyDetail: StoryDetail, chapterId: Int) {
+        val intent = Intent(this, ChapterActivity::class.java)
+        intent.putExtra("key_data_story", Gson().toJson(storyDetail))
+        intent.putExtra("chapter_id", chapterId)
+        startActivity(intent)
     }
 
     private fun gotoChapter(storyDetail: StoryDetail) {

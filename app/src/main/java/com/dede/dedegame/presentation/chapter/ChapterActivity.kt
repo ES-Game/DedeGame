@@ -16,15 +16,16 @@ import com.quangph.jetpack.JetActivity
 
 @Layout(R.layout.activity_chapter)
 class ChapterActivity : JetActivity<ChapterView>() {
-
+    private var chapterId = -1;
     override fun onPresenterReady() {
         super.onPresenterReady()
 
         val type = object : TypeToken<StoryDetail>() {}.type
         val input: StoryDetail? = Gson().fromJson(intent.getStringExtra("key_data_story"), type)
+        chapterId = intent.getIntExtra("chapter_id", -1)
         input?.let {
             it.title?.let { it1 -> mvpView.setStoryName(it1) }
-            it.chapters?.reversed()?.let { it1 -> mvpView.fillDataToSpinner(it1) }
+            it.chapters?.reversed()?.let { it1 -> mvpView.fillDataToSpinner(chapterId, it1) }
             it.chapters?.reversed()?.first()?.id?.let { it1 -> getChapterDetail(it1) }
             trackingOnChapterScreen(PARAM_STORY, it.id)
         }

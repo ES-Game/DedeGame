@@ -8,7 +8,7 @@ data class ChapterData(
     var id: Int? = null,
     @SerializedName("title")
     var title: String? = null,
-    @SerializedName("publishedAt")
+    @SerializedName("published_at")
     var publishedAt: String? = null,
     @SerializedName("view")
     var view: Int? = null

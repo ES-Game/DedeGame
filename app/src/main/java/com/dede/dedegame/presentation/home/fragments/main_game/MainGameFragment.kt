@@ -47,6 +47,7 @@ class MainGameFragment : JetFragment<MainGameFragmentView>() {
             }
 
             is MainGameFragmentView.GotoGameListCmd -> {
+                trackingTapEventMainGame(EVENT_TAP_GAME_VIEW_MORE, PARAM_GAME_TYPE, command.gameType)
                 GameListActivity.launchScreen(activity, Gson().toJson(command.gameType))
             }
 
@@ -174,6 +175,8 @@ class MainGameFragment : JetFragment<MainGameFragmentView>() {
     companion object {
         const val EVENT_ON_MAIN_GAME = "event_on_main_game"
         const val EVENT_TAP_GAME_ITEM = "event_tap_game_item"
+        const val EVENT_TAP_GAME_VIEW_MORE = "event_tap_game_view_more"
+        const val PARAM_GAME_TYPE = "game_type"
         const val PARAM_GAME_STATUS_OPEN = "status_open"
         const val PARAM_GAME = "game_id"
         const val EVENT_TAP_SLIDER_ITEM = "event_tap_slider_item"

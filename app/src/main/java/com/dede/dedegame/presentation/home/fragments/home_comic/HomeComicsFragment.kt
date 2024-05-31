@@ -48,6 +48,7 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
             }
 
             is HomeComicsFragmentView.GotoStoryListCmd -> {
+                trackingTapEventMainStory(EVENT_TAP_STORY_VIEW_MORE, PARAM_CATEGORY, command.category.id)
                 StoryListActivity.launchScreen(activity, command.category.id)
             }
 
@@ -105,6 +106,8 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
         const val EVENT_TAP_STORY_IN_CATEGORY = "event_tap_story_in_category"
         const val EVENT_TAP_STORY_IN_RANK = "event_tap_story_in_rank"
         const val PARAM_STORY = "story_id"
+        const val PARAM_CATEGORY = "category_id"
+        const val EVENT_TAP_STORY_VIEW_MORE = "event_tap_story_view_more"
     }
 
 }

@@ -54,6 +54,7 @@ class ShopFragmentView(context: Context?, attrs: AttributeSet?) :
 
             override fun onPageFinished(view: WebView?, url: String?) {
                 super.onPageFinished(view, url)
+                mPresenter.executeCommand(OnFinishLoadWebCmd())
                 Log.i("Loading Finished....", "")
             }
 
@@ -92,6 +93,7 @@ class ShopFragmentView(context: Context?, attrs: AttributeSet?) :
 
     class OnLogoutCmd() : ICommand
     class OnGetPaymentLinkCmd() : ICommand
+    class OnFinishLoadWebCmd() : ICommand
 }
 
 

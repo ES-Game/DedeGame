@@ -1,37 +1,40 @@
 package com.dede.dedegame.presentation.home
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
+import androidx.core.content.ContextCompat
+import com.dede.dedegame.R
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
-import com.dede.dedegame.R
 
 @Layout(R.layout.activity_home)
 class HomeActivity : JetActivity<HomeView>() {
 
+    companion object{
+        const val NOTIFICATION_PERMISSION_REQUEST_CODE: Int = 11112
+    }
+
     override fun onPresenterReady() {
         super.onPresenterReady()
         requestFragmentManager()
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                requestPermissions(
+                    arrayOf<String>(Manifest.permission.POST_NOTIFICATIONS),
+                    NOTIFICATION_PERMISSION_REQUEST_CODE
+                )
+            }
+        }
     }
 
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
         when (command) {
-//            is HomeView.SubmitBookCmd -> {
-//                val book = Book().apply {
-//                    this.title = command.bookTitle
-//                    this.displayTitle = command.bookTitle
-//                    this.author = command.bookAuthor
-//                    this.publisher = command.bookPublisher
-//                    this.description = command.bookDes
-//                }
-//
-//                val intent = Intent(this, ListBookActivity::class.java).apply {
-//                    this.action = ListBookActivity.EXTRA_BOOK_ADDED_ACTION
-//                    this.putExtra(ListBookActivity.EXTRA_BOOK_ADDED_KEY, book)
-//                    this.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
-//                }
-//
-//                startActivity(intent)
             }
         }
     }

@@ -31,11 +31,12 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         super.onExecuteCommand(command)
         when (command) {
             is StoryCoverView.GotoChapterCmd -> {
-                trackingTapEventStoryCover(EVENT_TAP_READ_NOW, PARAM_CHAPTER, command.item.id)
+                trackingTapEventStoryCover(EVENT_TAP_READ_NOW, PARAM_STORY, command.item.id)
                 gotoChapter(command.item)
             }
 
             is StoryCoverView.GotoChapterBySelectChapterCmd -> {
+                trackingTapEventStoryCover(EVENT_TAP_CHAPTER_ITEM, PARAM_CHAPTER, command.chapterId)
                 gotoChapter(command.item, command.chapterId)
             }
 
@@ -127,6 +128,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
     companion object {
         const val EVENT_ON_STORY_COVER = "event_on_story_cover"
         const val EVENT_TAP_READ_NOW = "event_tap_read_now"
+        const val EVENT_TAP_CHAPTER_ITEM = "event_tap_chapter"
         const val PARAM_STORY = "story_id"
         const val PARAM_CHAPTER = "chapter_id"
 

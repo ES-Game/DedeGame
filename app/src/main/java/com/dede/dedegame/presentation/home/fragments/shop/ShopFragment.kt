@@ -34,6 +34,10 @@ class ShopFragment : JetFragment<ShopFragmentView>() {
                 logOut()
             }
 
+            is ShopFragmentView.OnFinishLoadWebCmd -> {
+                hideLoading()
+            }
+
             is ShopFragmentView.OnGetPaymentLinkCmd -> {
                 showLoading()
                 actionManager.executeAction(

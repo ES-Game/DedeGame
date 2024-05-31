@@ -2,11 +2,14 @@ package com.dede.dedegame.presentation.home.fragments.main_game.game_list
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.GameType
 import com.dede.dedegame.domain.usecase.GetGamesByType
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.game.GameDetailActivity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -23,6 +26,9 @@ class GameListActivity : JetActivity<GameListView>() {
     var gameType: GameType? = null
 
     companion object {
+        const val EVENT_ON_GAME_LIST = "event_on_game_list"
+        const val PARAM_GAME = "game_id"
+        const val EVENT_TAP_GAME_ITEM = "event_tap_game_item"
         fun launchScreen(
             context: Context?,
             gameType: String
@@ -35,6 +41,7 @@ class GameListActivity : JetActivity<GameListView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
+        trackingOnGameListScreen()
         gameType = Gson().fromJson(
             intent.getStringExtra("gameType"),
             object : TypeToken<GameType>() {}.type
@@ -51,6 +58,7 @@ class GameListActivity : JetActivity<GameListView>() {
             }
 
             is GameListView.GotoGameDetailCmd -> {
+                trackingTapEventGameList(EVENT_TAP_GAME_ITEM, PARAM_GAME, command.game.id)
                 GameDetailActivity.launchScreen(this, command.game.id)
             }
 
@@ -95,6 +103,38 @@ class GameListActivity : JetActivity<GameListView>() {
                     hideLoading()
                 }
             })
+    }
+
+    private fun trackingOnGameListScreen() {
+        val fbModel = FirebaseGameListModel().apply {
+            this.eventName = EVENT_ON_GAME_LIST
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapEventGameList(eventName: String, param: String, paramValue: Any?) {
+        val fbModel = FirebaseGameListModel().apply {
+            this.eventName = eventName
+            this.param = param
+            this.paramValue = paramValue.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    inner class FirebaseGameListModel : DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@GameListActivity.javaClass.simpleName
+        var param: String = ""
+        var paramValue: String = ""
+        var param2: String = ""
+        var paramValue2: String = ""
+
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+            bundle.putString(param2, paramValue2)
+        }
     }
 
 }

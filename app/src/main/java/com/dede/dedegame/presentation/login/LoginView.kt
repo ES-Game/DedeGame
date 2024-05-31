@@ -90,32 +90,32 @@ class LoginView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(co
         val userNameOrPass = edtUser.inputText?.takeIf { it.isNotEmpty() } ?: return false
         val pass = edtPassword.inputText?.takeIf { it.isNotEmpty() } ?: return false
 
-        if (!checkValidPassword(pass).second) {
-            return false
-        }
+//        if (!checkValidPassword(pass).second) {
+//            return false
+//        }
 
         return true
     }
 
     private fun checkValidPassword(password: String): Pair<String, Boolean> {
-        if (password.isEmpty()) {
-            return Pair("Mật khẩu phải không được bỏ trống", false)
-        }
-        if (!password.checkMinium6Length()) {
-            return Pair("Mật khẩu phải có ít nhất 6 ký tự", false)
-        }
-
-        if (!password.hasLeastOneUpperCase()) {
-            return Pair("Mật khẩu phải có ít nhất 1 ký tự viết hoa", false)
-        }
-
-        if (!password.hasLeastOneSpecialCharacter()) {
-            return Pair("Mật khẩu phải có ít nhất 1 ký tự đặc biệt", false)
-        }
-
-        if (!password.hasLeastOneLowerCase()) {
-            return Pair("Mật khẩu phải có ít nhất 1 ký tự thường", false)
-        }
+//        if (password.isEmpty()) {
+//            return Pair("Mật khẩu phải không được bỏ trống", false)
+//        }
+//        if (!password.checkMinium6Length()) {
+//            return Pair("Mật khẩu phải có ít nhất 6 ký tự", false)
+//        }
+//
+//        if (!password.hasLeastOneUpperCase()) {
+//            return Pair("Mật khẩu phải có ít nhất 1 ký tự viết hoa", false)
+//        }
+//
+//        if (!password.hasLeastOneSpecialCharacter()) {
+//            return Pair("Mật khẩu phải có ít nhất 1 ký tự đặc biệt", false)
+//        }
+//
+//        if (!password.hasLeastOneLowerCase()) {
+//            return Pair("Mật khẩu phải có ít nhất 1 ký tự thường", false)
+//        }
 
         return Pair("", true)
     }

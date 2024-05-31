@@ -2,14 +2,14 @@ package com.dede.dedegame.presentation.home.fragments.home_comic.story_list
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.usecase.GetStoryByCategoryId
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
+import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
@@ -22,6 +22,9 @@ class StoryListActivity : JetActivity<StoryListView>() {
     var categoryId: Int? = null
 
     companion object {
+        const val EVENT_ON_STORY_LIST = "event_on_story_list"
+        const val EVENT_TAP_STORY = "event_tap_story"
+        const val PARAM_STORY = "story_id"
         fun launchScreen(
             context: Context?,
             categoryId: Int?
@@ -34,6 +37,7 @@ class StoryListActivity : JetActivity<StoryListView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
+        trackingOnStoryListScreen()
         categoryId = intent.getIntExtra("category_id", -1)
         categoryId?.let {
             getStoriesById(it, true)
@@ -52,6 +56,7 @@ class StoryListActivity : JetActivity<StoryListView>() {
             }
 
             is StoryListView.GotoStoryCoverCmd -> {
+                trackingTapEventStoryList(EVENT_TAP_STORY, PARAM_STORY, command.storyDetail.id)
                 StoryCoverActivity.launchScreen(this, command.storyDetail.id)
             }
         }
@@ -96,5 +101,36 @@ class StoryListActivity : JetActivity<StoryListView>() {
                     hideLoading()
                 }
             })
+    }
+
+    private fun trackingOnStoryListScreen() {
+        val fbModel = FirebaseStoryListModel().apply {
+            this.eventName = EVENT_ON_STORY_LIST
+            this.param = "on_screen"
+            this.paramValue = "on_screen"
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun trackingTapEventStoryList(eventName: String, param: String, paramValue: Any?) {
+        val fbModel = FirebaseStoryListModel().apply {
+            this.eventName = eventName
+            this.param = param
+            this.paramValue = paramValue.toString()
+        }
+        DedeFirebaseTracker.track(fbModel)
+    }
+
+    inner class FirebaseStoryListModel : DedeFirebaseTrackerModel() {
+        override var screenName: String? = this@StoryListActivity.javaClass.simpleName
+        var param: String = ""
+        var paramValue: String = ""
+        var param2: String = ""
+        var paramValue2: String = ""
+        override fun createParams(bundle: Bundle) {
+            super.createParams(bundle)
+            bundle.putString(param, paramValue)
+            bundle.putString(param2, paramValue2)
+        }
     }
 }

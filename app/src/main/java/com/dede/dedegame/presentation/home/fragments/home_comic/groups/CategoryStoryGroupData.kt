@@ -8,7 +8,6 @@ import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.extension.loadImageFromUrl
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.widget.RoundedTextView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
@@ -25,7 +24,7 @@ class CategoryStoryGroupData(category: Category?) :
 
     override fun getDataInGroup(position: Int): Any? {
         if (position == 0) {
-            return data?.name
+            return data
         }
         return data?.stories!!.get(position - 1)
     }
@@ -86,11 +85,9 @@ class CategoryStoryGroupData(category: Category?) :
 
         override fun onBind(vhData: Story?) {
             super.onBind(vhData)
-            LogUtil.getInstance().e("Tap  ====> onBind")
             clickOn(itemView) {
-                LogUtil.getInstance().e("Tap")
                 vhData?.id?.let {
-                    groupData.onClickStoryItem?.onClickStoryItem(it)
+                    listStoryGroupData.onClickStoryItem?.onClickStoryItem(it)
                 }
             }
             tvRankIndex.visibility = View.GONE
@@ -104,7 +101,7 @@ class CategoryStoryGroupData(category: Category?) :
     }
 
     class CategoryNameViewHolder(itemView: View, val listStoryGroupData: CategoryStoryGroupData) :
-        GroupRclvVH<String, CategoryStoryGroupData>(itemView) {
+        GroupRclvVH<Category, CategoryStoryGroupData>(itemView) {
 
         private var tvName: TextView
 
@@ -113,12 +110,11 @@ class CategoryStoryGroupData(category: Category?) :
             tvName = itemView.findViewById(R.id.tvCategoryName)
         }
 
-        override fun onBind(vhData: String) {
+        override fun onBind(vhData: Category) {
             super.onBind(vhData)
-            tvName.text = vhData
-            LogUtil.getInstance().e("Tap  ====> onBind")
+            tvName.text = vhData.name
             clickOn(itemView) {
-                LogUtil.getInstance().e("Tap")
+                listStoryGroupData.onClickStoryItem?.onClickCategoryViewMore(vhData)
             }
         }
 
@@ -126,5 +122,6 @@ class CategoryStoryGroupData(category: Category?) :
 
     interface OnClickStoryItem {
         fun onClickStoryItem(id: Int)
+        fun onClickCategoryViewMore(category: Category)
     }
 }

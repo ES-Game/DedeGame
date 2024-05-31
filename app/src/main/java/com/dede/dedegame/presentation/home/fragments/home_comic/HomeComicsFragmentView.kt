@@ -101,6 +101,10 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
             override fun onClickStoryItem(id: Int) {
                 mPresenter.executeCommand(GotoStoryDetailCmd(id))
             }
+
+            override fun onClickCategoryViewMore(category: Category) {
+                mPresenter.executeCommand(GotoStoryListCmd(category))
+            }
         }
 
         rvContent.visibility = View.VISIBLE
@@ -139,6 +143,7 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
     }
 
     class GotoStoryDetailCmd(val id: Int) : ICommand
+    class GotoStoryListCmd(val category: Category) : ICommand
     class OnclickCategoryCmd : ICommand
     class OnclickRankCmd : ICommand
 }

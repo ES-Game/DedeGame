@@ -1,20 +1,20 @@
 package com.dede.dedegame.presentation.story_cover
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import com.dede.dedegame.R
-import com.quangph.base.mvp.ICommand
-import com.quangph.base.mvp.action.Action
-import com.quangph.base.mvp.action.ActionException
-import com.quangph.base.viewbinder.Layout
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
-import com.dede.dedegame.presentation.home.fragments.home.HomeFragment
 import com.google.gson.Gson
+import com.quangph.base.mvp.ICommand
+import com.quangph.base.mvp.action.Action
+import com.quangph.base.mvp.action.ActionException
+import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
 
 @Layout(R.layout.activity_story_cover)
@@ -30,13 +30,11 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
         when (command) {
-//            is StoryCoverView.ChangeChapterCmd -> {
-//                getChapterDetail(command.chapterId)
-//            }
             is StoryCoverView.GotoChapterCmd -> {
                 trackingTapEventStoryCover(EVENT_TAP_READ_NOW, PARAM_CHAPTER, command.item.id)
                 gotoChapter(command.item)
             }
+
             is StoryCoverView.OnBackCmd -> {
                 onBackPressedDispatcher.onBackPressed()
             }
@@ -73,13 +71,8 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
             })
     }
 
-    private fun getChapterDetail(id: Int) {
-        val chapterLink = "https://www.dedegame.me/chapter/iframe/$id"
-//        mvpView.loadChapterContent(chapterLink)
-    }
-
     private fun gotoChapter(storyDetail: StoryDetail) {
-        val intent = Intent(this, ChapterActivity:: class.java)
+        val intent = Intent(this, ChapterActivity::class.java)
         intent.putExtra("key_data_story", Gson().toJson(storyDetail))
         startActivity(intent)
     }
@@ -122,5 +115,14 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         const val EVENT_TAP_READ_NOW = "event_tap_read_now"
         const val PARAM_STORY = "story_id"
         const val PARAM_CHAPTER = "chapter_id"
+
+        fun launchScreen(
+            context: Context?,
+            storyId: Int?
+        ) {
+            val intent = Intent(context, StoryCoverActivity::class.java)
+            intent.putExtra("storyId", storyId)
+            context?.startActivity(intent)
+        }
     }
 }

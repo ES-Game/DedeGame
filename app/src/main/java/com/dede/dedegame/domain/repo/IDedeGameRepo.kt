@@ -1,10 +1,13 @@
 package com.dede.dedegame.domain.repo
 
+import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.home.Home
+import com.dede.dedegame.domain.model.mainGame.Game
+import com.dede.dedegame.domain.model.mainGame.GameType
 import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.model.news.NewsDetail
@@ -38,7 +41,8 @@ interface IDedeGameRepo {
     ): UserInfo
 
     fun getNewsDetail(articleId: Int): NewsDetail
-    fun getGamesByType(type: Int, page: Int): ListGame
+    fun getGamesByType(type: GameType, page: Int): DataPage<Game>
+    fun getStoryByType(categoryId: Int, page: Int): DataPage<StoryDetail>
 
     fun getGameDetail(gameId: Int): GameDetail
 }

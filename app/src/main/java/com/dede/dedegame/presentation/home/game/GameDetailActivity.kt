@@ -27,6 +27,7 @@ class GameDetailActivity : JetActivity<GameDetailView>() {
         const val EVENT_TAP_DOWNLOAD_IOS = "event_tap_download_ios"
         const val EVENT_TAP_DOWNLOAD_ANDROID = "event_tap_download_android"
         const val PARAM_GAME = "game_id"
+
         fun launchScreen(
             context: Context?,
             gameId: Int?

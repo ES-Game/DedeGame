@@ -57,7 +57,7 @@ class GameOtherGroupData(tags: List<GameInfo>?) :
             vhData?.let {
                 ivThumb.loadImageFromUrl(it.image)
                 clickOn(itemView) {
-                    groupData.onClickOtherGameListener?.onClickGameItem(vhData)
+                    gameOtherGroupData.onClickOtherGameListener?.onClickGameItem(vhData)
                 }
             }
         }

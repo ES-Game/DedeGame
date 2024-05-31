@@ -8,6 +8,7 @@ import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.CategoryState
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.RankState
+import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
@@ -43,7 +44,11 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
                         trackingTapEventMainStory(EVENT_TAP_STORY_IN_RANK, PARAM_STORY, command.id)
                     }
                 }
-                goToStoryDetail(command.id)
+                StoryCoverActivity.launchScreen(activity, command.id)
+            }
+
+            is HomeComicsFragmentView.GotoStoryListCmd -> {
+                StoryListActivity.launchScreen(activity, command.category.id)
             }
 
             is HomeComicsFragmentView.OnclickCategoryCmd -> {
@@ -65,12 +70,6 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
 
     }
 
-
-    private fun goToStoryDetail(id: Int) {
-        val intent = Intent(activity, StoryCoverActivity::class.java)
-        intent.putExtra("storyId", id)
-        activity?.startActivity(intent)
-    }
 
     private fun trackingOnMainStoryScreen() {
         val fbModel = FirebaseLoginModel().apply {

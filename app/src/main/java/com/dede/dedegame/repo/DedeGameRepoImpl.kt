@@ -4,6 +4,7 @@ import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.domain.model.Author
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.Story
@@ -14,12 +15,14 @@ import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.model.mainGame.Game
+import com.dede.dedegame.domain.model.mainGame.GameType
 import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.model.payment.Payment
 import com.dede.dedegame.domain.repo.IDedeGameRepo
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
 import com.dede.dedegame.repo.home.CategoryData
@@ -264,19 +267,44 @@ class DedeGameRepoImpl : IDedeGameRepo {
         }
     }
 
-    override fun getGamesByType(type: Int, page: Int): ListGame {
+    override fun getGamesByType(type: GameType, page: Int): DataPage<Game> {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getGamesByType(type, page).invokeApi {
-            ListGame().apply {
-                this.pagination = it.data?.pagination?.let { it1 ->
-                    PaginationDataToPagination().convert(it1)
-                }
-                this.games = it.data?.games?.let { it1 ->
+        val gameType = if (type == GameType.OPEN) {
+            1
+        } else {
+            0
+        }
+        return service.getGamesByType(gameType, page).invokeApi {
+            DataPage<Game>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.dataList = it.data?.games?.let { it1 ->
                     com.dede.dedegame.repo.convert.ListConverter<GameData, Game>(
                         GameDataToGame()
                     ).convert(it1)
-                }
+                }!!
+                this.hasNextPage = this.currentPage <= this.lastPage
+            }
+        }
+    }
+
+    override fun getStoryByType(categoryId: Int, page: Int): DataPage<StoryDetail> {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getStoryById(categoryId, page).invokeApi {
+            DataPage<StoryDetail>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.title = it.data!!.category.name!!
+                this.dataList = it.data?.stories?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<StoryDetailData, StoryDetail>(
+                        StoryDetailDataToStoryDetail()
+                    ).convert(it1)
+                }!!
+                this.hasNextPage = this.currentPage <= this.lastPage
             }
         }
     }

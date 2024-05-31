@@ -59,7 +59,7 @@ class OtherNewsGroupData(data: List<Article>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickListener?.onClickOtherNews(vhData)
+                    homeTabGroupData.onClickListener?.onClickOtherNews(vhData)
                 }
             }
             vhData?.let {

@@ -78,7 +78,7 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 vhData?.id?.let {
-                    groupData.onClickStoryItem?.onClickStoryItem(it)
+                    listStoryGroupData.onClickStoryItem?.onClickStoryItem(it)
                 }
             }
             tvRankIndex.visibility = View.VISIBLE

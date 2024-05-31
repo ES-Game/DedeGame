@@ -78,7 +78,7 @@ class HomeTabGroupData(data: Unit?) :
             )
 
             tabLayout.setEvenListener { tabModel, pos ->
-                groupData.onClickListener?.onClickTab(pos)
+                homeTabGroupData.onClickListener?.onClickTab(pos)
             }
         }
 

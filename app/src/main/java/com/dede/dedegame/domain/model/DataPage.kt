@@ -1,7 +1,10 @@
 package com.dede.dedegame.domain.model
 
-abstract class DataPage<T> {
+class DataPage<T> {
     var dataList: List<T> = emptyList()
-    var pageOffset: Int = -1
-    var total: Int = 0
+    var currentPage: Int = -1
+    var title: String = ""
+    var lastPage: Int = 0
+    var perPage: Int = 0
+    var hasNextPage: Boolean = false
 }

@@ -13,7 +13,8 @@ data class StoryDetailData(
 
     @SerializedName("description")
     var description: String? = null,
-
+    @SerializedName("categories")
+    var categories: List<CategoryData>? = null,
     @SerializedName("postedBy")
     var postedBy: String? = null,
 

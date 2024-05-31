@@ -77,7 +77,7 @@ class ListPackageGroupData(listStory: List<Product>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
+                    listStoryGroupData.onClickStoryItem?.onClickStoryItem(vhData)
                 }
             }
             vhData?.let { product ->

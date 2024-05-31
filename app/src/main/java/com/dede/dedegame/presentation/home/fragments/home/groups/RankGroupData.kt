@@ -76,7 +76,7 @@ class RankGroupData(listStory: List<StoryDetail>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
+                    rankGroupData.onClickStoryItem?.onClickStoryItem(vhData)
                 }
             }
             vhData?.let { story ->

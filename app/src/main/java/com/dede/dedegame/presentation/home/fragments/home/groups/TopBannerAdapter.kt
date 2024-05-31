@@ -46,7 +46,7 @@ class TopBannerAdapter : BaseRclvAdapter(){
                     .with(ivBanner.context)
                     .load(it.image)
                     .centerCrop()
-                    .into(ivBanner);
+                    .into(ivBanner)
                 try {
                     ivBanner.setBackgroundColor(R.color.gray_300)
                 } catch (e: Exception) {

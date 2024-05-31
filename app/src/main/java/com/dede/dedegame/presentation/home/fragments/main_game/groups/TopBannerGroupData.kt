@@ -2,17 +2,15 @@ package com.dede.dedegame.presentation.home.fragments.main_game.groups
 
 import android.util.Log
 import android.view.View
-import android.widget.ImageView
-import com.quangph.base.mvp.IPresenter
-import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
-import com.quangph.base.view.recyclerview.adapter.group.GroupData
-import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.extension.loadImageFromUrl
 import com.dede.dedegame.presentation.common.IndicatorView
 import com.dede.dedegame.presentation.widget.carouselView.CarouselView
-import com.dede.dedegame.presentation.widget.carouselView.ImageListener
+import com.quangph.base.mvp.IPresenter
+import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
+import com.quangph.base.view.recyclerview.adapter.group.GroupData
+import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 
 class TopBannerGroupData(listStory: List<Slider>?) :
     GroupData<List<Slider>>(listStory) {
@@ -63,13 +61,24 @@ class TopBannerGroupData(listStory: List<Slider>?) :
             super.onBind(vhData)
             vhData?.let { sliders ->
                 vpHomeTopBannerItm.setPageCount(sliders.size)
-                vpHomeTopBannerItm.setImageListener(object : ImageListener{
-                    override fun setImageForPosition(position: Int, imageView: ImageView?) {
-                        imageView?.loadImageFromUrl(sliders[position].image)
-                    }
-                })
+                vpHomeTopBannerItm.setImageListener { position, imageView ->
+                    imageView?.loadImageFromUrl(
+                        sliders[position].image
+                    )
+                }
+                vpHomeTopBannerItm.setImageClickListener { position ->
+                    topBannerGroupData.onEvenSliderListener?.onClickSliderItem(
+                        sliders[position]
+                    )
+                }
                 idvHomeTopBannerItm.setUpWithViewPager(vpHomeTopBannerItm)
             }
         }
+    }
+
+    var onEvenSliderListener: OnEvenSliderListener? = null
+
+    interface OnEvenSliderListener {
+        fun onClickSliderItem(item: Slider)
     }
 }

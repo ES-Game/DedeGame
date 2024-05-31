@@ -76,7 +76,7 @@ class NewsGroupData(listArticle: List<Article>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickNewsListener?.onClickNewsItem(vhData)
+                    newsGroupData.onClickNewsListener?.onClickNewsItem(vhData)
                 }
             }
             vhData?.let { article ->
@@ -84,7 +84,7 @@ class NewsGroupData(listArticle: List<Article>?) :
                     .with(ivThumb.context)
                     .load(article.image)
                     .centerCrop()
-                    .into(ivThumb);
+                    .into(ivThumb)
                 tvName.text = article.title
                 tvDes.text = article.description
                 tvCreatedAt.text = article.date

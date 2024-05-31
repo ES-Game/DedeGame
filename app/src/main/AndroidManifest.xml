@@ -108,6 +108,24 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name="com.dede.dedegame.presentation.home.fragments.main_game.game_list.GameListActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name="com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <service android:name="com.dede.dedegame.cloudMessage.CloudNotificationService"
             android:exported="false">
             <intent-filter>

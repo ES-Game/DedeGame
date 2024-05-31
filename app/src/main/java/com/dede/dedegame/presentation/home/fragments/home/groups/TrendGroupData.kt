@@ -76,7 +76,7 @@ class TrendGroupData(listTrend: List<StoryDetail>?) :
             super.onBind(vhData)
             clickOn(itemView) {
                 if (vhData != null) {
-                    groupData.onClickStoryItem?.onClickStoryItem(vhData)
+                    trendGroupData.onClickStoryItem?.onClickStoryItem(vhData)
                 }
             }
             vhData?.let { story ->

@@ -36,16 +36,6 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
         super.onInitView()
 
         val layoutManager = GridLayoutManager(context, 1)
-//        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-//            override fun getSpanSize(position: Int): Int {
-//                return if (position == 0 || position == 1 || position == 2) {
-//                    2
-//                } else {
-//                    1
-//                }
-//            }
-//
-//        }
         rvContent.layoutManager = layoutManager
         rvContent.adapter = homeContentAdapter
         val positionsToHideDivider = intArrayOf(0)
@@ -74,6 +64,11 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
             }
         }
         rankGroupData.onClickStoryItem = object : RankGroupData.OnClickStoryItem {
+            override fun onClickStoryItem(item: StoryDetail) {
+                mPresenter.executeCommand(GotoStoryDetailCmd(item))
+            }
+        }
+        listTrendGroupData.onClickStoryItem = object : TrendGroupData.OnClickStoryItem {
             override fun onClickStoryItem(item: StoryDetail) {
                 mPresenter.executeCommand(GotoStoryDetailCmd(item))
             }
@@ -125,8 +120,8 @@ HomeFragmentView(context: Context?, attrs: AttributeSet?) : BaseRelativeView(con
     }
 
     fun validateTrendingGroup() {
-        if (rankGroupData.isAttached) {
-            homeContentAdapter.removeGroup(rankGroupData)
+        if (newsGroupData.isAttached) {
+            homeContentAdapter.removeGroup(newsGroupData)
         }
 
         if (rankGroupData.isAttached) {

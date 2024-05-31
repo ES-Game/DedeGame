@@ -87,7 +87,7 @@ class TopCoverGroupData(data: StoryDetail?) :
                 txtCmtLabel.text = if (it.comments != null && it.comments != 0 && it.comments!! > 1) itemView.context.getString(R.string.story_cover_top_comments_label) else itemView.context.getString(R.string.story_cover_top_comment_label)
 
                 txtReadNow.setOnClickListener {
-                    groupData.onClickTopCoverItem?.onClickReadNow(vhData)
+                    homeTabGroupData.onClickTopCoverItem?.onClickReadNow(vhData)
                 }
 
                 if (!it.authors.isNullOrEmpty()){

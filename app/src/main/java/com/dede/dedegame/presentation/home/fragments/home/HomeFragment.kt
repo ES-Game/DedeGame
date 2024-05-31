@@ -13,6 +13,7 @@ import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.fragments.home.states.NewsTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.RankTabState
 import com.dede.dedegame.presentation.home.fragments.home.states.TrendTabState
+import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListActivity
 import com.dede.dedegame.presentation.home.game.GameDetailActivity
 import com.dede.dedegame.presentation.home.news.NewsDetailActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
@@ -78,6 +79,7 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
                 when (command.item.type) {
                     Slider.Type.COMIC_CATEGORY -> {
                         trackingTapEventHome(EVENT_TAP_SLIDER_ITEM, PARAM_SLIDER_COMIC_CATEGORY, command.item.sid)
+                        StoryListActivity.launchScreen(activity, command.item.sid)
                     }
 
                     else -> {

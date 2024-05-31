@@ -6,14 +6,12 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
-import com.dede.dedegame.domain.model.mainGame.ComingTempGame
-import com.dede.dedegame.domain.model.mainGame.Game
-import com.dede.dedegame.domain.model.mainGame.OpenTempGame
+import com.dede.dedegame.domain.model.mainGame.GameListModel
+import com.dede.dedegame.domain.model.mainGame.GameType
 import com.dede.dedegame.presentation.common.CustomItemMainGameDecoration
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ComingGamesGroupData
+import com.dede.dedegame.presentation.home.fragments.home.HomeFragmentView
+import com.dede.dedegame.presentation.home.fragments.main_game.groups.GameListGroupData
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.ItemViewType
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.ListGameGroupData
-import com.dede.dedegame.presentation.home.fragments.main_game.groups.OpenGamesGroupData
 import com.dede.dedegame.presentation.home.fragments.main_game.groups.TopBannerGroupData
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseRelativeView
@@ -25,9 +23,6 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
     private val rvContent by lazy { findViewById<RecyclerView>(R.id.rvContent) }
     private val homeContentAdapter = GroupRclvAdapter()
     private val topBannerGroupData = TopBannerGroupData(null)
-    private var listGameGroupData = ListGameGroupData(null)
-    val comingGamesGroupData = ComingGamesGroupData(null)
-    val openGamesGroupData = OpenGamesGroupData(null)
     private lateinit var layoutManager: GridLayoutManager
     override fun onInitView() {
         super.onInitView()
@@ -38,7 +33,7 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 val itemViewType = homeContentAdapter.getItemViewType(position)
-                return if (itemViewType == ItemViewType.ITEM_OPEN_GAME || itemViewType == ItemViewType.ITEM_COMING_GAME) {
+                return if (itemViewType == ItemViewType.ITEM_GAME) {
                     1
                 } else {
                     2
@@ -50,6 +45,11 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         val decoration = CustomItemMainGameDecoration(space)
         rvContent.addItemDecoration(decoration)
 
+        topBannerGroupData.onEvenSliderListener = object : TopBannerGroupData.OnEvenSliderListener{
+            override fun onClickSliderItem(item: Slider) {
+                mPresenter.executeCommand(GotoScreenByTypeCmd(item))
+            }
+        }
         homeContentAdapter.addGroup(topBannerGroupData)
     }
 
@@ -58,31 +58,20 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
         topBannerGroupData.show()
     }
 
-    fun fillOpenGamesToGroup(openTempGame: OpenTempGame) {
-        homeContentAdapter.addGroup(openGamesGroupData)
-        openGamesGroupData.reset(openTempGame)
-        openGamesGroupData.show()
-        openGamesGroupData.onClickStoryItem = object : OpenGamesGroupData.OnClickStoryItem {
+    fun fillContainerGamesToGroup(gameListModel: GameListModel) {
+        val gameListGroupData = GameListGroupData(null)
+        homeContentAdapter.addGroup(gameListGroupData)
+        gameListGroupData.reset(gameListModel)
+        gameListGroupData.show()
+        gameListGroupData.onClickStoryItem = object : GameListGroupData.OnClickStoryItem {
+            override fun onClickViewMore(gameType: GameType) {
+                mPresenter.executeCommand(GotoGameListCmd(gameType))
+            }
+
             override fun onClickStoryItem(id: Int, status: Int) {
                 mPresenter.executeCommand(GotoGameDetailCmd(id, status))
             }
         }
-    }
-
-    fun fillComingGamesToGroup(comingGame: ComingTempGame) {
-        homeContentAdapter.addGroup(comingGamesGroupData)
-        comingGamesGroupData.reset(comingGame)
-        comingGamesGroupData.show()
-        comingGamesGroupData.onClickStoryItem = object : ComingGamesGroupData.OnClickStoryItem {
-            override fun onClickStoryItem(id: Int, status: Int) {
-                mPresenter.executeCommand(GotoGameDetailCmd(id, status))
-            }
-        }
-    }
-
-    fun fillGamesToGroup(games: List<Game>) {
-        listGameGroupData.reset(games)
-        listGameGroupData.show()
     }
 
     private var scrollPosition = 0
@@ -98,6 +87,8 @@ class MainGameFragmentView(context: Context?, attrs: AttributeSet?) :
     }
 
     class GotoGameDetailCmd(val id: Int, val status: Int) : ICommand
+    class GotoGameListCmd(val gameType: GameType) : ICommand
+    class GotoScreenByTypeCmd(val item: Slider) : ICommand
 }
 
 

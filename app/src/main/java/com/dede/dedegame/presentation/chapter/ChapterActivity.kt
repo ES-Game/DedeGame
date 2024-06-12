@@ -35,7 +35,7 @@ class ChapterActivity : JetActivity<ChapterView>() {
         super.onExecuteCommand(command)
         when (command) {
             is ChapterView.ChangeChapterCmd -> {
-                trackingTapEventChapter(EVENT_TAP_CHAPTER_ITEM, PARAM_CHAPTER, command.chapterId)
+//                trackingTapEventChapter(EVENT_TAP_CHAPTER_ITEM, PARAM_CHAPTER, command.chapterId)
                 getChapterDetail(command.chapterId)
             }
 

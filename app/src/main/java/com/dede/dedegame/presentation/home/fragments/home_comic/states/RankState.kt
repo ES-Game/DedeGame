@@ -6,6 +6,8 @@ import com.dede.dedegame.domain.usecase.GetRankingAction
 import com.dede.dedegame.presentation.common.TimeUtil
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragment
 import com.dede.dedegame.presentation.home.fragments.home_comic.HomeComicsFragmentView
+import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
+import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.mvpcomponent.MVPState
@@ -18,6 +20,20 @@ class RankState(stateContext: HomeComicsFragment, view: HomeComicsFragmentView) 
         super.onEnter()
         mView.setupRankLayout()
         getRanking()
+    }
+
+    override fun onExecuteCommand(command: ICommand): Boolean {
+        when (command) {
+            is HomeComicsFragmentView.GotoStoryDetailCmd -> {
+                mStateContext.trackingTapEventMainStory(
+                    HomeComicsFragment.EVENT_TAP_STORY_IN_RANK,
+                    HomeComicsFragment.PARAM_STORY, command.id
+                )
+                StoryCoverActivity.launchScreen(mStateContext.activity, command.id)
+                return true
+            }
+        }
+        return super.onExecuteCommand(command)
     }
 
     private fun getRanking() {

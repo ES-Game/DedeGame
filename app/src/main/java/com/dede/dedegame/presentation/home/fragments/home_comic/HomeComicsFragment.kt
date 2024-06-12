@@ -33,25 +33,7 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
 
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
-
         when (command) {
-            is HomeComicsFragmentView.GotoStoryDetailCmd -> {
-                when(stateMachine.currentStateName){
-                    StateName.CATEGORY -> {
-                        trackingTapEventMainStory(EVENT_TAP_STORY_IN_CATEGORY, PARAM_STORY, command.id)
-                    }
-                    StateName.RANK -> {
-                        trackingTapEventMainStory(EVENT_TAP_STORY_IN_RANK, PARAM_STORY, command.id)
-                    }
-                }
-                StoryCoverActivity.launchScreen(activity, command.id)
-            }
-
-            is HomeComicsFragmentView.GotoStoryListCmd -> {
-                trackingTapEventMainStory(EVENT_TAP_STORY_VIEW_MORE, PARAM_CATEGORY, command.category.id)
-                StoryListActivity.launchScreen(activity, command.category.id)
-            }
-
             is HomeComicsFragmentView.OnclickCategoryCmd -> {
                 transitToState(StateName.CATEGORY)
             }
@@ -72,7 +54,7 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
     }
 
 
-    private fun trackingOnMainStoryScreen() {
+    fun trackingOnMainStoryScreen() {
         val fbModel = FirebaseLoginModel().apply {
             this.eventName = EVENT_ON_MAIN_STORY
             this.param = "on_screen"
@@ -81,7 +63,7 @@ class HomeComicsFragment : JetFragment<HomeComicsFragmentView>() {
         DedeFirebaseTracker.track(fbModel)
     }
 
-    private fun trackingTapEventMainStory(eventName: String, param: String, paramValue: Any?) {
+    fun trackingTapEventMainStory(eventName: String, param: String, paramValue: Any?) {
         val fbModel = FirebaseLoginModel().apply {
             this.eventName = eventName
             this.param = param

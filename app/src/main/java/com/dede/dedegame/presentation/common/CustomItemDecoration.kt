@@ -30,8 +30,8 @@ class CustomItemDecoration(
         if (viewType == LATEST_CHAPTER) {
             outRect.left = leftSpace
             outRect.right = rightSpace
-            outRect.top = topSpace / 5
-            outRect.bottom = bottomSpace / 5
+            outRect.top = 0
+            outRect.bottom = 0
         } else {
             if (position == 0) {
                 outRect.left = leftSpace

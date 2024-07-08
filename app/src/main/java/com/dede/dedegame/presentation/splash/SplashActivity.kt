@@ -14,6 +14,10 @@ import com.quangph.jetpack.JetActivity
 @Layout(R.layout.activity_splash)
 class SplashActivity : JetActivity<SplashView>() {
 
+    companion object {
+        const val TIME_DELAY_SPLASH: Long = 1000
+    }
+
     override fun onStart() {
         super.onStart()
         supportActionBar?.hide()
@@ -21,17 +25,7 @@ class SplashActivity : JetActivity<SplashView>() {
 
     override fun onPresenterReady() {
         super.onPresenterReady()
-        if (DedeSharedPref.getUserInfo() == null){
-            Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, LoginActivity::class.java))
-                finish()
-            }, 1000)
-        } else {
-            Handler(Looper.getMainLooper()).postDelayed({
-                startActivity(Intent(this, HomeActivity::class.java))
-                finish()
-            }, 1000)
-        }
+        delaySplash()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -39,5 +33,27 @@ class SplashActivity : JetActivity<SplashView>() {
         when (command) {
 
         }
+    }
+
+    private fun delaySplash() {
+        if (DedeSharedPref.getUserInfo() == null) {
+            Handler(Looper.getMainLooper()).postDelayed({
+                navigateToLogin()
+            }, TIME_DELAY_SPLASH)
+        } else {
+            Handler(Looper.getMainLooper()).postDelayed({
+                navigateToHome()
+            }, TIME_DELAY_SPLASH)
+        }
+    }
+
+    private fun navigateToHome() {
+        startActivity(Intent(this, HomeActivity::class.java))
+        finish()
+    }
+
+    private fun navigateToLogin() {
+        startActivity(Intent(this, LoginActivity::class.java))
+        finish()
     }
 }

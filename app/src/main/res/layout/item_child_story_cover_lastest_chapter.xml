@@ -3,8 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/margin_small_between_part_in_item"
-    android:layout_marginEnd="@dimen/margin_small_between_part_in_item">
+    android:paddingStart="@dimen/margin_small_to_medium_between_part_in_item"
+    android:paddingEnd="@dimen/margin_small_to_medium_between_part_in_item"
+    android:paddingTop="@dimen/margin_small_to_medium_between_part_in_item"
+    android:paddingBottom="@dimen/margin_small_to_medium_between_part_in_item">
 
     <TextView
         android:id="@+id/tvNameChapter"
@@ -12,6 +14,8 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="24dp"
         android:text=""
+        android:maxLines="1"
+        android:ellipsize="end"
         android:textColor="@color/black"
         android:fontFamily="@font/montserrat_medium"
         android:textSize="@dimen/size_text_medium"

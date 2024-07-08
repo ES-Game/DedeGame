@@ -36,6 +36,8 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
                 R.dimen.margin_left_right_decorate
             )
         )
+        rcvInfo?.setItemAnimator(null)
+        
         setupToolbar()
         storyCoverAdapter.addGroup(topCoverGroupData)
         storyCoverAdapter.addGroup(summaryGroupData)
@@ -52,6 +54,24 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
             override fun onClickChapter(storyDetail: StoryDetail, chapterId: Int) {
                 mPresenter.executeCommand(GotoChapterBySelectChapterCmd(storyDetail, chapterId))
             }
+
+            override fun onClickExpand(storyDetail: StoryDetail) {
+                latestChapterGroupData.setStoryDetail(storyDetail)
+                latestChapterGroupData.setExpanded(false)
+                latestChapterGroupData.reset(mChapters)
+                latestChapterGroupData.show()
+            }
+
+            override fun onClickContract(storyDetail: StoryDetail) {
+                latestChapterGroupData.setStoryDetail(storyDetail)
+                if (mChapters!!.isNotEmpty() && mChapters?.size!! > 5) {
+                    latestChapterGroupData.setExpanded(true)
+                }
+                latestChapterGroupData.reset(mChapters)
+                latestChapterGroupData.show()
+            }
+
+
         }
     }
 
@@ -75,9 +95,15 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
         summaryGroupData.show()
     }
 
+    private var mChapters: List<Chapter>? = null
+
     fun fillDataToLatestChapter(storyDetail: StoryDetail, listChapter: List<Chapter>) {
         latestChapterGroupData.setStoryDetail(storyDetail)
-        latestChapterGroupData.reset(listChapter)
+        mChapters = listChapter
+        if (mChapters?.isNotEmpty()!! && mChapters?.size!! > 5) {
+            latestChapterGroupData.setExpanded(true)
+        }
+        latestChapterGroupData.reset(mChapters)
         latestChapterGroupData.show()
     }
 

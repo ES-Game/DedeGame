@@ -17,22 +17,30 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Chapter
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
+
 
 class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
 
     private var tvChapterName: TextView? = null
+    private var collapsingToolbar: CollapsingToolbarLayout? = null
     private lateinit var spListChapter: Spinner
     private var wvContent: WebView? = null
 
     override fun onInitView() {
         super.onInitView()
+        collapsingToolbar = findViewById(R.id.toolbar_layout)
         tvChapterName = findViewById(R.id.tvStoryNameDetail)
         spListChapter = findViewById(R.id.spListChapter)
         setupToolbar()
+
+        collapsingToolbar?.setContentScrimColor(ContextCompat.getColor(context, android.R.color.white))
+        collapsingToolbar?.setBackgroundColor(ContextCompat.getColor(context, android.R.color.white))
 
         wvContent = findViewById(R.id.wvContent)
         CookieManager.getInstance().setAcceptCookie(true)

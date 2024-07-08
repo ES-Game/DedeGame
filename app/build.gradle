@@ -54,7 +54,9 @@ dependencies {
     retrofit()
     implementation 'com.google.firebase:firebase-messaging:24.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.4.0'
-    implementation project(path: ':base')
+
+    implementation files('libs/TapDB_3.29.2.aar')
+    implementation "com.google.firebase:firebase-firestore:25.0.0"
 }
 
 private void retrofit() {

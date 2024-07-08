@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import com.dede.dedegame.R
 
@@ -34,6 +35,8 @@ class ExpiredSessionDialog : DialogFragment() {
     ): View {
         viewParent = inflater.inflate(R.layout.dialog_expired_session, container, false)
         dialog?.window?.setBackgroundDrawableResource(R.color.color_background_common_dialog)
+        dialog?.window?.statusBarColor =
+            ContextCompat.getColor(requireContext(), R.color.color_background_common_dialog)
         dialog?.setCanceledOnTouchOutside(false)
         dialog?.setCancelable(false)
         initView()

@@ -1,13 +1,20 @@
 package com.dede.dedegame.presentation.home.fragments.home
 
+import android.content.ActivityNotFoundException
+import android.content.ComponentName
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.VersionUpdate
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.usecase.GetHomeDataAction
+import com.dede.dedegame.presentation.common.LogUtil
+import com.dede.dedegame.presentation.common.VersionUtils
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.fragments.home.states.NewsTabState
@@ -17,12 +24,17 @@ import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.Story
 import com.dede.dedegame.presentation.home.game.GameDetailActivity
 import com.dede.dedegame.presentation.home.news.NewsDetailActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
+import com.dede.dedegame.presentation.widget.dialog.ForceUpdateDialog
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.gson.Gson
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action.SimpleActionCallback
 import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.mvp.action.scheduler.AsyncTaskScheduler
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetFragment
+import kotlin.system.exitProcess
 
 
 @Layout(R.layout.fragment_home)
@@ -78,12 +90,20 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
             is HomeFragmentView.GotoScreenByTypeCmd -> {
                 when (command.item.type) {
                     Slider.Type.COMIC_CATEGORY -> {
-                        trackingTapEventHome(EVENT_TAP_SLIDER_ITEM, PARAM_SLIDER_COMIC_CATEGORY, command.item.sid)
+                        trackingTapEventHome(
+                            EVENT_TAP_SLIDER_ITEM,
+                            PARAM_SLIDER_COMIC_CATEGORY,
+                            command.item.sid
+                        )
                         StoryListActivity.launchScreen(activity, command.item.sid)
                     }
 
                     else -> {
-                        trackingTapEventHome(EVENT_TAP_SLIDER_ITEM, PARAM_SLIDER_GAME_DETAIL, command.item.sid)
+                        trackingTapEventHome(
+                            EVENT_TAP_SLIDER_ITEM,
+                            PARAM_SLIDER_GAME_DETAIL,
+                            command.item.sid
+                        )
                         GameDetailActivity.launchScreen(activity, command.item.sid)
                     }
                 }
@@ -101,6 +121,52 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
         initState(StateName.NEWS)
     }
 
+    private fun getConfigApp() {
+        val app = FirebaseApp.getInstance()
+        val firestore = FirebaseFirestore.getInstance(app, "dede-game-app")
+        val docRef = firestore.collection("app_config").document("force_update_config")
+        docRef.get().addOnSuccessListener { result ->
+            try {
+                val versionUpdate = VersionUpdate(result.data!!)
+                if (versionUpdate.versionCode != VersionUtils.getVersionCode(activity)) {
+                    val fm: FragmentManager = childFragmentManager
+                    val dialog: ForceUpdateDialog =
+                        ForceUpdateDialog.newInstance(Gson().toJson(versionUpdate))
+                    dialog.setOnEventDialogListener(object :
+                        ForceUpdateDialog.OnEventDialogListener {
+                        override fun onClickUpdate(url: String) {
+                            try {
+                                val launchIntentForPackage: Intent =
+                                    activity!!.packageManager.getLaunchIntentForPackage("com.android.vending")!!
+                                launchIntentForPackage.setComponent(
+                                    ComponentName(
+                                        "com.android.vending",
+                                        "com.google.android.finsky.activities.LaunchUrlHandlerActivity"
+                                    )
+                                )
+                                launchIntentForPackage.setData(Uri.parse(url))
+                                startActivity(launchIntentForPackage)
+                            } catch (unused: ActivityNotFoundException) {
+                                startActivity(Intent("android.intent.action.VIEW", Uri.parse(url)))
+                            }
+                            exitProcess(0)
+                        }
+                    })
+                    dialog.show(fm, dialog.tag)
+                }
+                LogUtil.getInstance()
+                    .e("FireStore ==================>   Complete.   " + Gson().toJson(versionUpdate))
+            } catch (e: Exception) {
+                e.printStackTrace()
+                LogUtil.getInstance()
+                    .e("FireStore ==================>   Error getting documents.   " + e.message)
+            }
+        }.addOnFailureListener { exception ->
+            LogUtil.getInstance()
+                .e("FireStore ==================>   Error getting documents.   " + exception.message)
+        }
+    }
+
     private fun getHomeData() {
         showLoading()
         val callback = object : SimpleActionCallback<Home>() {
@@ -116,6 +182,7 @@ class HomeFragment : JetFragment<HomeFragmentView>() {
                         newsState.setData(it)
                     }
                 }
+                getConfigApp()
             }
 
             override fun onError(e: ActionException) {

@@ -6,7 +6,8 @@ class CoverStoryViewType {
         const val SUM_CONTENT = 2
         const val LATEST_CHAPTER_TITLE = 3
         const val LATEST_CHAPTER = 4
-        const val LIST_COMMENT = 5
+        const val ITEM_EXPANDED = 5
+        const val LIST_COMMENT = 6
 
     }
 }

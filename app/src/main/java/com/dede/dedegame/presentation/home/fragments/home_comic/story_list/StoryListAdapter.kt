@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.extension.loadImageFromUrl
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListViewType.Companion.ITEM_LOAD_MORE
 import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListViewType.Companion.ITEM_STORY
 import com.dede.dedegame.presentation.widget.RoundedTextView

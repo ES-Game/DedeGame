@@ -4,12 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.comment.Comment
+import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
+import com.dede.dedegame.presentation.widget.dialog.CommentDetailDialog
 import com.google.gson.Gson
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
@@ -20,16 +25,55 @@ import com.quangph.jetpack.JetActivity
 @Layout(R.layout.activity_story_cover)
 class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
+    private var storyId = -1
+
     override fun onPresenterReady() {
         super.onPresenterReady()
-        val storyId = intent.getIntExtra("storyId", -1)
+        storyId = intent.getIntExtra("storyId", -1)
         trackingOnStoryCoverScreen(PARAM_STORY, storyId)
         getStory(storyId)
+        getComments(storyId)
     }
 
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
         when (command) {
+            is StoryCoverView.OnclickLikedCmd -> {
+                if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
+
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.story_cover_login_to_interaction),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            is StoryCoverView.OnclickReplyCmd -> {
+                if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
+                    gotoCommentDetail(storyId, command.comment, command.comments)
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.story_cover_login_to_interaction),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
+            is StoryCoverView.ViewCommentCmd -> {
+                if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
+                    gotoCommentDetail(storyId, null, command.comments)
+                } else {
+                    Toast.makeText(
+                        this,
+                        getString(R.string.story_cover_login_to_comment),
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+
             is StoryCoverView.GotoChapterCmd -> {
                 trackingTapEventStoryCover(EVENT_TAP_READ_NOW, PARAM_STORY, command.item.id)
                 gotoChapter(command.item)
@@ -66,7 +110,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                         mvpView.fillDataToTopGroup(it)
                         mvpView.fillDataToSummary(it)
                         if (!it.chapters.isNullOrEmpty()) {
-                            mvpView.fillDataToLatestChapter(it, it.chapters!!.reversed())
+                            mvpView.fillDataToLatestChapter(it, it.chapters!!)
                         }
                     }
                 }
@@ -77,6 +121,42 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
+    }
+
+    private fun getComments(id: Int) {
+        showLoading()
+
+        val rv = GetCommentByStoryId.RV().apply {
+            this.storyId = id
+        }
+
+        mActionManager.executeAction(
+            GetCommentByStoryId(),
+            rv,
+            object : Action.SimpleActionCallback<DataPage<Comment>>() {
+                override fun onSuccess(responseValue: DataPage<Comment>?) {
+                    super.onSuccess(responseValue)
+                    hideLoading()
+                    responseValue?.dataList?.let {
+                        mvpView.fillDataToComment(flattenComments(it))
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    hideLoading()
+                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun gotoCommentDetail(storyId: Int, comment: Comment?, comments: List<Comment>) {
+        val commentDetailDialog = if (comment != null) {
+            CommentDetailDialog.newInstance(storyId, comment, comments)
+        } else {
+            CommentDetailDialog.newInstance(storyId, null, comments)
+        }
+        commentDetailDialog.show(supportFragmentManager, commentDetailDialog.tag)
     }
 
     private fun gotoChapter(storyDetail: StoryDetail, chapterId: Int) {
@@ -90,6 +170,18 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         val intent = Intent(this, ChapterActivity::class.java)
         intent.putExtra("key_data_story", Gson().toJson(storyDetail))
         startActivity(intent)
+    }
+
+    private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
+        val flatList = mutableListOf<Comment>()
+        for (comment in comments) {
+            comment.tab = level
+            flatList.add(comment)
+            comment.children?.let {
+                flatList.addAll(flattenComments(it, level + 1))
+            }
+        }
+        return flatList
     }
 
     private fun trackingOnStoryCoverScreen(param: String, paramValue: Any?) {

@@ -9,7 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.presentation.common.CustomItemDecoration
+import com.dede.dedegame.presentation.story_cover.groups.CommentGroupData
+import com.dede.dedegame.presentation.story_cover.groups.EnumListType
 import com.dede.dedegame.presentation.story_cover.groups.LatestChapterGroupData
 import com.dede.dedegame.presentation.story_cover.groups.SummaryGroupData
 import com.dede.dedegame.presentation.story_cover.groups.TopCoverGroupData
@@ -24,6 +27,7 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
     private var topCoverGroupData: TopCoverGroupData = TopCoverGroupData(null)
     private var summaryGroupData: SummaryGroupData = SummaryGroupData(null)
     private val latestChapterGroupData = LatestChapterGroupData(null)
+    private val commentGroupData = CommentGroupData(null)
     override fun onInitView() {
         super.onInitView()
         rcvInfo = findViewById<RecyclerView>(R.id.rcvInfo)
@@ -37,11 +41,17 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
             )
         )
         rcvInfo?.setItemAnimator(null)
-        
+
         setupToolbar()
+
         storyCoverAdapter.addGroup(topCoverGroupData)
+
         storyCoverAdapter.addGroup(summaryGroupData)
+
         storyCoverAdapter.addGroup(latestChapterGroupData)
+
+        storyCoverAdapter.addGroup(commentGroupData)
+
         topCoverGroupData.onClickTopCoverItem = object : TopCoverGroupData.OnClickTopCoverItem {
             override fun onClickReadNow(item: StoryDetail) {
                 mPresenter.executeCommand(GotoChapterCmd(item))
@@ -56,21 +66,31 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
             }
 
             override fun onClickExpand(storyDetail: StoryDetail) {
-                latestChapterGroupData.setStoryDetail(storyDetail)
-                latestChapterGroupData.setExpanded(false)
+                latestChapterGroupData.setListType(EnumListType.GREATER_THAN_LIMIT)
                 latestChapterGroupData.reset(mChapters)
                 latestChapterGroupData.show()
             }
 
             override fun onClickContract(storyDetail: StoryDetail) {
-                latestChapterGroupData.setStoryDetail(storyDetail)
-                if (mChapters!!.isNotEmpty() && mChapters?.size!! > 5) {
-                    latestChapterGroupData.setExpanded(true)
-                }
-                latestChapterGroupData.reset(mChapters)
+                latestChapterGroupData.setListType(EnumListType.EQUAL_LIMIT_WITH_COLLAPSE)
+                val listChapter = mChapters
+                latestChapterGroupData.reset(listChapter?.subList(0, 5))
                 latestChapterGroupData.show()
             }
+        }
 
+        commentGroupData.listener = object : CommentGroupData.OnEventCommentListener {
+            override fun onClickCommentAction(comments: List<Comment>) {
+                mPresenter.executeCommand(ViewCommentCmd(comments))
+            }
+
+            override fun onClickReplyAction(comment: Comment?, comments: List<Comment>) {
+                mPresenter.executeCommand(OnclickReplyCmd(comment, comments))
+            }
+
+            override fun onClickLikedComment(comment: Comment?) {
+                mPresenter.executeCommand(OnclickLikedCmd(comment))
+            }
 
         }
     }
@@ -100,15 +120,32 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
     fun fillDataToLatestChapter(storyDetail: StoryDetail, listChapter: List<Chapter>) {
         latestChapterGroupData.setStoryDetail(storyDetail)
         mChapters = listChapter
-        if (mChapters?.isNotEmpty()!! && mChapters?.size!! > 5) {
-            latestChapterGroupData.setExpanded(true)
+        if (mChapters?.isNotEmpty()!!) {
+            if (mChapters?.size!! > 5) {
+                latestChapterGroupData.setListType(EnumListType.EQUAL_LIMIT_WITH_COLLAPSE)
+                latestChapterGroupData.reset(listChapter.subList(0, 5))
+            } else if (mChapters?.size!! == 5) {
+                latestChapterGroupData.setListType(EnumListType.EQUAL_LIMIT_NO_COLLAPSE)
+                latestChapterGroupData.reset(listChapter)
+            } else {
+                latestChapterGroupData.setListType(EnumListType.LESS_THAN_LIMIT)
+                latestChapterGroupData.reset(listChapter)
+            }
+            latestChapterGroupData.show()
         }
-        latestChapterGroupData.reset(mChapters)
-        latestChapterGroupData.show()
+
+    }
+
+    fun fillDataToComment(listComment: List<Comment>) {
+        commentGroupData.reset(listComment)
+        commentGroupData.show()
     }
 
     class GotoChapterCmd(val item: StoryDetail) : ICommand
     class GotoChapterBySelectChapterCmd(val item: StoryDetail, val chapterId: Int) : ICommand
+    class OnclickLikedCmd(val comment: Comment?) : ICommand
+    class OnclickReplyCmd(val comment: Comment?, val comments: List<Comment>) : ICommand
+    class ViewCommentCmd(val comments: List<Comment>) : ICommand
     class OnBackCmd() : ICommand
 }
 

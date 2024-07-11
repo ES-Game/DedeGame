@@ -59,6 +59,7 @@
         <activity
             android:name="com.dede.dedegame.presentation.story_cover.StoryCoverActivity"
             android:exported="false"
+            android:windowSoftInputMode="adjustPan"
             android:parentActivityName=".presentation.home.HomeActivity">
             <meta-data
                 android:name="android.app.lib_name"

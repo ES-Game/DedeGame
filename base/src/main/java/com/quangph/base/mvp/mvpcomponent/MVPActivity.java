@@ -39,7 +39,7 @@ import com.quangph.base.lifecycle.OnDestroy;
 public class MVPActivity<V extends IView> extends BaseActivity implements IParentPresenter {
 
     protected V mView;
-    protected IActionManager mActionManager;
+    public IActionManager mActionManager;
     protected UIStateMachine mStateMachine;
     protected LCDelegate mLCController;
 

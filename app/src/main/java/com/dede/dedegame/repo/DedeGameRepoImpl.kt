@@ -11,6 +11,7 @@ import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.UserInfo
+import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.model.home.Article
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.Slider
@@ -43,6 +44,8 @@ import com.dede.dedegame.repo.network.APIException
 import com.dede.dedegame.repo.network.ApiService
 import com.dede.dedegame.repo.network.NetworkFactory.createDefaultService
 import com.dede.dedegame.repo.network.invokeApi
+import com.dede.dedegame.repo.temp.comment.CommentData
+import com.dede.dedegame.repo.temp.comment.CommentDataToComment
 import com.dede.dedegame.repo.temp.home.ArticleData
 import com.dede.dedegame.repo.temp.home.ComingGameData
 import com.dede.dedegame.repo.temp.home.OpenedGameData
@@ -322,6 +325,24 @@ class DedeGameRepoImpl : IDedeGameRepo {
                         OtherGameDataToOtherGame()
                     ).convert(it1)
                 }
+            }
+        }
+    }
+
+    override fun getCommentByStoryId(storyId: Int, page: Int): DataPage<Comment> {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getCommentByIdStory(storyId, page).invokeApi {
+            DataPage<Comment>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.dataList = it.data?.comments?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<CommentData, Comment>(
+                        CommentDataToComment()
+                    ).convert(it1)
+                }!!
+                this.hasNextPage = this.currentPage <= this.lastPage
             }
         }
     }

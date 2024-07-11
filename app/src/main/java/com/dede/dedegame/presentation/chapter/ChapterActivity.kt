@@ -16,7 +16,7 @@ import com.quangph.jetpack.JetActivity
 
 @Layout(R.layout.activity_chapter)
 class ChapterActivity : JetActivity<ChapterView>() {
-    private var chapterId = -1;
+    private var chapterId = -1
     override fun onPresenterReady() {
         super.onPresenterReady()
 

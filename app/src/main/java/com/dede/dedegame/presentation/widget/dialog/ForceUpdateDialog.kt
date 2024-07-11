@@ -1,6 +1,5 @@
 package com.dede.dedegame.presentation.widget.dialog
 
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -35,7 +34,7 @@ class ForceUpdateDialog : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setStyle(STYLE_NO_FRAME, R.style.CommonDialog)
+        setStyle(STYLE_NORMAL, R.style.CommonDialog)
         arguments?.let {
             versionUpdate = Gson().fromJson(it.getString("key_data"), VersionUpdate::class.java)
         }

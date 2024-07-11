@@ -29,6 +29,17 @@
     <string name="story_cover_top_read_later">Đọc sau</string>
     <string name="story_cover_summary_title">Tóm tắt</string>
     <string name="story_cover_latest_chapter_title">Chương mới nhất</string>
+    <string name="story_cover_comment_title">Bình luận</string>
+    <string name="story_cover_comment_like">Thích</string>
+    <string name="story_cover_comment_feedback">Phản hồi</string>
+    <string name="story_cover_join_comment">Viết bình luận</string>
+    <string name="action_comment_send">Gửi bình luận</string>
+    <string name="story_cover_comment_action_not_login">Hãy đăng nhập hoặc tạo tài khoản để gửi bình luận</string>
+    <string name="story_cover_login_to_comment">Đăng nhập để bình luận</string>
+    <string name="story_cover_login_to_interaction">Đăng nhập để tương tác</string>
+    <string name="view_comment_detail_all_comment">Tất cả bình luận</string>
+    <string name="view_comment_no_comment">Chưa có bình luận nào</string>
+
     <string name="view_more">Xem thêm</string>
 
     <string name="shop_screen_label">Gói đăng ký hệ thống</string>

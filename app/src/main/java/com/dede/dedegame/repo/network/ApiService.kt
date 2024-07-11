@@ -1,11 +1,11 @@
 package com.dede.dedegame.repo.network
 
-import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.repo.home.HomeResponse
 import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
+import com.dede.dedegame.repo.temp.comment.ListCommentResponse
 import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
 import com.dede.dedegame.repo.temp.mainGame.ListStoryResponse
 import com.dede.dedegame.repo.temp.mainGame.gameDetail.GameDetailResponse
@@ -16,7 +16,6 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Headers
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -68,11 +67,23 @@ interface ApiService {
     fun fetchPayment(@Header("Authorization") authToken: String): Call<PaymentResponse>
 
     @GET("games/{type}")
-    fun getGamesByType(@Path("type") gameType: Int, @Query("page") page: Int): Call<ListGameResponse>
+    fun getGamesByType(
+        @Path("type") gameType: Int,
+        @Query("page") page: Int
+    ): Call<ListGameResponse>
 
     @GET("game/{gameId}")
     fun getGameDetail(@Path("gameId") gameId: Int): Call<GameDetailResponse>
 
     @GET("category/{categoryId}")
-    fun getStoryById(@Path("categoryId") categoryId: Int, @Query("page") page: Int): Call<ListStoryResponse>
+    fun getStoryById(
+        @Path("categoryId") categoryId: Int,
+        @Query("page") page: Int
+    ): Call<ListStoryResponse>
+
+    @GET("comments/story/{storyId}")
+    fun getCommentByIdStory(
+        @Path("storyId") categoryId: Int,
+        @Query("page") page: Int
+    ): Call<ListCommentResponse>
 }

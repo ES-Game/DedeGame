@@ -39,6 +39,8 @@
     <string name="story_cover_login_to_interaction">Đăng nhập để tương tác</string>
     <string name="view_comment_detail_all_comment">Tất cả bình luận</string>
     <string name="view_comment_no_comment">Chưa có bình luận nào</string>
+    <string name="all_comment_screen_replying"><![CDATA[Đang phản hồi <b>%s</b> -]]></string>
+    <string name="app_common_cancel">Hủy</string>
 
     <string name="view_more">Xem thêm</string>
 

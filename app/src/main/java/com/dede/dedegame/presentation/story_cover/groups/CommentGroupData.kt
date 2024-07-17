@@ -136,7 +136,7 @@ class CommentGroupData(comments: List<Comment>?) :
         private val txtName by lazy { itemView.findViewById<TextView>(R.id.txtName) }
         private val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }
         private val txtLike by lazy { itemView.findViewById<TextView>(R.id.txtLike) }
-        private val txtFeedback by lazy { itemView.findViewById<TextView>(R.id.txtFeedback) }
+        private val txtReply by lazy { itemView.findViewById<TextView>(R.id.txtReply) }
 
         override fun onBind(comment: Comment?) {
             super.onBind(comment)
@@ -144,12 +144,20 @@ class CommentGroupData(comments: List<Comment>?) :
                 txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 txtName.text = cmt.user
                 txtContent.text = cmt.comment
-                if (cmt.tab!! > 0) {
-                    itemView.setPadding(
-                        (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
-                            R.dimen.margin_between_part_in_item_10dp
-                        )) * cmt.tab!!, 0, 0, 0
-                    )
+                if (cmt.level > 0) {
+                    if (cmt.level > 2){
+                        itemView.setPadding(
+                            (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
+                                R.dimen.margin_between_part_in_item_10dp
+                            )) * 2, 0, 0, 0
+                        )
+                    } else {
+                        itemView.setPadding(
+                            (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
+                                R.dimen.margin_between_part_in_item_10dp
+                            )) * cmt.level, 0, 0, 0
+                        )
+                    }
                 } else {
                     itemView.setPadding(0, 0, 0, 0)
                 }
@@ -158,7 +166,7 @@ class CommentGroupData(comments: List<Comment>?) :
                         commentGroupData.listener?.onClickLikedComment(cmt)
                     }
                 }
-                clickOn(txtFeedback) {
+                clickOn(txtReply) {
                     if (commentGroupData.listener != null) {
                         commentGroupData.listener?.onClickReplyAction(cmt, commentGroupData.data)
                     }

@@ -1,11 +1,13 @@
 package com.dede.dedegame.presentation.widget.dialog
 
-import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.DialogInterface
 import android.content.res.ColorStateList
 import android.content.res.Resources
+import android.os.Build
 import android.os.Bundle
 import android.text.Editable
+import android.text.Html
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +16,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
@@ -23,6 +26,8 @@ import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
+import com.dede.dedegame.domain.usecase.ReplyComment
+import com.dede.dedegame.domain.usecase.SendCommentToStory
 import com.dede.dedegame.presentation.common.CustomItemDecoration
 import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListAdapter
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
@@ -43,13 +48,17 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     lateinit var rvComments: RecyclerView
     lateinit var imvSend: ImageView
     lateinit var emptyView: View
+    lateinit var replyView: View
+    lateinit var tvReplyEveryOne: TextView
+    lateinit var tvCancelEveryOne: TextView
 
     private var commentListAdapter = CommentListAdapter(false)
     private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
-    private var comments: List<Comment>? = null
-    private var comment: Comment? = null
+    private var comments: List<Comment> = arrayListOf()
+    private var mComment: Comment? = null
     private var mStoryId: Int? = null
     private var currentPage = 1
+    private var hasUpdate = false
 
     companion object {
         private const val KEY_STORY_ID = "key_story_id"
@@ -80,7 +89,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         arguments?.let {
             val listType = object : TypeToken<List<Comment>>() {}.type
             comments = Gson().fromJson(it.getString(KEY_COMMENT_LIST), listType)
-            comment = Gson().fromJson(it.getString(KEY_COMMENT_ITEM), Comment::class.java)
+            mComment = Gson().fromJson(it.getString(KEY_COMMENT_ITEM), Comment::class.java)
             mStoryId = it.getInt(KEY_STORY_ID)
         }
     }
@@ -99,6 +108,9 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         editText = view.findViewById(R.id.editText)
         rvComments = view.findViewById(R.id.rvComments)
         imvSend = view.findViewById(R.id.imvSend)
+        replyView = view.findViewById(R.id.replyView)
+        tvReplyEveryOne = view.findViewById(R.id.tvReplyEveryOne)
+        tvCancelEveryOne = view.findViewById(R.id.tvCancelEveryOne)
         return view
     }
 
@@ -130,7 +142,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             editText.post {
                 val inputMethodManager =
-                    activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                    activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
                 inputMethodManager.showSoftInput(
                     editText,
                     InputMethodManager.SHOW_IMPLICIT
@@ -144,7 +156,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             }
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (s?.length!! > 0) {
+                if (s?.toString()?.replace(" ", "")?.length!! > 0) {
                     setStateSendButton(true)
                 } else {
                     setStateSendButton(false)
@@ -155,12 +167,23 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             }
         })
 
-        if (comment != null) {
-            val userTag = "${comment?.user}" + " "
+        if (mComment != null) {
+            val userTag = "${mComment?.user}" + " "
             editText.setText(userTag)
             editText.setSelection(userTag.length)
+            replyView.visibility = View.VISIBLE
+            setStateReplyView()
             setStateSendButton(true)
         } else {
+            replyView.visibility = View.GONE
+            setStateSendButton(false)
+        }
+
+        tvCancelEveryOne.setOnClickListener {
+            mComment = null
+            editText.setText("")
+            tvReplyEveryOne.text = ""
+            replyView.visibility = View.GONE
             setStateSendButton(false)
         }
 
@@ -168,22 +191,155 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             hideKeyboard()
         }
 
-        if (comments.isNullOrEmpty()) {
+        if (comments.isEmpty()) {
             emptyView.visibility = View.VISIBLE
         } else {
             emptyView.visibility = View.GONE
-            rvComments.adapter = commentListAdapter
-            rvComments.layoutManager = layoutManager
-            rvComments.addItemDecoration(
-                CustomItemDecoration(
-                    requireContext(),
-                    R.dimen.margin_top_bottom_decorate,
-                    R.dimen.margin_left_right_decorate
-                )
-            )
-            rvComments.setItemAnimator(null)
-            commentListAdapter.setListStory(comments!!)
         }
+
+        rvComments.adapter = commentListAdapter
+        rvComments.layoutManager = layoutManager
+        rvComments.addItemDecoration(
+            CustomItemDecoration(
+                requireContext(),
+                R.dimen.margin_top_bottom_decorate,
+                R.dimen.margin_left_right_decorate
+            )
+        )
+        commentListAdapter.setOnClickListener(object : CommentListAdapter.OnClickListener {
+            override fun onClickLikedComment(item: Comment) {
+
+            }
+
+            override fun onClickReplyComment(item: Comment) {
+                if (mComment == null) {
+                    mComment = item
+                    val userTag = "${mComment?.user}" + " "
+                    editText.setText(userTag)
+                    editText.setSelection(userTag.length)
+                    setStateReplyView()
+                    replyView.visibility = View.VISIBLE
+                    setStateSendButton(true)
+                } else {
+                    mComment = item
+                    val userTag = "${mComment?.user}" + " "
+                    editText.setText(userTag)
+                    editText.setSelection(userTag.length)
+                    setStateReplyView()
+                    replyView.visibility = View.VISIBLE
+                    setStateSendButton(true)
+                }
+            }
+        })
+        rvComments.setItemAnimator(null)
+        commentListAdapter.setListStory(comments)
+
+        imvSend.setOnClickListener {
+            if (mComment != null) {
+                val rv = ReplyComment.RV().apply {
+                    this.storyId = mStoryId!!
+                    this.comment = editText.text.toString()
+                    this.parentId = mComment?.id!!
+                }
+                (activity as StoryCoverActivity).mActionManager.executeAction(
+                    ReplyComment(),
+                    rv,
+                    object : Action.SimpleActionCallback<Comment>() {
+                        override fun onSuccess(responseValue: Comment?) {
+                            super.onSuccess(responseValue)
+                            responseValue?.let {
+                                editText.setText("")
+                                currentPage = 1
+                                val rvGetComment = GetCommentByStoryId.RV().apply {
+                                    this.storyId = mStoryId!!
+                                    this.page = currentPage
+                                }
+                                (activity as StoryCoverActivity).mActionManager.executeAction(
+                                    GetCommentByStoryId(),
+                                    rvGetComment,
+                                    object : Action.SimpleActionCallback<DataPage<Comment>>() {
+                                        override fun onSuccess(responseValue: DataPage<Comment>?) {
+                                            super.onSuccess(responseValue)
+                                            responseValue?.dataList?.let {
+                                                hasUpdate = true
+                                                commentListAdapter.setListStory(flattenComments(it))
+                                            }
+                                        }
+
+                                        override fun onError(e: ActionException) {
+                                            super.onError(e)
+                                            Toast.makeText(
+                                                requireActivity(),
+                                                e.message,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+                                    })
+                            }
+                        }
+
+                        override fun onError(e: ActionException) {
+                            super.onError(e)
+                            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+            } else {
+                val rv = SendCommentToStory.RV().apply {
+                    this.storyId = mStoryId!!
+                    this.comment = editText.text.toString()
+                }
+                (activity as StoryCoverActivity).mActionManager.executeAction(
+                    SendCommentToStory(),
+                    rv,
+                    object : Action.SimpleActionCallback<Comment>() {
+                        override fun onSuccess(responseValue: Comment?) {
+                            super.onSuccess(responseValue)
+                            responseValue?.let {
+                                editText.setText("")
+                                currentPage = 1
+                                val rvGetComment = GetCommentByStoryId.RV().apply {
+                                    this.storyId = mStoryId!!
+                                    this.page = currentPage
+                                }
+                                (activity as StoryCoverActivity).mActionManager.executeAction(
+                                    GetCommentByStoryId(),
+                                    rvGetComment,
+                                    object : Action.SimpleActionCallback<DataPage<Comment>>() {
+                                        override fun onSuccess(responseValue: DataPage<Comment>?) {
+                                            super.onSuccess(responseValue)
+                                            responseValue?.dataList?.let {
+                                                if (comments.isEmpty()) {
+                                                    emptyView.visibility = View.GONE
+                                                }
+                                                hasUpdate = true
+                                                commentListAdapter.setListStory(flattenComments(it))
+                                            }
+                                        }
+
+                                        override fun onError(e: ActionException) {
+                                            super.onError(e)
+                                            Toast.makeText(
+                                                requireActivity(),
+                                                e.message,
+                                                Toast.LENGTH_SHORT
+                                            )
+                                                .show()
+                                        }
+                                    })
+                            }
+                        }
+
+                        override fun onError(e: ActionException) {
+                            super.onError(e)
+                            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    })
+            }
+        }
+
         rvComments.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 if (activity is StoryCoverActivity) {
@@ -217,7 +373,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
         val flatList = mutableListOf<Comment>()
         for (comment in comments) {
-            comment.tab = level
+            comment.level = level
             flatList.add(comment)
             comment.children?.let {
                 flatList.addAll(flattenComments(it, level + 1))
@@ -255,11 +411,29 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         ImageViewCompat.setImageTintList(imvSend, colorStateList)
     }
 
+    private fun setStateReplyView() {
+        val rawText = getString(R.string.all_comment_screen_replying)
+        val formattedText = java.lang.String.format(rawText, mComment?.user)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            tvReplyEveryOne.text = Html.fromHtml(formattedText, Html.FROM_HTML_MODE_LEGACY)
+        } else {
+            tvReplyEveryOne.text = Html.fromHtml(formattedText)
+        }
+    }
+
+    override fun onDismiss(dialog: DialogInterface) {
+        super.onDismiss(dialog)
+        onEventDialogListener?.onRefreshData(hasUpdate)
+    }
+
     fun setOnEventDialogListener(onEventDialogListener: OnEventDialogListener) {
         this.onEventDialogListener = onEventDialogListener
     }
 
     private var onEventDialogListener: OnEventDialogListener? = null
 
-    interface OnEventDialogListener
+    interface OnEventDialogListener{
+        fun onRefreshData(update: Boolean)
+    }
+
 }

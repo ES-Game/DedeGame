@@ -5,6 +5,7 @@ import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
+import com.dede.dedegame.repo.temp.comment.CommentResponse
 import com.dede.dedegame.repo.temp.comment.ListCommentResponse
 import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
 import com.dede.dedegame.repo.temp.mainGame.ListStoryResponse
@@ -86,4 +87,22 @@ interface ApiService {
         @Path("storyId") categoryId: Int,
         @Query("page") page: Int
     ): Call<ListCommentResponse>
+
+    @FormUrlEncoded
+    @POST("comment-story")
+    fun sendCommentToStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") storyId: Int,
+        @Field("comment") comment: String,
+    ): Call<CommentResponse>
+
+    @FormUrlEncoded
+    @POST("comment-story")
+    fun replyComment(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") storyId: Int,
+        @Field("comment") comment: String,
+        @Field("parent_id") parentId: Int,
+    ): Call<CommentResponse>
+
 }

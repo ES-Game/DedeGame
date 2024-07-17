@@ -17,13 +17,12 @@ import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.home.Slider
 import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.GameType
-import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameInfo
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.model.payment.Payment
 import com.dede.dedegame.domain.repo.IDedeGameRepo
-import com.dede.dedegame.presentation.common.LogUtil
+import com.dede.dedegame.repo.convert.ListConverter
 import com.dede.dedegame.repo.home.AuthorData
 import com.dede.dedegame.repo.home.AuthorDataToAuthor
 import com.dede.dedegame.repo.home.CategoryData
@@ -52,7 +51,6 @@ import com.dede.dedegame.repo.temp.home.OpenedGameData
 import com.dede.dedegame.repo.temp.home.SliderData
 import com.dede.dedegame.repo.temp.mainGame.GameData
 import com.dede.dedegame.repo.temp.mainGame.GameDataToGame
-import com.dede.dedegame.repo.temp.mainGame.PaginationDataToPagination
 import com.dede.dedegame.repo.temp.mainGame.gameDetail.OtherGameData
 import com.dede.dedegame.repo.temp.mainGame.gameDetail.OtherGameDataToOtherGame
 import com.dede.dedegame.repo.temp.news.ArticleDataToNewsArticle
@@ -343,6 +341,58 @@ class DedeGameRepoImpl : IDedeGameRepo {
                     ).convert(it1)
                 }!!
                 this.hasNextPage = this.currentPage <= this.lastPage
+            }
+        }
+    }
+
+
+    override fun sendCommentToStory(storyId: Int, comment: String): Comment {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.sendCommentToStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            comment
+        ).invokeApi { source ->
+            Comment().apply {
+                this.id = source.data?.id
+                this.user = source.data?.user
+                this.comment = source.data?.comment
+                this.children = source.data?.children?.let {
+                    ListConverter<CommentData, Comment>(CommentDataToComment()).convert(
+                        it
+                    )
+                }
+                this.likes = source.data?.likes
+                this.liked = source.data?.liked
+                this.createdAt = source.data?.createdAt
+                this.updatedAt = source.data?.updatedAt
+            }
+        }
+    }
+
+    override fun replyComment(storyId: Int, comment: String, parentId: Int): Comment {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.replyComment(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            comment,
+            parentId
+        ).invokeApi { source ->
+            Comment().apply {
+                this.id = source.data?.id
+                this.user = source.data?.user
+                this.comment = source.data?.comment
+                this.children = source.data?.children?.let {
+                    ListConverter<CommentData, Comment>(CommentDataToComment()).convert(
+                        it
+                    )
+                }
+                this.likes = source.data?.likes
+                this.liked = source.data?.liked
+                this.createdAt = source.data?.createdAt
+                this.updatedAt = source.data?.updatedAt
             }
         }
     }

@@ -13,7 +13,7 @@ class Comment() : KParcelable {
     var liked: Int? = null
     var createdAt: String? = null
     var updatedAt: String? = null
-    var tab: Int? = null
+    var level: Int = 0
     constructor(parcel: Parcel) : this() {
         id = parcel.readInt()
         user = parcel.readString()
@@ -23,7 +23,7 @@ class Comment() : KParcelable {
         liked = parcel.readInt()
         createdAt = parcel.readString()
         updatedAt = parcel.readString()
-        tab = parcel.readInt()
+        level = parcel.readInt()
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -35,7 +35,7 @@ class Comment() : KParcelable {
         liked?.let { parcel.writeInt(it) }
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
-        parcel.writeInt(tab ?: 0)
+        parcel.writeInt(level ?: 0)
     }
 
     companion object {

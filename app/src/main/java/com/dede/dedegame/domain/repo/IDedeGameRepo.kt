@@ -45,6 +45,7 @@ interface IDedeGameRepo {
     fun getGamesByType(type: GameType, page: Int): DataPage<Game>
     fun getStoryByType(categoryId: Int, page: Int): DataPage<StoryDetail>
     fun getCommentByStoryId(storyId: Int, page: Int): DataPage<Comment>
-
     fun getGameDetail(gameId: Int): GameDetail
+    fun sendCommentToStory(storyId: Int, comment: String): Comment
+    fun replyComment(storyId: Int, comment: String, parentId: Int): Comment
 }

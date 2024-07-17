@@ -417,9 +417,15 @@ com.quangph.base.common.KeyboardTouchManager:
     public final boolean hideKeyboardWhenScrollingOutside()
     public static boolean isScrollGesture()
 com.quangph.base.common.ScreenOrientationHelper:
+    public static void checkOrientationChanged()
     public static boolean isOrientationChanged()
+    public static void onCreate()
+    public static void onRestoreInstanceState()
+    public static void onSaveInstanceState()
 com.quangph.base.common.bus.AppBus:
     public static void handleEvent()
+    public final void register(com.quangph.base.common.bus.IAppEventHandler)
+    public final void unregister(com.quangph.base.common.bus.IAppEventHandler)
 com.quangph.base.common.converter.Mapper$srcPropertyNames$2:
     public static java.util.Map invoke()
 com.quangph.base.common.converter.Mapper:
@@ -451,9 +457,7 @@ com.quangph.base.mvp.action.ActionMonitor:
     public final void addActionQueue(com.quangph.base.mvp.action.queue.ActionEnqueue)
     public static com.quangph.base.mvp.action.queue.ActionEnqueue createEnqueue()
     public final void dispatch(com.quangph.base.mvp.action.queue.ActionEnqueue)
-    public final synchronized void enqueueAction(java.lang.String,com.quangph.base.mvp.action.post.PostAction,java.util.List,com.quangph.base.mvp.action.post.PostTaskScheduler)
     public static void executeActionOnPost()
-    public final synchronized java.util.List findCallbacksRelatedAction(java.lang.String)
     public static java.util.List findRegisteredCallback()
     public final com.quangph.base.mvp.action.ActionQueueInfo findRunningAction(java.lang.String)
     public final void notifyErrorAction(com.quangph.base.mvp.action.Action)
@@ -490,7 +494,7 @@ com.quangph.base.mvp.action.actionhandler.ActionHandlerImpl$CallbackDispatcher:
     public static void stopAction$2()
     public static void stopActions()
 com.quangph.base.mvp.action.actionhandler.ActionHandlerImpl:
-    public static java.lang.String TAG
+    public static final java.lang.String TAG
     public static void <clinit>()
     public final synchronized void dispatch()
     public final synchronized void dispatchAtFrontOfQueue()
@@ -525,7 +529,6 @@ com.quangph.base.mvp.action.post.SequencePostActionManager:
     public static com.quangph.base.mvp.action.post.SequencePostActionManager$ActionInfo collectInfo(com.quangph.base.mvp.action.IActionManager,com.quangph.base.mvp.action.Action)
     public static com.quangph.base.mvp.action.post.SequencePostActionManager getInstance()
     public static void initInfoIfNeed()
-    public final void registerCallback(com.quangph.base.mvp.action.IActionManager,java.lang.String,com.quangph.base.mvp.action.Action$ActionCallback)
 com.quangph.base.mvp.action.queue.ActionEnqueue:
     public final void add(java.lang.String,com.quangph.base.mvp.action.Action,java.util.List,com.quangph.base.mvp.action.scheduler.IActionScheduler)
     public abstract void compound()
@@ -554,7 +557,6 @@ com.quangph.base.mvp.action.scheduler.AsyncTaskScheduler$ActionAsync:
 com.quangph.base.mvp.action.scheduler.AsyncTaskScheduler:
     public static void notifyError()
     public static void notifyProgress()
-    public static void notifyResult()
     public static void notifyStartAction()
 com.quangph.base.mvp.mvpcomponent.MVPActivity:
     public final void addStateToLC(java.lang.String)
@@ -583,11 +585,16 @@ com.quangph.base.mvp.mvpcomponent.ViewModelFinderReflection:
 com.quangph.base.roadmap.RoadNode$CREATOR:
     public static com.quangph.base.roadmap.RoadNode createFromParcel()
     public static com.quangph.base.roadmap.RoadNode[] newArray()
+com.quangph.base.roadmap.RoadNode:
+    public static java.lang.String getScreenName()
+    public static boolean isAvailable()
+    public static void setAvailable()
+    public static void setScreenName()
 com.quangph.base.security.CipherService$Companion
 com.quangph.base.security.CipherService:
     public static final com.quangph.base.security.CipherService$Companion Companion
-    public static java.lang.String TRANSFORMATION_ASYMMETRIC
-    public static java.lang.String TRANSFORMATION_SYMMETRIC
+    public static final java.lang.String TRANSFORMATION_ASYMMETRIC
+    public static final java.lang.String TRANSFORMATION_SYMMETRIC
     public static void <clinit>()
     public static final synthetic java.lang.String access$getTRANSFORMATION_ASYMMETRIC$cp()
     public static final synthetic java.lang.String access$getTRANSFORMATION_SYMMETRIC$cp()
@@ -601,11 +608,14 @@ com.quangph.base.security.KeyStorage:
     public static final com.quangph.base.security.KeyStorage INSTANCE
     public static void <clinit>()
     public void <init>()
+    public static java.lang.String getEncryptedKey(android.content.Context)
 com.quangph.base.security.KeyStoreService:
+    public static javax.crypto.SecretKey generateDefaultSymmetricKey()
+    public final java.security.KeyPair getKeyStoreAsymmetricKeyPair()
     public static void initGeneratorWithKeyGenParameterSpec()
     public static void initGeneratorWithKeyPairGeneratorSpec()
 com.quangph.base.statemachine.UIState:
-    public boolean isNeedTransitToParent
+    public final boolean isNeedTransitToParent
     public final boolean checkTransitFromChild()
     public final void handleTransitFrom()
 com.quangph.base.statemachine.UIStateMachine$1:
@@ -624,14 +634,13 @@ com.quangph.base.statemachine.core.StateMachine$LogRec:
     public int mWhat
 com.quangph.base.statemachine.core.StateMachine$LogRecords:
     public int mCount
-    public final synchronized void add(com.quangph.base.statemachine.core.IState,com.quangph.base.statemachine.core.IState)
     public final synchronized void cleanup()
 com.quangph.base.statemachine.core.StateMachine$SmHandler$QuittingState:
     public final synthetic com.quangph.base.statemachine.core.StateMachine$SmHandler this$0
 com.quangph.base.statemachine.core.StateMachine$SmHandler$StateInfo:
     public final synthetic com.quangph.base.statemachine.core.StateMachine$SmHandler this$0
 com.quangph.base.statemachine.core.StateMachine$SmHandler:
-    public boolean mDbg
+    public final boolean mDbg
     public android.os.Message mMsg
     public static void cleanupAfterQuitting()
     public static void completeConstruction()
@@ -676,8 +685,6 @@ com.quangph.base.thread.PostableThread:
     public static void cancelTask()
     public static void clearAllTask()
     public final void postTask(java.lang.Runnable)
-com.quangph.base.thread.SerialExecutor:
-    public final synchronized void scheduleNext()
 com.quangph.base.tracking.Tracker:
     public abstract java.lang.String getScreenLabel()
     public abstract java.lang.String getScreenLabel$1()
@@ -688,8 +695,8 @@ com.quangph.base.tracking.impl.firebase.FirebaseTrackerBuilder:
 com.quangph.base.view.drag.FlingHelper$FlingRunnable:
     public static void onFlingFinished()
 com.quangph.base.view.drag.MoveGestureDetector$MoveGestureListener:
-    public float mLeftBound
-    public float mRightBound
+    public final float mLeftBound
+    public final float mRightBound
     public static double getAngle()
     public static com.quangph.base.view.drag.SWIPE_DIRECTION getDirectionX()
 com.quangph.base.view.recyclerview.adapter.group.GroupManager:
@@ -703,12 +710,13 @@ com.quangph.base.viewbinder.ViewFinder$ByActivity
 com.quangph.base.viewbinder.ViewFinder$ByView
 com.quangph.base.viewbinder.ViewFinder
 com.quangph.base.viewmodel.NotifyViewModel$ObserverInfo$DelayObserverInfo:
-    public androidx.lifecycle.LiveData data
-    public com.quangph.base.viewmodel.observer.IDelayObserver observer
+    public final androidx.lifecycle.LiveData data
+    public final com.quangph.base.viewmodel.observer.IDelayObserver observer
+    public static void release()
     public static void setActive()
 com.quangph.base.viewmodel.NotifyViewModel$ObserverInfo:
     public boolean isActive
-    public com.quangph.base.viewmodel.DelayObserverFactory mFactory
+    public final com.quangph.base.viewmodel.DelayObserverFactory mFactory
     public androidx.lifecycle.LifecycleOwner mOwner
     public static void notifyActive()
     public static void release()
@@ -774,6 +782,12 @@ com.quangph.jetpack.JetTabFragment:
     public com.quangph.jetpack.JetTabFragment$Config mConfig
 com.quangph.jetpack.JetTrackerFactory:
     public static com.quangph.base.tracking.Tracker init()
+com.quangph.jetpack.alert.HeaderAlertDefault$MessageInfo:
+    public static java.lang.String getMsg()
+    public static java.lang.String getType()
+    public static boolean isSame()
+    public static void setMsg()
+    public static void setType()
 com.quangph.jetpack.alert.HeaderAlertDefault:
     public static int getStatusBarHeight()
 com.quangph.jetpack.error.NetworkErrorImpl:
@@ -812,9 +826,16 @@ com.quangph.jetpack.loading.LoadingDialogConfig:
     public static boolean finishWhenCancelLoading()
 com.quangph.jetpack.navigation.JetNavi$JetNaviInfo:
     public android.content.Intent intent
+    public static kotlin.jvm.functions.Function2 getCallback()
+    public static int getRequestCode()
+    public static void setCallback()
     public static void setIntent()
-com.quangph.jetpack.network.CheckNetworkConnectionJob$Companion:
-    public void <init>()
+    public static void setRequestCode()
+com.quangph.jetpack.navigation.JetNavi:
+    public final com.quangph.jetpack.navigation.JetNavi naviTo(android.content.Intent)
+    public final com.quangph.jetpack.navigation.JetNavi naviTo(java.lang.Class,kotlin.jvm.functions.Function1)
+    public static com.quangph.jetpack.navigation.JetNavi with()
+com.quangph.jetpack.network.CheckNetworkConnectionJob$Companion
 com.quangph.jetpack.network.CheckNetworkConnectionJob:
     public static final com.quangph.jetpack.network.CheckNetworkConnectionJob$Companion Companion
     public static final int LOW_SPEED_CONNECTION
@@ -826,23 +847,18 @@ com.quangph.jetpack.network.CheckNetworkConnectionJob:
 com.quangph.jetpack.network.DefaultNetworkManager$Companion
 com.quangph.jetpack.network.DefaultNetworkManager$receiver$1:
     public final synthetic com.quangph.jetpack.network.DefaultNetworkManager this$0
-com.quangph.jetpack.network.DefaultNetworkManager:
-    public static final com.quangph.jetpack.network.DefaultNetworkManager$Companion Companion
-    public kotlin.jvm.functions.Function1 callback
-    public boolean isNetworkAvailable
-    public static void <clinit>()
-    public static final synthetic kotlin.jvm.functions.Function1 access$getCallback$p()
-    public static final synthetic boolean access$isNetworkAvailable$p()
-    public static final synthetic void access$startCheckNetWorkJob()
-    public static boolean haveNetworkConnection()
-    public static boolean isWorkScheduled()
-    public static void startCheckNetWorkJob()
+com.quangph.jetpack.network.DefaultNetworkManager
 com.quangph.jetpack.network.NetworkAvailableStatusEvent
 com.quangph.jetpack.perm.PermsRequest
 com.quangph.jetpack.print.JetPrinterProxy:
     public final boolean printAIDL(android.graphics.Bitmap,int)
     public static boolean printBluetooth()
     public static boolean printWifi()
+com.quangph.jetpack.print.core.aidl.AIDLBitmapPrinter:
+    public final com.quangph.jetpack.print.core.aidl.IAIDLPrinterService service
+    public void <init>(com.quangph.jetpack.print.core.aidl.IAIDLPrinterService)
+    public final boolean print(android.graphics.Bitmap,int)
+    public final synthetic bridge boolean print(java.lang.Object,int)
 com.quangph.jetpack.print.core.stream.StreamingListByteArrPrinter$Companion
 com.quangph.jetpack.print.core.stream.StreamingListByteArrPrinter:
     public static final com.quangph.jetpack.print.core.stream.StreamingListByteArrPrinter$Companion Companion
@@ -872,6 +888,11 @@ com.quangph.jetpack.retrofit.BaseRetrofitConfig:
     public abstract com.google.gson.Gson getGson()
 com.quangph.jetpack.retrofit.GsonUtcDateAdapter:
     public final java.lang.String ISO_DATE_TIME_FORMAT
+com.quangph.jetpack.retrofit.RetrofitFactory$RetrofitBuilderInfo:
+    public static java.lang.Object getService()
+    public static void setParams()
+    public static void setService()
+    public static boolean valid()
 com.quangph.jetpack.view.AutoGridLayout$1:
     public final synthetic com.quangph.jetpack.view.AutoGridLayout this$0
 com.quangph.jetpack.view.BoundedTextView:
@@ -912,7 +933,7 @@ com.quangph.jetpack.view.appbar.TitleBehavior:
     public final float totalScrollRange(android.view.View,com.google.android.material.appbar.AppBarLayout)
 com.quangph.jetpack.view.recyclerview.MaxItemLayoutManager:
     public final android.graphics.Rect maxBounds
-    public int maxItem
+    public final int maxItem
 com.quangph.jetpack.view.recyclerview.decor.GridDividerItemDecoration:
     public static int getItemSpanSize()
     public static int getTotalSpanCount()
@@ -928,15 +949,17 @@ com.quangph.pattern.behavior.Behavior:
     public static boolean execute()
 com.quangph.pattern.behavior.BehaviorAgent$BehaviorInfo:
     public com.quangph.pattern.behavior.Behavior behavior
-    public com.quangph.pattern.behavior.Condition condition
     public final synthetic com.quangph.pattern.behavior.BehaviorAgent this$0
     public static void getBehavior()
     public final com.quangph.pattern.behavior.Condition getCondition()
+    public static boolean match()
+    public static void setBehavior()
     public static void setCondition()
+    public final boolean validRule(com.quangph.pattern.behavior.IRuleValid)
 com.quangph.pattern.behavior.BehaviorAgent$checkCondition$1:
     public static void invoke()
 com.quangph.pattern.behavior.BehaviorAgent:
-    public static void addToList()
+    public final void addToList(com.quangph.pattern.behavior.Condition)
 com.quangph.pattern.behavior.Condition$compareTwoList$areNotEqual$1:
     public static java.lang.Boolean invoke()
 com.quangph.pattern.behavior.Condition:
@@ -975,30 +998,58 @@ com.quangph.sync.SyncSharedPreference:
     public static void <clinit>()
     public void <init>()
     public static android.content.SharedPreferences$Editor getEditor(android.content.Context)
+    public static long getLatestSyncTime()
     public static java.lang.String getProgressKey()
 com.quangph.sync.core.SyncEvent$Companion
 com.quangph.sync.core.SyncEvent:
     public static final com.quangph.sync.core.SyncEvent$Companion Companion
     public static void <clinit>()
+    public static java.lang.String getActionId()
+    public static java.lang.String getActionType()
+    public static java.lang.Object getPayload()
+    public static java.lang.String getType()
+    public static void setActionId()
+    public final void setActionType(java.lang.String)
+    public static void setPayload()
+    public static void setType()
 com.quangph.sync.core.SyncManager:
     public static final com.quangph.sync.core.SyncManager INSTANCE
+    public static final boolean access$isFinishedAll()
+    public static final void access$removeSyncActionIfNeed(com.quangph.sync.core.action.SyncAction)
+    public static void initSync()
     public static boolean isFinishedAll()
     public static void removeSyncActionIfNeed()
     public static void submit()
+    public static void submit$1()
     public static void updateError()
     public static void updateProgress()
     public static void updateResult()
 com.quangph.sync.core.SyncResult:
     public java.lang.Throwable error
+    public static java.lang.Object getCurrentProgress()
+    public static void setCurrentProgress()
+    public static void setData()
     public static void setError()
 com.quangph.sync.core.SyncResultManager:
+    public static boolean addSyncResult()
+    public final float getProgress()
     public static boolean isEmpty()
+    public static void remove()
+    public static void updateError()
+    public static void updateProgress()
+    public static void updateResult()
 com.quangph.sync.core.action.SyncAction:
     public abstract int getRetryCount()
     public abstract void onError()
     public abstract void onStart()
     public abstract void onSuccess()
+    public abstract void setCallback()
+    public abstract void sync()
 com.quangph.sync.core.emitter.ErrorEvent:
     public final java.lang.String id
+    public static java.lang.Throwable getT()
+    public final java.lang.String getType()
 com.quangph.sync.core.emitter.ProgressEvent:
     public final java.lang.String id
+    public static java.lang.Object getProgress()
+    public final java.lang.String getType()

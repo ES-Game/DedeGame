@@ -32,7 +32,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         storyId = intent.getIntExtra("storyId", -1)
         trackingOnStoryCoverScreen(PARAM_STORY, storyId)
         getStory(storyId)
-        getComments(storyId)
+        getComments(storyId, true)
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -123,8 +123,10 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
             })
     }
 
-    private fun getComments(id: Int) {
-        showLoading()
+    private fun getComments(id: Int, loading: Boolean) {
+        if (loading){
+            showLoading()
+        }
 
         val rv = GetCommentByStoryId.RV().apply {
             this.storyId = id
@@ -156,6 +158,13 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         } else {
             CommentDetailDialog.newInstance(storyId, null, comments)
         }
+        commentDetailDialog.setOnEventDialogListener(object : CommentDetailDialog.OnEventDialogListener{
+            override fun onRefreshData(update: Boolean) {
+                if (update){
+                    getComments(storyId, false)
+                }
+            }
+        })
         commentDetailDialog.show(supportFragmentManager, commentDetailDialog.tag)
     }
 
@@ -175,7 +184,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
     private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
         val flatList = mutableListOf<Comment>()
         for (comment in comments) {
-            comment.tab = level
+            comment.level = level
             flatList.add(comment)
             comment.children?.let {
                 flatList.addAll(flattenComments(it, level + 1))

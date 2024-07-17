@@ -69,14 +69,30 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
                 holder.txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 holder.txtName.text = cmt.user
                 holder.txtContent.text = cmt.comment
-                if (cmt.tab!! > 0) {
-                    holder.itemView.setPadding(
-                        (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
-                            R.dimen.margin_between_part_in_item_10dp
-                        )) * cmt.tab!!, 0, 0, 0
-                    )
+                if (cmt.level > 0) {
+                    if (cmt.level > 2){
+                        holder.itemView.setPadding(
+                            (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
+                                R.dimen.margin_between_part_in_item_10dp
+                            )) * 2, 0, 0, 0
+                        )
+                    } else {
+                        holder.itemView.setPadding(
+                            (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
+                                R.dimen.margin_between_part_in_item_10dp
+                            )) * cmt.level, 0, 0, 0
+                        )
+                    }
                 } else {
                     holder.itemView.setPadding(0, 0, 0, 0)
+                }
+
+                holder.txtLike.setOnClickListener {
+                    onClickListener?.onClickLikedComment(cmt)
+                }
+
+                holder.txtReply.setOnClickListener {
+                    onClickListener?.onClickReplyComment(cmt)
                 }
             }
         }
@@ -105,7 +121,7 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
         val txtName by lazy { itemView.findViewById<TextView>(R.id.txtName) }
         val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }
         val txtLike by lazy { itemView.findViewById<TextView>(R.id.txtLike) }
-        val txtFeedback by lazy { itemView.findViewById<TextView>(R.id.txtFeedback) }
+        val txtReply by lazy { itemView.findViewById<TextView>(R.id.txtReply) }
     }
 
     private var onClickListener: OnClickListener? = null
@@ -115,6 +131,7 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
     }
 
     interface OnClickListener {
-        fun onClickGameItem(item: Comment)
+        fun onClickLikedComment(item: Comment)
+        fun onClickReplyComment(item: Comment)
     }
 }

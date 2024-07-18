@@ -194,7 +194,6 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    hideLoading()
                     Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
@@ -223,7 +222,6 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    hideLoading()
                     Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })

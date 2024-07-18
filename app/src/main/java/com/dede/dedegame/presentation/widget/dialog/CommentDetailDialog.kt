@@ -26,10 +26,11 @@ import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
+import com.dede.dedegame.domain.usecase.LikeCommentStory
 import com.dede.dedegame.domain.usecase.ReplyComment
 import com.dede.dedegame.domain.usecase.SendCommentToStory
+import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.common.CustomItemDecoration
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListAdapter
 import com.dede.dedegame.presentation.widget.EndlessRecyclerViewScrollListener
@@ -211,15 +212,11 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             override fun onClickLikedComment(item: Comment) {
                 when (item.statusLike) {
                     Comment.LikeStatus.LIKED -> {
-                        LogUtil.getInstance()
-                            .e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
-//                        unLikeCommentStory(storyId, command.comment.id!!)
+                        unLikeCommentStory(mStoryId!!, item.id!!, commentListAdapter.getComments())
                     }
 
                     Comment.LikeStatus.NOT_YET_LIKED -> {
-                        LogUtil.getInstance()
-                            .e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
-//                        likeCommentStory(storyId, command.comment.id!!)
+                        likeCommentStory(mStoryId!!, item.id!!, commentListAdapter.getComments())
                     }
 
                     else -> {
@@ -433,6 +430,64 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         } else {
             tvReplyEveryOne.text = Html.fromHtml(formattedText)
         }
+    }
+
+    private fun likeCommentStory(id: Int, commentId: Int, listComment: List<Comment>) {
+        val rv = LikeCommentStory.RV().apply {
+            this.storyId = id
+            this.commentId = commentId
+        }
+
+        (activity as StoryCoverActivity).mActionManager.executeAction(
+            LikeCommentStory(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        listComment.find { cmt -> cmt.id == commentId }?.let {
+                            it.statusLike = Comment.LikeStatus.LIKED
+                            it.likes += 1
+                            commentListAdapter.notifyItemChanged(listComment.indexOf(it), 1)
+                            hasUpdate = true
+                        }
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun unLikeCommentStory(id: Int, commentId: Int, listComment: List<Comment>) {
+        val rv = UnLikeCommentStory.RV().apply {
+            this.storyId = id
+            this.commentId = commentId
+        }
+
+        (activity as StoryCoverActivity).mActionManager.executeAction(
+            UnLikeCommentStory(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        listComment.find { cmt -> cmt.id == commentId }?.let {
+                            it.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                            it.likes -= 1
+                            commentListAdapter.notifyItemChanged(listComment.indexOf(it), 1)
+                            hasUpdate = true
+                        }
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
     }
 
     override fun onDismiss(dialog: DialogInterface) {

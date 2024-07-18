@@ -9,6 +9,7 @@ import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryListDataPage
 import com.dede.dedegame.domain.model.Tag
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
@@ -300,11 +301,11 @@ class DedeGameRepoImpl : IDedeGameRepo {
         }
     }
 
-    override fun getStoryByType(categoryId: Int, page: Int): DataPage<StoryDetail> {
+    override fun getStoryByType(categoryId: Int, page: Int): StoryListDataPage<StoryDetail> {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
         return service.getStoryById(categoryId, page).invokeApi {
-            DataPage<StoryDetail>().apply {
+            StoryListDataPage<StoryDetail>().apply {
                 this.currentPage = it.data?.pagination?.currentPage!!
                 this.lastPage = it.data!!.pagination!!.lastPage!!
                 this.perPage = it.data!!.pagination!!.perPage!!

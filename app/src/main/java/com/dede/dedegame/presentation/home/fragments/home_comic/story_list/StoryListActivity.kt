@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import com.dede.dedegame.R
-import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryListDataPage
 import com.dede.dedegame.domain.usecase.GetStoryByCategoryId
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
@@ -78,8 +78,8 @@ class StoryListActivity : JetActivity<StoryListView>() {
         mActionManager.executeAction(
             GetStoryByCategoryId(),
             rv,
-            object : Action.SimpleActionCallback<DataPage<StoryDetail>>() {
-                override fun onSuccess(responseValue: DataPage<StoryDetail>?) {
+            object : Action.SimpleActionCallback<StoryListDataPage<StoryDetail>>() {
+                override fun onSuccess(responseValue: StoryListDataPage<StoryDetail>?) {
                     super.onSuccess(responseValue)
                     if (isInitialLoad) {
                         hideLoading()

@@ -4,6 +4,7 @@ import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.StoryListDataPage
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.model.home.Home
@@ -40,7 +41,7 @@ interface IDedeGameRepo {
 
     fun getNewsDetail(articleId: Int): NewsDetail
     fun getGamesByType(type: GameType, page: Int): DataPage<Game>
-    fun getStoryByType(categoryId: Int, page: Int): DataPage<StoryDetail>
+    fun getStoryByType(categoryId: Int, page: Int): StoryListDataPage<StoryDetail>
     fun getCommentByStoryId(storyId: Int, page: Int): DataPage<Comment>
     fun getGameDetail(gameId: Int): GameDetail
     fun sendCommentToStory(storyId: Int, comment: String): Comment

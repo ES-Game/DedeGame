@@ -13,6 +13,6 @@ class GetCategoriesDataAction : Action<GetCategoriesDataAction.RV, OldHome>() {
 
     override fun onExecute(rv: RV): OldHome {
         val dedeRepo: IDedeGameRepo = RepoFactory.getDedeGameRepo()
-        return dedeRepo.getCategies(rv.limit)
+        return dedeRepo.getCategories(rv.limit)
     }
 }

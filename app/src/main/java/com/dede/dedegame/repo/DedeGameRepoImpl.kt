@@ -104,10 +104,13 @@ class DedeGameRepoImpl : IDedeGameRepo {
             }
     }
 
-    override fun getCategies(limit: Int): OldHome {
+    override fun getCategories(limit: Int): OldHome {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getCategoriesData(limit).invokeApi {
+        return service.getCategoriesData(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            limit
+        ).invokeApi {
             OldHome().apply {
                 if (it.data?.featuredStories != null) {
                     this.featuredStories =
@@ -129,7 +132,13 @@ class DedeGameRepoImpl : IDedeGameRepo {
     override fun getRanking(from: String, to: String, categoryId: Int, limit: Int): Rank {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getRanking(from, to, categoryId, limit).invokeApi {
+        return service.getRanking(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            from,
+            to,
+            categoryId,
+            limit
+        ).invokeApi {
             Rank().apply {
                 this.all = it.data?.all?.let { it1 ->
                     com.dede.dedegame.repo.convert.ListConverter<StoryDetailData, StoryDetail>(

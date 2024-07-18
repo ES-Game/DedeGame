@@ -286,6 +286,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                             super.onSuccess(responseValue)
                                             responseValue?.dataList?.let {
                                                 hasUpdate = true
+                                                scrollListener.resetState()
                                                 commentListAdapter.setComments(it)
                                             }
                                         }
@@ -338,6 +339,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                                     emptyView.visibility = View.GONE
                                                 }
                                                 hasUpdate = true
+                                                scrollListener.resetState()
                                                 commentListAdapter.setComments(it)
                                             }
                                         }

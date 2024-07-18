@@ -9,18 +9,15 @@ import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.model.home.Home
 import com.dede.dedegame.domain.model.mainGame.Game
 import com.dede.dedegame.domain.model.mainGame.GameType
-import com.dede.dedegame.domain.model.mainGame.ListGame
 import com.dede.dedegame.domain.model.mainGame.gameDetail.GameDetail
 import com.dede.dedegame.domain.model.news.NewsDetail
 import com.dede.dedegame.domain.model.payment.Payment
-import retrofit2.http.Path
-import retrofit2.http.Query
 
 interface IDedeGameRepo {
 
     fun getHomeData(): Home
     fun fetchPayment(): Payment
-    fun getCategies(limit: Int): OldHome
+    fun getCategories(limit: Int): OldHome
     fun getRanking(from: String, to: String, categoryId: Int, limit: Int): Rank
     fun getStoryDetail(storyId: Int): StoryDetail
     fun login(

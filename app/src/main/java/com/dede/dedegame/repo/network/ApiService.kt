@@ -27,10 +27,14 @@ interface ApiService {
     fun getHomeData(): Call<HomeResponse>
 
     @GET("home")
-    fun getCategoriesData(@Query("limit") limit: Int): Call<OldHomeResponse>
+    fun getCategoriesData(
+        @Header("Authorization") authToken: String,
+        @Query("limit") limit: Int
+    ): Call<OldHomeResponse>
 
     @GET("ranking")
     fun getRanking(
+        @Header("Authorization") authToken: String,
         @Query("from") from: String,
         @Query("to") to: String,
         @Query("category_id") categoryId: Int,

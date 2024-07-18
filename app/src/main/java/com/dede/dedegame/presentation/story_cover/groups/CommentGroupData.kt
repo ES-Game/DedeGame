@@ -147,35 +147,41 @@ class CommentGroupData(comments: List<Comment>?) :
                 txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 txtName.text = cmt.user
                 txtContent.text = cmt.comment
-                if (cmt.level > 0) {
-                    if (cmt.level > 2) {
-                        itemView.setPadding(
-                            (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
-                                R.dimen.margin_between_part_in_item_10dp
-                            )) * 2, 0, 0, 0
-                        )
-                    } else {
-                        itemView.setPadding(
-                            (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
-                                R.dimen.margin_between_part_in_item_10dp
-                            )) * cmt.level, 0, 0, 0
-                        )
-                    }
-                } else {
-                    itemView.setPadding(0, 0, 0, 0)
-                }
+
+                itemView.setPadding(
+                    (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
+                        R.dimen.margin_between_part_in_item_10dp
+                    )) * cmt.level, 0, 0, 0
+                )
 
                 when (cmt.statusLike) {
                     Comment.LikeStatus.LIKED -> {
-                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.orange_300))
+                        txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.orange_300
+                            )
+                        )
                         txtLike.isSelected = true
                     }
+
                     Comment.LikeStatus.NOT_YET_LIKED -> {
-                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.black
+                            )
+                        )
                         txtLike.isSelected = false
                     }
+
                     else -> {
-                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                itemView.context,
+                                R.color.black
+                            )
+                        )
                         txtLike.isSelected = false
                     }
                 }

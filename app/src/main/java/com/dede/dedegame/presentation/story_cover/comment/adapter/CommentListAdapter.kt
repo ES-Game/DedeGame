@@ -75,40 +75,46 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
                 holder.txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 holder.txtName.text = cmt.user
                 holder.txtContent.text = cmt.comment
-                if (cmt.level > 0) {
-                    if (cmt.level > 2){
-                        holder.itemView.setPadding(
-                            (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
-                                R.dimen.margin_between_part_in_item_10dp
-                            )) * 2, 0, 0, 0
-                        )
-                    } else {
-                        holder.itemView.setPadding(
-                            (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
-                                R.dimen.margin_between_part_in_item_10dp
-                            )) * cmt.level, 0, 0, 0
-                        )
-                    }
-                } else {
-                    holder.itemView.setPadding(0, 0, 0, 0)
-                }
+
+                holder.itemView.setPadding(
+                    (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
+                        R.dimen.margin_between_part_in_item_10dp
+                    )) * cmt.level, 0, 0, 0
+                )
 
                 when (cmt.statusLike) {
                     Comment.LikeStatus.LIKED -> {
-                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.orange_300))
+                        holder.txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                holder.itemView.context,
+                                R.color.orange_300
+                            )
+                        )
                         holder.txtLike.isSelected = true
                     }
+
                     Comment.LikeStatus.NOT_YET_LIKED -> {
-                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
+                        holder.txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                holder.itemView.context,
+                                R.color.black
+                            )
+                        )
                         holder.txtLike.isSelected = false
                     }
+
                     else -> {
-                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
+                        holder.txtLike.setTextColor(
+                            ContextCompat.getColor(
+                                holder.itemView.context,
+                                R.color.black
+                            )
+                        )
                         holder.txtLike.isSelected = false
                     }
                 }
 
-                if (cmt.likes > 0){
+                if (cmt.likes > 0) {
                     holder.containerLike.visibility = View.VISIBLE
                     holder.tvCountLiked.text = cmt.likes.toString()
                 } else {

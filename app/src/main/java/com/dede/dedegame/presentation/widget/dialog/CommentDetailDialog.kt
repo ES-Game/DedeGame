@@ -59,7 +59,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     private var mStoryId: Int? = null
     private var currentPage = 1
     private var hasUpdate = false
-    private lateinit var scrollListener : EndlessRecyclerViewScrollListener
+    private lateinit var scrollListener: EndlessRecyclerViewScrollListener
 
     companion object {
         private const val KEY_STORY_ID = "key_story_id"
@@ -211,13 +211,17 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             override fun onClickLikedComment(item: Comment) {
                 when (item.statusLike) {
                     Comment.LikeStatus.LIKED -> {
-                        LogUtil.getInstance().e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
+                        LogUtil.getInstance()
+                            .e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
 //                        unLikeCommentStory(storyId, command.comment.id!!)
                     }
+
                     Comment.LikeStatus.NOT_YET_LIKED -> {
-                        LogUtil.getInstance().e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
+                        LogUtil.getInstance()
+                            .e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
 //                        likeCommentStory(storyId, command.comment.id!!)
                     }
+
                     else -> {
                         Toast.makeText(
                             activity,
@@ -282,9 +286,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                             super.onSuccess(responseValue)
                                             responseValue?.dataList?.let {
                                                 hasUpdate = true
-                                                rvComments.recycledViewPool.clear()
-                                                scrollListener.resetState()
-                                                commentListAdapter.setComments(flattenComments(it))
+                                                commentListAdapter.setComments(it)
                                             }
                                         }
 
@@ -336,9 +338,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                                     emptyView.visibility = View.GONE
                                                 }
                                                 hasUpdate = true
-                                                rvComments.recycledViewPool.clear()
-                                                scrollListener.resetState()
-                                                commentListAdapter.setComments(flattenComments(it))
+                                                commentListAdapter.setComments(it)
                                             }
                                         }
 
@@ -378,7 +378,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                             override fun onSuccess(responseValue: DataPage<Comment>?) {
                                 super.onSuccess(responseValue)
                                 responseValue?.dataList?.let {
-                                    loadMore(flattenComments(it), responseValue.hasNextPage)
+                                    loadMore(it, responseValue.hasNextPage)
                                 }
                             }
 
@@ -392,18 +392,6 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             }
         }
         rvComments.addOnScrollListener(scrollListener)
-    }
-
-    private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
-        val flatList = mutableListOf<Comment>()
-        for (comment in comments) {
-            comment.level = level
-            flatList.add(comment)
-            comment.children?.let {
-                flatList.addAll(flattenComments(it, level + 1))
-            }
-        }
-        return flatList
     }
 
     private fun loadMore(data: List<Comment>, hasLoadMore: Boolean) {
@@ -456,7 +444,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
 
     private var onEventDialogListener: OnEventDialogListener? = null
 
-    interface OnEventDialogListener{
+    interface OnEventDialogListener {
         fun onRefreshData(update: Boolean)
     }
 

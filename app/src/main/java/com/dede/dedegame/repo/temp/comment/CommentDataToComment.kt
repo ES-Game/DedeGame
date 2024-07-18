@@ -17,6 +17,7 @@ class CommentDataToComment : IConverter<CommentData, Comment> {
                 )
             }
             this.likes = source.likes!!
+
             when (source.liked) {
                 1 -> this.statusLike = Comment.LikeStatus.LIKED
                 0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED

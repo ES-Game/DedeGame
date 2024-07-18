@@ -339,14 +339,31 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 this.currentPage = it.data?.pagination?.currentPage!!
                 this.lastPage = it.data!!.pagination!!.lastPage!!
                 this.perPage = it.data!!.pagination!!.perPage!!
-                this.dataList = it.data?.comments?.let { it1 ->
-                    com.dede.dedegame.repo.convert.ListConverter<CommentData, Comment>(
+                this.dataList = flattenComments(it.data?.comments?.let { it1 ->
+                    ListConverter<CommentData, Comment>(
                         CommentDataToComment()
                     ).convert(it1)
-                }!!
+                }!!)
                 this.hasNextPage = this.currentPage <= this.lastPage
             }
+
         }
+    }
+
+    private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
+        val flatList = mutableListOf<Comment>()
+        for (comment in comments) {
+            comment.level = level
+            flatList.add(comment)
+            comment.children?.let {
+                if (level + 1 > 2) {
+                    flatList.addAll(flattenComments(it, 2))
+                } else {
+                    flatList.addAll(flattenComments(it, level + 1))
+                }
+            }
+        }
+        return flatList
     }
 
 

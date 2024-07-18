@@ -46,9 +46,11 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                         Comment.LikeStatus.LIKED -> {
                             unLikeCommentStory(storyId, command.comment.id!!)
                         }
+
                         Comment.LikeStatus.NOT_YET_LIKED -> {
                             likeCommentStory(storyId, command.comment.id!!)
                         }
+
                         else -> {
                             Toast.makeText(
                                 this,
@@ -140,7 +142,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
     }
 
     private fun getComments(id: Int, loading: Boolean) {
-        if (loading){
+        if (loading) {
             showLoading()
         }
 
@@ -156,7 +158,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     responseValue?.dataList?.let {
-                        listComment = flattenComments(it)
+                        listComment = it
                         mvpView.fillDataToComment(listComment)
                     }
                 }
@@ -233,9 +235,10 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         } else {
             CommentDetailDialog.newInstance(storyId, null, comments)
         }
-        commentDetailDialog.setOnEventDialogListener(object : CommentDetailDialog.OnEventDialogListener{
+        commentDetailDialog.setOnEventDialogListener(object :
+            CommentDetailDialog.OnEventDialogListener {
             override fun onRefreshData(update: Boolean) {
-                if (update){
+                if (update) {
                     getComments(storyId, false)
                 }
             }
@@ -254,18 +257,6 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         val intent = Intent(this, ChapterActivity::class.java)
         intent.putExtra("key_data_story", Gson().toJson(storyDetail))
         startActivity(intent)
-    }
-
-    private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
-        val flatList = mutableListOf<Comment>()
-        for (comment in comments) {
-            comment.level = level
-            flatList.add(comment)
-            comment.children?.let {
-                flatList.addAll(flattenComments(it, level + 1))
-            }
-        }
-        return flatList
     }
 
     private fun trackingOnStoryCoverScreen(param: String, paramValue: Any?) {

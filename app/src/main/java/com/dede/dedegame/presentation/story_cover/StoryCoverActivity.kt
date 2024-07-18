@@ -11,6 +11,8 @@ import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
+import com.dede.dedegame.domain.usecase.LikeCommentStory
+import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
@@ -26,7 +28,7 @@ import com.quangph.jetpack.JetActivity
 class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
     private var storyId = -1
-
+    private lateinit var listComment: List<Comment>
     override fun onPresenterReady() {
         super.onPresenterReady()
         storyId = intent.getIntExtra("storyId", -1)
@@ -40,7 +42,21 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
         when (command) {
             is StoryCoverView.OnclickLikedCmd -> {
                 if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
-
+                    when (command.comment?.statusLike) {
+                        Comment.LikeStatus.LIKED -> {
+                            unLikeCommentStory(storyId, command.comment.id!!)
+                        }
+                        Comment.LikeStatus.NOT_YET_LIKED -> {
+                            likeCommentStory(storyId, command.comment.id!!)
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this,
+                                getString(R.string.story_cover_login_to_interaction),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
                 } else {
                     Toast.makeText(
                         this,
@@ -140,7 +156,66 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     responseValue?.dataList?.let {
-                        mvpView.fillDataToComment(flattenComments(it))
+                        listComment = flattenComments(it)
+                        mvpView.fillDataToComment(listComment)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    hideLoading()
+                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun likeCommentStory(id: Int, commentId: Int) {
+        val rv = LikeCommentStory.RV().apply {
+            this.storyId = id
+            this.commentId = commentId
+        }
+
+        mActionManager.executeAction(
+            LikeCommentStory(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        listComment.find { cmt -> cmt.id == commentId }?.let {
+                            it.statusLike = Comment.LikeStatus.LIKED
+                            it.likes += 1
+                            mvpView.fillDataToComment(listComment)
+                        }
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    hideLoading()
+                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun unLikeCommentStory(id: Int, commentId: Int) {
+        val rv = UnLikeCommentStory.RV().apply {
+            this.storyId = id
+            this.commentId = commentId
+        }
+
+        mActionManager.executeAction(
+            UnLikeCommentStory(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        listComment.find { cmt -> cmt.id == commentId }?.let {
+                            it.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                            it.likes -= 1
+                            mvpView.fillDataToComment(listComment)
+                        }
                     }
                 }
 

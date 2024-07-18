@@ -29,7 +29,7 @@ import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.ReplyComment
 import com.dede.dedegame.domain.usecase.SendCommentToStory
 import com.dede.dedegame.presentation.common.CustomItemDecoration
-import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListAdapter
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListAdapter
 import com.dede.dedegame.presentation.widget.EndlessRecyclerViewScrollListener
@@ -59,6 +59,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     private var mStoryId: Int? = null
     private var currentPage = 1
     private var hasUpdate = false
+    private lateinit var scrollListener : EndlessRecyclerViewScrollListener
 
     companion object {
         private const val KEY_STORY_ID = "key_story_id"
@@ -196,7 +197,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         } else {
             emptyView.visibility = View.GONE
         }
-
+        rvComments.setItemAnimator(null)
         rvComments.adapter = commentListAdapter
         rvComments.layoutManager = layoutManager
         rvComments.addItemDecoration(
@@ -208,7 +209,23 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         )
         commentListAdapter.setOnClickListener(object : CommentListAdapter.OnClickListener {
             override fun onClickLikedComment(item: Comment) {
-
+                when (item.statusLike) {
+                    Comment.LikeStatus.LIKED -> {
+                        LogUtil.getInstance().e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
+//                        unLikeCommentStory(storyId, command.comment.id!!)
+                    }
+                    Comment.LikeStatus.NOT_YET_LIKED -> {
+                        LogUtil.getInstance().e("Theo doi day ===========>  " + commentListAdapter.getComments().size)
+//                        likeCommentStory(storyId, command.comment.id!!)
+                    }
+                    else -> {
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.story_cover_login_to_interaction),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
             }
 
             override fun onClickReplyComment(item: Comment) {
@@ -230,9 +247,12 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                     setStateSendButton(true)
                 }
             }
+
+            override fun onClickItemComment() {
+                hideKeyboard()
+            }
         })
-        rvComments.setItemAnimator(null)
-        commentListAdapter.setListStory(comments)
+        commentListAdapter.setComments(comments)
 
         imvSend.setOnClickListener {
             if (mComment != null) {
@@ -262,7 +282,9 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                             super.onSuccess(responseValue)
                                             responseValue?.dataList?.let {
                                                 hasUpdate = true
-                                                commentListAdapter.setListStory(flattenComments(it))
+                                                rvComments.recycledViewPool.clear()
+                                                scrollListener.resetState()
+                                                commentListAdapter.setComments(flattenComments(it))
                                             }
                                         }
 
@@ -314,7 +336,9 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                                     emptyView.visibility = View.GONE
                                                 }
                                                 hasUpdate = true
-                                                commentListAdapter.setListStory(flattenComments(it))
+                                                rvComments.recycledViewPool.clear()
+                                                scrollListener.resetState()
+                                                commentListAdapter.setComments(flattenComments(it))
                                             }
                                         }
 
@@ -339,8 +363,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                     })
             }
         }
-
-        rvComments.addOnScrollListener(object : EndlessRecyclerViewScrollListener(layoutManager) {
+        scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 if (activity is StoryCoverActivity) {
                     currentPage += 1
@@ -367,7 +390,8 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                         })
                 }
             }
-        })
+        }
+        rvComments.addOnScrollListener(scrollListener)
     }
 
     private fun flattenComments(comments: List<Comment>, level: Int = 0): List<Comment> {
@@ -388,8 +412,8 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
             commentListAdapter.addItemsAndNotify(data)
         } else {
             val viewHolder =
-                rvComments.findViewHolderForAdapterPosition(commentListAdapter.getEndPosListStory())
-            if (viewHolder != null && viewHolder is StoryListAdapter.LoadingVH) {
+                rvComments.findViewHolderForAdapterPosition(commentListAdapter.getEndPosListComments())
+            if (viewHolder != null && viewHolder is CommentListAdapter.LoadingVH) {
                 viewHolder.itemView.visibility = View.GONE
             }
         }

@@ -6,6 +6,7 @@ import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
 import com.dede.dedegame.repo.temp.comment.CommentResponse
+import com.dede.dedegame.repo.temp.comment.LikedResponse
 import com.dede.dedegame.repo.temp.comment.ListCommentResponse
 import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
 import com.dede.dedegame.repo.temp.mainGame.ListStoryResponse
@@ -84,6 +85,7 @@ interface ApiService {
 
     @GET("comments/story/{storyId}")
     fun getCommentByIdStory(
+        @Header("Authorization") authToken: String,
         @Path("storyId") categoryId: Int,
         @Query("page") page: Int
     ): Call<ListCommentResponse>
@@ -105,4 +107,20 @@ interface ApiService {
         @Field("parent_id") parentId: Int,
     ): Call<CommentResponse>
 
+
+    @FormUrlEncoded
+    @POST("like-story-comment")
+    fun likeCommentStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") storyId: Int,
+        @Field("comment_id") commentId: Int,
+    ): Call<LikedResponse>
+
+    @FormUrlEncoded
+    @POST("unlike-story-comment")
+    fun unlikeCommentStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") storyId: Int,
+        @Field("comment_id") commentId: Int,
+    ): Call<LikedResponse>
 }

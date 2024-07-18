@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.comment.Comment
@@ -17,15 +18,20 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
 
     private var listComment = arrayListOf<Comment>()
 
-    fun getEndPosListStory(): Int {
+    fun getEndPosListComments(): Int {
         return listComment.size
     }
 
-    fun setListStory(list: List<Comment>) {
-        val tempList = arrayListOf<Comment>()
-        tempList.addAll(list)
-        listComment = tempList
-        notifyDataSetChanged()
+    fun getComments(): List<Comment> {
+        return listComment
+    }
+
+    fun setComments(list: List<Comment>) {
+        val currentSize: Int = listComment.size
+        listComment.clear()
+        listComment.addAll(list)
+        notifyItemRangeRemoved(0, currentSize)
+        notifyItemRangeInserted(0, list.size)
     }
 
     fun addItemsAndNotify(items: List<Comment>) {
@@ -87,12 +93,39 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
                     holder.itemView.setPadding(0, 0, 0, 0)
                 }
 
+                when (cmt.statusLike) {
+                    Comment.LikeStatus.LIKED -> {
+                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.orange_300))
+                        holder.txtLike.isSelected = true
+                    }
+                    Comment.LikeStatus.NOT_YET_LIKED -> {
+                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
+                        holder.txtLike.isSelected = false
+                    }
+                    else -> {
+                        holder.txtLike.setTextColor(ContextCompat.getColor(holder.itemView.context, R.color.black))
+                        holder.txtLike.isSelected = false
+                    }
+                }
+
+                if (cmt.likes > 0){
+                    holder.containerLike.visibility = View.VISIBLE
+                    holder.tvCountLiked.text = cmt.likes.toString()
+                } else {
+                    holder.containerLike.visibility = View.INVISIBLE
+                    holder.tvCountLiked.text = ""
+                }
+
                 holder.txtLike.setOnClickListener {
                     onClickListener?.onClickLikedComment(cmt)
                 }
 
                 holder.txtReply.setOnClickListener {
                     onClickListener?.onClickReplyComment(cmt)
+                }
+
+                holder.itemView.setOnClickListener {
+                    onClickListener?.onClickItemComment()
                 }
             }
         }
@@ -122,6 +155,9 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
         val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }
         val txtLike by lazy { itemView.findViewById<TextView>(R.id.txtLike) }
         val txtReply by lazy { itemView.findViewById<TextView>(R.id.txtReply) }
+        val containerLike by lazy { itemView.findViewById<View>(R.id.containerLike) }
+        val tvCountLiked by lazy { itemView.findViewById<TextView>(R.id.tvCountLiked) }
+
     }
 
     private var onClickListener: OnClickListener? = null
@@ -133,5 +169,6 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
     interface OnClickListener {
         fun onClickLikedComment(item: Comment)
         fun onClickReplyComment(item: Comment)
+        fun onClickItemComment()
     }
 }

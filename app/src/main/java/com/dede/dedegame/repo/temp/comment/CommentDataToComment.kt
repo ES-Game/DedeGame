@@ -16,8 +16,12 @@ class CommentDataToComment : IConverter<CommentData, Comment> {
                     it
                 )
             }
-            this.likes = source.likes
-            this.liked = source.liked
+            this.likes = source.likes!!
+            when (source.liked) {
+                1 -> this.statusLike = Comment.LikeStatus.LIKED
+                0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                else -> this.statusLike = Comment.LikeStatus.NOT_LOGIN
+            }
             this.createdAt = source.createdAt
             this.updatedAt = source.updatedAt
         }

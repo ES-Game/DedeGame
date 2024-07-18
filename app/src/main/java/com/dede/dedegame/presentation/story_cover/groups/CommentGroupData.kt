@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.comment.Comment
@@ -108,14 +109,15 @@ class CommentGroupData(comments: List<Comment>?) :
                 }
             }
 
-            if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!){
+            if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
                 tvDesFeedback.visibility = View.GONE
                 containerUser.visibility = View.VISIBLE
                 tvName.text = DedeSharedPref.getUserInfo()?.user?.name
             } else {
                 tvDesFeedback.visibility = View.VISIBLE
                 containerUser.visibility = View.GONE
-                tvDesFeedback.text = itemView.context.getString(R.string.story_cover_comment_action_not_login)
+                tvDesFeedback.text =
+                    itemView.context.getString(R.string.story_cover_comment_action_not_login)
             }
 
             clickOn(btnSend) {
@@ -137,7 +139,8 @@ class CommentGroupData(comments: List<Comment>?) :
         private val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }
         private val txtLike by lazy { itemView.findViewById<TextView>(R.id.txtLike) }
         private val txtReply by lazy { itemView.findViewById<TextView>(R.id.txtReply) }
-
+        val containerLike by lazy { itemView.findViewById<View>(R.id.containerLike) }
+        val tvCountLiked by lazy { itemView.findViewById<TextView>(R.id.tvCountLiked) }
         override fun onBind(comment: Comment?) {
             super.onBind(comment)
             comment?.let { cmt ->
@@ -145,7 +148,7 @@ class CommentGroupData(comments: List<Comment>?) :
                 txtName.text = cmt.user
                 txtContent.text = cmt.comment
                 if (cmt.level > 0) {
-                    if (cmt.level > 2){
+                    if (cmt.level > 2) {
                         itemView.setPadding(
                             (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
                                 R.dimen.margin_between_part_in_item_10dp
@@ -161,6 +164,30 @@ class CommentGroupData(comments: List<Comment>?) :
                 } else {
                     itemView.setPadding(0, 0, 0, 0)
                 }
+
+                when (cmt.statusLike) {
+                    Comment.LikeStatus.LIKED -> {
+                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.orange_300))
+                        txtLike.isSelected = true
+                    }
+                    Comment.LikeStatus.NOT_YET_LIKED -> {
+                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        txtLike.isSelected = false
+                    }
+                    else -> {
+                        txtLike.setTextColor(ContextCompat.getColor(itemView.context, R.color.black))
+                        txtLike.isSelected = false
+                    }
+                }
+
+                if (cmt.likes > 0) {
+                    containerLike.visibility = View.VISIBLE
+                    tvCountLiked.text = cmt.likes.toString()
+                } else {
+                    containerLike.visibility = View.INVISIBLE
+                    tvCountLiked.text = ""
+                }
+
                 clickOn(txtLike) {
                     if (commentGroupData.listener != null) {
                         commentGroupData.listener?.onClickLikedComment(cmt)

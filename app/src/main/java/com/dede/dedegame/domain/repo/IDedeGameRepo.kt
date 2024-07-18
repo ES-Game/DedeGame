@@ -48,4 +48,6 @@ interface IDedeGameRepo {
     fun getGameDetail(gameId: Int): GameDetail
     fun sendCommentToStory(storyId: Int, comment: String): Comment
     fun replyComment(storyId: Int, comment: String, parentId: Int): Comment
+    fun likeCommentStory(storyId: Int, commentId: Int): Int
+    fun unlikeCommentStory(storyId: Int, commentId: Int): Int
 }

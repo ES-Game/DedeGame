@@ -330,7 +330,11 @@ class DedeGameRepoImpl : IDedeGameRepo {
     override fun getCommentByStoryId(storyId: Int, page: Int): DataPage<Comment> {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getCommentByIdStory(storyId, page).invokeApi {
+        return service.getCommentByIdStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            page
+        ).invokeApi {
             DataPage<Comment>().apply {
                 this.currentPage = it.data?.pagination?.currentPage!!
                 this.lastPage = it.data!!.pagination!!.lastPage!!
@@ -363,8 +367,12 @@ class DedeGameRepoImpl : IDedeGameRepo {
                         it
                     )
                 }
-                this.likes = source.data?.likes
-                this.liked = source.data?.liked
+                this.likes = source.data?.likes!!
+                when (source.data?.liked) {
+                    1 -> this.statusLike = Comment.LikeStatus.LIKED
+                    0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                    else -> this.statusLike = Comment.LikeStatus.NOT_LOGIN
+                }
                 this.createdAt = source.data?.createdAt
                 this.updatedAt = source.data?.updatedAt
             }
@@ -389,11 +397,39 @@ class DedeGameRepoImpl : IDedeGameRepo {
                         it
                     )
                 }
-                this.likes = source.data?.likes
-                this.liked = source.data?.liked
+                this.likes = source.data?.likes!!
+                when (source.data?.liked) {
+                    1 -> this.statusLike = Comment.LikeStatus.LIKED
+                    0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                    else -> this.statusLike = Comment.LikeStatus.NOT_LOGIN
+                }
                 this.createdAt = source.data?.createdAt
                 this.updatedAt = source.data?.updatedAt
             }
+        }
+    }
+
+    override fun likeCommentStory(storyId: Int, commentId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.likeCommentStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            commentId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun unlikeCommentStory(storyId: Int, commentId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.unlikeCommentStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            commentId
+        ).invokeApi {
+            it.data!!
         }
     }
 }

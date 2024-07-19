@@ -31,6 +31,7 @@ import com.dede.dedegame.domain.usecase.ReplyComment
 import com.dede.dedegame.domain.usecase.SendCommentToStory
 import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.common.CustomItemDecoration
+import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListAdapter
 import com.dede.dedegame.presentation.widget.EndlessRecyclerViewScrollListener
@@ -53,12 +54,14 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     lateinit var tvReplyEveryOne: TextView
     lateinit var tvCancelEveryOne: TextView
 
-    private var commentListAdapter = CommentListAdapter(false)
+    private var commentListAdapter = CommentListAdapter()
     private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
     private var comments: List<Comment> = arrayListOf()
     private var mComment: Comment? = null
     private var mStoryId: Int? = null
+    private var isLoading = false
     private var currentPage = 1
+    private var mLastPage = 1
     private var hasUpdate = false
     private lateinit var scrollListener: EndlessRecyclerViewScrollListener
 
@@ -253,7 +256,6 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                 hideKeyboard()
             }
         })
-        commentListAdapter.setComments(comments)
 
         imvSend.setOnClickListener {
             if (mComment != null) {
@@ -270,34 +272,12 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                             super.onSuccess(responseValue)
                             responseValue?.let {
                                 editText.setText("")
-                                currentPage = 1
-                                val rvGetComment = GetCommentByStoryId.RV().apply {
-                                    this.storyId = mStoryId!!
-                                    this.page = currentPage
-                                }
-                                (activity as StoryCoverActivity).mActionManager.executeAction(
-                                    GetCommentByStoryId(),
-                                    rvGetComment,
-                                    object : Action.SimpleActionCallback<DataPage<Comment>>() {
-                                        override fun onSuccess(responseValue: DataPage<Comment>?) {
-                                            super.onSuccess(responseValue)
-                                            responseValue?.dataList?.let {
-                                                hasUpdate = true
-                                                scrollListener.resetState()
-                                                commentListAdapter.setComments(it)
-                                            }
-                                        }
-
-                                        override fun onError(e: ActionException) {
-                                            super.onError(e)
-                                            Toast.makeText(
-                                                requireActivity(),
-                                                e.message,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-                                    })
+                                currentPage = 0
+                                hasUpdate = true
+                                mLastPage = 1
+                                commentListAdapter.setComments(emptyList())
+                                scrollListener.resetState()
+                                loadMoreItems(currentPage)
                             }
                         }
 
@@ -320,37 +300,12 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                             super.onSuccess(responseValue)
                             responseValue?.let {
                                 editText.setText("")
-                                currentPage = 1
-                                val rvGetComment = GetCommentByStoryId.RV().apply {
-                                    this.storyId = mStoryId!!
-                                    this.page = currentPage
-                                }
-                                (activity as StoryCoverActivity).mActionManager.executeAction(
-                                    GetCommentByStoryId(),
-                                    rvGetComment,
-                                    object : Action.SimpleActionCallback<DataPage<Comment>>() {
-                                        override fun onSuccess(responseValue: DataPage<Comment>?) {
-                                            super.onSuccess(responseValue)
-                                            responseValue?.dataList?.let {
-                                                if (comments.isEmpty()) {
-                                                    emptyView.visibility = View.GONE
-                                                }
-                                                hasUpdate = true
-                                                scrollListener.resetState()
-                                                commentListAdapter.setComments(it)
-                                            }
-                                        }
-
-                                        override fun onError(e: ActionException) {
-                                            super.onError(e)
-                                            Toast.makeText(
-                                                requireActivity(),
-                                                e.message,
-                                                Toast.LENGTH_SHORT
-                                            )
-                                                .show()
-                                        }
-                                    })
+                                currentPage = 0
+                                hasUpdate = true
+                                mLastPage = 1
+                                commentListAdapter.setComments(emptyList())
+                                scrollListener.resetState()
+                                loadMoreItems(currentPage)
                             }
                         }
 
@@ -364,45 +319,49 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         }
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
-                if (activity is StoryCoverActivity) {
-                    currentPage += 1
-                    val rv = GetCommentByStoryId.RV().apply {
-                        this.storyId = mStoryId!!
-                        this.page = currentPage
-                    }
-                    (activity as StoryCoverActivity).mActionManager.executeAction(
-                        GetCommentByStoryId(),
-                        rv,
-                        object : Action.SimpleActionCallback<DataPage<Comment>>() {
-                            override fun onSuccess(responseValue: DataPage<Comment>?) {
-                                super.onSuccess(responseValue)
-                                responseValue?.dataList?.let {
-                                    loadMore(it, responseValue.hasNextPage)
-                                }
-                            }
-
-                            override fun onError(e: ActionException) {
-                                super.onError(e)
-                                Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
-                                    .show()
-                            }
-                        })
+                if (currentPage <= mLastPage && !isLoading) {
+                    loadMoreItems(page)
                 }
             }
         }
         rvComments.addOnScrollListener(scrollListener)
+        commentListAdapter.addItems(comments)
     }
 
-    private fun loadMore(data: List<Comment>, hasLoadMore: Boolean) {
-        commentListAdapter.setLoadMore(hasLoadMore)
-        if (hasLoadMore) {
-            commentListAdapter.addItemsAndNotify(data)
-        } else {
-            val viewHolder =
-                rvComments.findViewHolderForAdapterPosition(commentListAdapter.getEndPosListComments())
-            if (viewHolder != null && viewHolder is CommentListAdapter.LoadingVH) {
-                viewHolder.itemView.visibility = View.GONE
+    private fun loadMoreItems(endPage: Int) {
+        isLoading = true
+        commentListAdapter.addLoadingFooter()
+        currentPage += 1
+        if (activity is StoryCoverActivity) {
+            val rv = GetCommentByStoryId.RV().apply {
+                this.storyId = mStoryId!!
+                this.page = currentPage
             }
+            (activity as StoryCoverActivity).mActionManager.executeAction(
+                GetCommentByStoryId(),
+                rv,
+                object : Action.SimpleActionCallback<DataPage<Comment>>() {
+                    override fun onSuccess(responseValue: DataPage<Comment>?) {
+                        super.onSuccess(responseValue)
+                        commentListAdapter.removeLoadingFooter()
+                        if (comments.isEmpty()) {
+                            emptyView.visibility = View.GONE
+                        }
+                        responseValue?.dataList?.let {
+                            commentListAdapter.addItems(it)
+                            mLastPage = responseValue.lastPage
+                            isLoading = false
+                        }
+                    }
+
+                    override fun onError(e: ActionException) {
+                        super.onError(e)
+                        commentListAdapter.removeLoadingFooter()
+                        isLoading = false
+                        Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                })
         }
     }
 

@@ -1,6 +1,5 @@
 package com.dede.dedegame.presentation.story_cover.comment.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,45 +12,49 @@ import com.dede.dedegame.presentation.common.DateFormatConverter
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListViewType.Companion.ITEM_COMMENT
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListViewType.Companion.ITEM_LOAD_MORE
 
-class CommentListAdapter(private var hasLoadMore: Boolean) :
+class CommentListAdapter :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var listComment = arrayListOf<Comment>()
-
-    fun getEndPosListComments(): Int {
-        return listComment.size
-    }
+    private var isLoadingAdded = false
 
     fun getComments(): List<Comment> {
         return listComment
     }
 
-    fun setComments(list: List<Comment>) {
-        val currentSize: Int = listComment.size
+    fun setComments(newComments: List<Comment>) {
         listComment.clear()
-        listComment.addAll(list)
-        notifyItemRangeRemoved(0, currentSize)
-        notifyItemRangeInserted(0, list.size)
+        listComment.addAll(newComments)
+        notifyDataSetChanged()
     }
 
-    fun addItemsAndNotify(items: List<Comment>) {
-        val start: Int = listComment.size
-        listComment.addAll(items)
-        notifyItemRangeInserted(start, items.size)
+    fun addItems(newItems: List<Comment>) {
+        val startPosition = listComment.size
+        listComment.addAll(newItems)
+        notifyItemRangeInserted(startPosition, newItems.size)
     }
 
-    fun setLoadMore(hasLoadMore: Boolean) {
-        this.hasLoadMore = hasLoadMore
+    fun addLoadingFooter() {
+        if (!isLoadingAdded) {
+            isLoadingAdded = true
+            listComment.add(Comment())
+            notifyItemInserted(listComment.size - 1)
+        }
+    }
+
+    fun removeLoadingFooter() {
+        if (isLoadingAdded) {
+            isLoadingAdded = false
+            val position = listComment.size - 1
+            if (position >= 0) {
+                listComment.removeAt(position)
+                notifyItemRemoved(position)
+            }
+        }
     }
 
     override fun getItemCount(): Int {
-        val size = if (listComment != null) listComment.size else 0
-        Log.i("Size data", size.toString())
-        return if (hasLoadMore) {
-            size + 1
-        } else {
-            size
-        }
+        return listComment.size
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -138,15 +141,7 @@ class CommentListAdapter(private var hasLoadMore: Boolean) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        if (position == listComment.size) {
-            if (hasLoadMore) {
-                return ITEM_LOAD_MORE
-            } else {
-                return ITEM_COMMENT
-            }
-        } else {
-            return ITEM_COMMENT
-        }
+        return if (position == listComment.size - 1 && isLoadingAdded) ITEM_LOAD_MORE else ITEM_COMMENT
     }
 
     inner class LoadingVH(itemView: View) :

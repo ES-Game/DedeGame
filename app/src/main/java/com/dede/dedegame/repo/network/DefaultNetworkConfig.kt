@@ -29,6 +29,7 @@ open class DefaultNetworkConfig(private val apiKey: String) : BaseNetworkConfig(
 
             val requestBuilder: Request.Builder = original.newBuilder()
                 .url(url)
+                .header("Accept", "application/json")
 
             val request: Request = requestBuilder.build()
             return chain.proceed(request)

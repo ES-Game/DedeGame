@@ -53,6 +53,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     lateinit var replyView: View
     lateinit var tvReplyEveryOne: TextView
     lateinit var tvCancelEveryOne: TextView
+    lateinit var containerBack: View
 
     private var commentListAdapter = CommentListAdapter()
     private val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -116,6 +117,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         replyView = view.findViewById(R.id.replyView)
         tvReplyEveryOne = view.findViewById(R.id.tvReplyEveryOne)
         tvCancelEveryOne = view.findViewById(R.id.tvCancelEveryOne)
+        containerBack = view.findViewById(R.id.containerBack)
         return view
     }
 
@@ -144,6 +146,10 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
     }
 
     private fun initView() {
+        containerBack.setOnClickListener {
+            dismiss()
+            onEventDialogListener?.onRefreshData(hasUpdate)
+        }
         editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             editText.post {
                 val inputMethodManager =

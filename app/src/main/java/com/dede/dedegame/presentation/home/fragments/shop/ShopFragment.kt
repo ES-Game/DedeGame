@@ -59,8 +59,6 @@ class ShopFragment : JetFragment<ShopFragmentView>() {
                             hideLoading()
                             if (e.cause is LogoutException) {
                                 logOut()
-                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
-                                    .show()
                             } else {
                                 Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
                                     .show()

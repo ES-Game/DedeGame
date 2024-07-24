@@ -48,6 +48,7 @@
             android:background="@null"
             android:textSize="@dimen/size_text_large_18sp"
             android:fontFamily="@font/montserrat_regular"
+            android:textCursorDrawable="@drawable/bg_edittext_caret"
             android:layout_marginStart="@dimen/_5sdp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

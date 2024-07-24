@@ -160,9 +160,8 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         }
         editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
             editText.post {
-                val inputMethodManager =
-                    activity?.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-                inputMethodManager.showSoftInput(
+                val inputMethodManager = activity?.getSystemService(INPUT_METHOD_SERVICE) as? InputMethodManager
+                inputMethodManager?.showSoftInput(
                     editText,
                     InputMethodManager.SHOW_IMPLICIT
                 )

@@ -459,4 +459,20 @@ class DedeGameRepoImpl : IDedeGameRepo {
             it.data!!
         }
     }
+
+    override fun refreshToken(token: String, clientId: Int, clientSecret: String): UserInfo {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.refreshToken(
+            token,
+            clientId,
+            clientSecret
+        ).invokeApi {
+            UserInfo().apply {
+                this.authen = it.data?.authen?.let { it1 ->
+                    AuthenTokenDataToAuthenToken().convert(it1)
+                }
+            }
+        }
+    }
 }

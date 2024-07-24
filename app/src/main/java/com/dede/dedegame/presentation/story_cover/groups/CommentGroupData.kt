@@ -134,6 +134,7 @@ class CommentGroupData(comments: List<Comment>?) :
     ) :
         GroupRclvVH<Comment, CommentGroupData>(itemView) {
 
+        val containerContent by lazy { itemView.findViewById<View>(R.id.containerContent) }
         private val txtDateTime by lazy { itemView.findViewById<TextView>(R.id.txtDateTime) }
         private val txtName by lazy { itemView.findViewById<TextView>(R.id.txtName) }
         private val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }
@@ -147,7 +148,7 @@ class CommentGroupData(comments: List<Comment>?) :
                 txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 txtName.text = cmt.user
                 txtContent.text = cmt.comment
-
+                containerContent.visibility = View.VISIBLE
                 itemView.setPadding(
                     (itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + itemView.context.resources.getDimensionPixelSize(
                         R.dimen.margin_between_part_in_item_10dp

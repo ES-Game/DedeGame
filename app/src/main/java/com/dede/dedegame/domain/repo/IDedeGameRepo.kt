@@ -48,4 +48,10 @@ interface IDedeGameRepo {
     fun replyComment(storyId: Int, comment: String, parentId: Int): Comment
     fun likeCommentStory(storyId: Int, commentId: Int): Int
     fun unlikeCommentStory(storyId: Int, commentId: Int): Int
+
+    fun refreshToken(
+        token: String,
+        clientId: Int,
+        clientSecret: String
+    ): UserInfo
 }

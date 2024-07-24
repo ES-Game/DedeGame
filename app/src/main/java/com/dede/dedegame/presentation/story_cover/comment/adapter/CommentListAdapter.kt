@@ -78,6 +78,7 @@ class CommentListAdapter :
                 holder.txtDateTime.text = DateFormatConverter.convertDateFormat(cmt.createdAt)
                 holder.txtName.text = cmt.user
                 holder.txtContent.text = cmt.comment
+                holder.containerContent.visibility = View.VISIBLE
 
                 holder.itemView.setPadding(
                     (holder.itemView.context.resources.getDimensionPixelSize(R.dimen.size_icon_40dp) + holder.itemView.context.resources.getDimensionPixelSize(
@@ -151,6 +152,7 @@ class CommentListAdapter :
     inner class CommentGridVH(itemView: View) :
         RecyclerView.ViewHolder(itemView) {
 
+        val containerContent by lazy { itemView.findViewById<View>(R.id.containerContent) }
         val txtDateTime by lazy { itemView.findViewById<TextView>(R.id.txtDateTime) }
         val txtName by lazy { itemView.findViewById<TextView>(R.id.txtName) }
         val txtContent by lazy { itemView.findViewById<TextView>(R.id.txtContent) }

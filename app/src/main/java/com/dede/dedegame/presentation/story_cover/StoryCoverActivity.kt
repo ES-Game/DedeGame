@@ -4,19 +4,27 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.fragment.app.FragmentManager
+import com.dede.dedegame.AppConfig
 import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.domain.usecase.LikeCommentStory
+import com.dede.dedegame.domain.usecase.RefreshToken
 import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
+import com.dede.dedegame.presentation.login.LoginActivity
 import com.dede.dedegame.presentation.widget.dialog.CommentDetailDialog
+import com.dede.dedegame.presentation.widget.dialog.ExpiredSessionDialog
+import com.dede.dedegame.repo.network.APIActionException
+import com.dede.dedegame.repo.user.exception.LogoutException
 import com.google.gson.Gson
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
@@ -52,11 +60,13 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                         }
 
                         else -> {
-                            Toast.makeText(
-                                this,
-                                getString(R.string.story_cover_login_to_interaction),
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            refreshToken(
+                                DedeSharedPref.getUserInfo()?.authen?.refreshToken!!,
+                                AppConfig.clientId,
+                                AppConfig.clientSecret
+                            ) {
+                                getComments(storyId, true)
+                            }
                         }
                     }
                 } else {
@@ -194,7 +204,12 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             })
     }
@@ -222,7 +237,12 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             })
     }
@@ -242,6 +262,56 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
             }
         })
         commentDetailDialog.show(supportFragmentManager, commentDetailDialog.tag)
+    }
+
+    private fun refreshToken(
+        token: String,
+        clientId: Int,
+        clientSecret: String,
+        callback: () -> Unit
+    ) {
+        showLoading()
+        val rv = RefreshToken.RV().apply {
+            this.token = token
+            this.clientId = clientId
+            this.clientSecret = clientSecret
+        }
+
+        mActionManager.executeAction(
+            RefreshToken(),
+            rv,
+            object : Action.SimpleActionCallback<UserInfo>() {
+                override fun onSuccess(responseValue: UserInfo?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        callback()
+                    } ?: run {
+                        hideLoading()
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    hideLoading()
+                    if (e.cause is APIActionException) {
+                        if ((e.cause as APIActionException).code == 801) {
+                            Toast.makeText(
+                                this@StoryCoverActivity,
+                                (e.cause as APIActionException).message,
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            logOut()
+                        } else {
+                            Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
     }
 
     private fun gotoChapter(storyDetail: StoryDetail, chapterId: Int) {
@@ -275,6 +345,21 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
             this.paramValue = paramValue.toString()
         }
         DedeFirebaseTracker.track(fbModel)
+    }
+
+    private fun logOut() {
+        val fm: FragmentManager = supportFragmentManager
+        val dialog: ExpiredSessionDialog = ExpiredSessionDialog.newInstance()
+        dialog.setOnEventDialogListener(object : ExpiredSessionDialog.OnEventDialogListener {
+            override fun onClickApply() {
+                dialog.dismiss()
+                DedeSharedPref.saveUserInfo(null)
+                val intent = Intent(this@StoryCoverActivity, LoginActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
+        })
+        dialog.show(fm, dialog.tag)
     }
 
     inner class FirebaseLoginModel : DedeFirebaseTrackerModel() {

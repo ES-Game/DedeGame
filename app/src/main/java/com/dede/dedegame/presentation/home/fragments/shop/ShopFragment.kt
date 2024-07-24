@@ -2,6 +2,7 @@ package com.dede.dedegame.presentation.home.fragments.shop
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
@@ -11,6 +12,7 @@ import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.login.LoginActivity
 import com.dede.dedegame.presentation.widget.dialog.ExpiredSessionDialog
+import com.dede.dedegame.repo.user.exception.LogoutException
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.mvp.action.Action
 import com.quangph.base.mvp.action.ActionException
@@ -55,7 +57,14 @@ class ShopFragment : JetFragment<ShopFragmentView>() {
                         override fun onError(e: ActionException) {
                             super.onError(e)
                             hideLoading()
-                            logOut()
+                            if (e.cause is LogoutException) {
+                                logOut()
+                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            } else {
+                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                    .show()
+                            }
                         }
                     })
             }

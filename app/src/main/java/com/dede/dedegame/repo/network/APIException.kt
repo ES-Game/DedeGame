@@ -1,6 +1,6 @@
 package com.dede.dedegame.repo.network
 
-class APIException : Exception {
+open class APIException : Exception {
     var code = 0
         private set
     var payload: Any? = null
@@ -26,6 +26,11 @@ class APIException : Exception {
     }
 
     constructor(t: Throwable?) : super(t) {}
+    constructor()
+
+    fun isExpired(): Boolean {
+        return code == 800
+    }
 
     companion object {
 

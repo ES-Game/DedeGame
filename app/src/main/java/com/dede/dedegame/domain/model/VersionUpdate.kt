@@ -38,7 +38,7 @@ data class VersionUpdate(val task: Map<String, Any>) : Serializable {
 
     var linkAction: String? = null
         get() {
-            return task["link_action"]?.toString() ?: field
+            return task["link_action_android"]?.toString() ?: field
         }
         set(value) {
             field = value

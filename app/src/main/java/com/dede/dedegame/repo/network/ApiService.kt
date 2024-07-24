@@ -127,4 +127,12 @@ interface ApiService {
         @Field("story_id") storyId: Int,
         @Field("comment_id") commentId: Int,
     ): Call<LikedResponse>
+
+    @FormUrlEncoded
+    @POST("auth/refresh-token")
+    fun refreshToken(
+        @Field("refresh_token") token: String,
+        @Field("client_id") clientId: Int,
+        @Field("client_secret") clientSecret: String
+    ): Call<UserResponse>
 }

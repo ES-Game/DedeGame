@@ -2,6 +2,7 @@ package com.dede.dedegame.presentation.widget.dialog
 
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Resources
 import android.os.Build
@@ -20,21 +21,28 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.widget.ImageViewCompat
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.dede.dedegame.AppConfig
+import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
+import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.LikeCommentStory
+import com.dede.dedegame.domain.usecase.RefreshToken
 import com.dede.dedegame.domain.usecase.ReplyComment
 import com.dede.dedegame.domain.usecase.SendCommentToStory
 import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.common.CustomItemDecoration
-import com.dede.dedegame.presentation.common.LogUtil
+import com.dede.dedegame.presentation.login.LoginActivity
 import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.dede.dedegame.presentation.story_cover.comment.adapter.CommentListAdapter
 import com.dede.dedegame.presentation.widget.EndlessRecyclerViewScrollListener
+import com.dede.dedegame.repo.network.APIActionException
+import com.dede.dedegame.repo.user.exception.LogoutException
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
@@ -229,11 +237,18 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                     }
 
                     else -> {
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.story_cover_login_to_interaction),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        refreshToken(
+                            DedeSharedPref.getUserInfo()?.authen?.refreshToken!!,
+                            AppConfig.clientId,
+                            AppConfig.clientSecret
+                        ) {
+                            currentPage = 0
+                            hasUpdate = true
+                            mLastPage = 1
+                            commentListAdapter.setComments(emptyList())
+                            scrollListener.resetState()
+                            loadMoreItems()
+                        }
                     }
                 }
             }
@@ -283,14 +298,17 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                 mLastPage = 1
                                 commentListAdapter.setComments(emptyList())
                                 scrollListener.resetState()
-                                loadMoreItems(currentPage)
+                                loadMoreItems()
                             }
                         }
 
                         override fun onError(e: ActionException) {
                             super.onError(e)
-                            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
-                                .show()
+                            if (e.cause is LogoutException) {
+                                logOut()
+                            } else {
+                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     })
             } else {
@@ -311,14 +329,17 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
                                 mLastPage = 1
                                 commentListAdapter.setComments(emptyList())
                                 scrollListener.resetState()
-                                loadMoreItems(currentPage)
+                                loadMoreItems()
                             }
                         }
 
                         override fun onError(e: ActionException) {
                             super.onError(e)
-                            Toast.makeText(requireActivity(), e.message, Toast.LENGTH_SHORT)
-                                .show()
+                            if (e.cause is LogoutException) {
+                                logOut()
+                            } else {
+                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                            }
                         }
                     })
             }
@@ -326,7 +347,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
             override fun onLoadMore(page: Int, totalItemsCount: Int) {
                 if (currentPage <= mLastPage && !isLoading) {
-                    loadMoreItems(page)
+                    loadMoreItems()
                 }
             }
         }
@@ -334,7 +355,7 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
         commentListAdapter.addItems(comments)
     }
 
-    private fun loadMoreItems(endPage: Int) {
+    private fun loadMoreItems() {
         isLoading = true
         commentListAdapter.addLoadingFooter()
         currentPage += 1
@@ -421,7 +442,11 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
     }
@@ -450,9 +475,78 @@ class CommentDetailDialog : BottomSheetDialogFragment() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
-                    Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    }
                 }
             })
+    }
+
+    private fun refreshToken(
+        token: String,
+        clientId: Int,
+        clientSecret: String,
+        callback: () -> Unit
+    ) {
+        (activity as StoryCoverActivity).showLoading()
+        val rv = RefreshToken.RV().apply {
+            this.token = token
+            this.clientId = clientId
+            this.clientSecret = clientSecret
+        }
+
+        (activity as StoryCoverActivity).mActionManager.executeAction(
+            RefreshToken(),
+            rv,
+            object : Action.SimpleActionCallback<UserInfo>() {
+                override fun onSuccess(responseValue: UserInfo?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        callback()
+                    } ?: run {
+                        (activity as StoryCoverActivity).hideLoading()
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    (activity as StoryCoverActivity).hideLoading()
+                    if (e.cause is APIActionException) {
+                        if ((e.cause as APIActionException).code == 801) {
+                            Toast.makeText(
+                                activity,
+                                (e.cause as APIActionException).message,
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            logOut()
+                        } else {
+                            Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    } else {
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    private fun logOut() {
+        val fm: FragmentManager = childFragmentManager
+        val dialog: ExpiredSessionDialog = ExpiredSessionDialog.newInstance()
+        dialog.setOnEventDialogListener(object : ExpiredSessionDialog.OnEventDialogListener {
+            override fun onClickApply() {
+                dialog.dismiss()
+                DedeSharedPref.saveUserInfo(null)
+                val intent = Intent(activity, LoginActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
+        })
+        dialog.show(fm, dialog.tag)
     }
 
     override fun onDismiss(dialog: DialogInterface) {

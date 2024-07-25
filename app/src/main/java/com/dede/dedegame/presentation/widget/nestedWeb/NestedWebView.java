@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.VelocityTracker;
 import android.view.ViewConfiguration;
@@ -19,6 +20,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RestrictTo;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.view.GestureDetectorCompat;
 import androidx.core.view.NestedScrollingChild3;
 import androidx.core.view.NestedScrollingChildHelper;
 import androidx.core.view.ViewCompat;
@@ -35,6 +37,9 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
             new CoordinatorLayoutChildHelper();
     private final InternalScrollDetector internalScrollDetector =
             new InternalScrollDetector();
+
+    private GestureListener gestureListener;
+    private GestureDetectorCompat gestureDetector;
 
     public NestedWebView(Context context) {
         super(context);
@@ -79,6 +84,7 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
                 }
             }
         }
+        gestureDetector = new GestureDetectorCompat(context, new GestureListenerImpl());
         setOverScrollMode(OVER_SCROLL_NEVER);
         initNestedScrollView(context, attrs);
     }
@@ -96,13 +102,17 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
 
     private OverScroller mScroller;
 
-    /** @hide */
+    /**
+     * @hide
+     */
     @RestrictTo(LIBRARY)
     @VisibleForTesting
     @NonNull
     public EdgeEffect mEdgeGlowTop;
 
-    /** @hide */
+    /**
+     * @hide
+     */
     @RestrictTo(LIBRARY)
     @VisibleForTesting
     @NonNull
@@ -445,8 +455,8 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
      * deltaY on the edge glow.
      *
      * @param deltaY The pointer motion, in pixels, in the vertical direction, positive
-     *                         for moving down and negative for moving up.
-     * @param x The vertical position of the pointer.
+     *               for moving down and negative for moving up.
+     * @param x      The vertical position of the pointer.
      * @return The amount of <code>deltaY</code> that has been consumed by the
      * edge glow.
      */
@@ -765,6 +775,9 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
     @Override
     protected void onScrollChanged(int l, int t, int oldl, int oldt) {
         internalScrollDetector.onPageScrolled();
+        if (gestureDetector != null) {
+            gestureListener.onScrollDistance(t);
+        }
         super.onScrollChanged(l, t, oldl, oldt);
     }
 
@@ -773,6 +786,59 @@ public class NestedWebView extends WebView implements NestedScrollingChild3 {
         if (!internalScrollDetector.onTouchEvent(event)) {
             onNestedTouchEvent(event);
         }
+        if (gestureDetector != null) {
+            gestureDetector.onTouchEvent(event);
+        }
         return super.onTouchEvent(event);
+    }
+
+    public void setGestureListener(GestureListener listener) {
+        this.gestureListener = listener;
+    }
+
+    public interface GestureListener {
+        void onSingleTap();
+
+        void onDoubleTap();
+
+        void onScroll(float distanceX, float distanceY);
+
+        void onLongPress();
+
+        void onScrollDistance(float cumulativeDistanceY);
+    }
+
+    private class GestureListenerImpl extends GestureDetector.SimpleOnGestureListener {
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            if (gestureListener != null) {
+                gestureListener.onSingleTap();
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onDoubleTap(MotionEvent e) {
+            if (gestureListener != null) {
+                gestureListener.onDoubleTap();
+            }
+            return true;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if (gestureListener != null) {
+                gestureListener.onScroll(distanceX, distanceY);
+            }
+            return true;
+        }
+
+        @Override
+        public void onLongPress(@NonNull MotionEvent e) {
+            super.onLongPress(e);
+            if (gestureListener != null) {
+                gestureListener.onLongPress();
+            }
+        }
     }
 }

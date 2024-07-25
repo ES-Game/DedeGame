@@ -5,6 +5,8 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Parcel
+import android.view.View
+import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +14,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.dede.dedegame.domain.model.home.Slider
-import com.dede.dedegame.presentation.common.LogUtil
 import com.quangph.base.common.ActivityNavi
 import com.quangph.jetpack.IScreenData
 import com.quangph.jetpack.JetActivity
@@ -164,4 +165,53 @@ inline fun <reified T : Enum<T>> Parcel.readEnum(): T {
 
 inline fun <reified T : Enum<T>> Parcel.writeEnum(value: T) {
     writeInt(value.ordinal)
+}
+
+fun String.toFacebookUriScheme(): String? {
+    val uriScheme = "fb://group/"
+    val regex = Regex("""facebook\.com/groups/(\d+)""")
+    val matchResult = regex.find(this)
+    val groupId = matchResult?.groups?.get(1)?.value
+    return if (groupId != null) {
+        uriScheme + groupId
+    } else {
+        null
+    }
+}
+
+fun View.slideUp() {
+    if (visibility != View.VISIBLE) {
+        visibility = View.VISIBLE
+        val animate = TranslateAnimation(
+            0f,
+            0f,
+            this.height.toFloat(),
+            0f
+        )
+        animate.duration = 500L
+        animate.fillAfter = true
+        this.startAnimation(animate)
+    }
+}
+
+fun View.slideDown() {
+    if (visibility != View.GONE) {
+        val animate = TranslateAnimation(
+            0f,
+            0f,
+            0f,
+            this.height.toFloat()
+        )
+        animate.duration = 500L
+        animate.fillAfter = true
+        animate.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
+            override fun onAnimationStart(animation: android.view.animation.Animation?) {}
+            override fun onAnimationEnd(animation: android.view.animation.Animation?) {
+                visibility = View.GONE
+            }
+
+            override fun onAnimationRepeat(animation: android.view.animation.Animation?) {}
+        })
+        this.startAnimation(animate)
+    }
 }

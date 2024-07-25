@@ -138,4 +138,11 @@
         <attr name="civ_border_overlay" format="boolean" />
         <attr name="civ_circle_background_color" format="color" />
     </declare-styleable>
+
+    <declare-styleable name="GridRecyclerView">
+        <attr name="columnNum" format="integer"/>
+        <attr name="maxRow" format="integer"/>
+        <attr name="itemMargin" format="dimension"/>
+    </declare-styleable>
+
 </resources>

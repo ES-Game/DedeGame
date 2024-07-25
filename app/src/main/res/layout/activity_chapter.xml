@@ -112,4 +112,36 @@
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <ImageView
+            android:id="@+id/ivMoveTop"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="@dimen/margin_left_right_layout"
+            android:layout_marginBottom="@dimen/margin_between_part_in_item_24dp"
+            android:src="@drawable/ic_scroll_to_top"
+            app:tint="@color/orange_300"
+            android:layout_gravity="end"/>
+
+        <com.dede.dedegame.presentation.widget.gridRecyclerview.GridRecyclerView
+            android:id="@+id/rcvOption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:columnNum="4"
+            app:maxRow="1"
+            app:itemMargin="1dp"
+            android:layout_gravity="center"
+            android:scrollbars="none"
+            android:background="@drawable/bg_bottom_action_chapters_detail"/>
+
+    </LinearLayout>
+
 </com.dede.dedegame.presentation.chapter.ChapterView>

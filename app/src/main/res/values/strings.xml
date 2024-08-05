@@ -52,5 +52,11 @@
     <string name="title_open_game">Game đã ra mắt</string>
     <string name="title_coming_game">Game sắp ra mắt</string>
 
+    <string name="option_chapter_previous_action">Trước</string>
+    <string name="option_chapter_next_action">Sau</string>
+    <string name="option_chapter_comment_action">Bình luận</string>
+    <string name="option_chapter_chapter_action">Chương</string>
+    <string name="app_chapter_lis_title">Danh sách chương</string>
+
 
 </resources>

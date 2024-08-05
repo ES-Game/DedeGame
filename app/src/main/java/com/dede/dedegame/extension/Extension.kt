@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Drawable
 import android.os.Parcel
+import android.util.SparseBooleanArray
 import android.view.View
 import android.view.animation.TranslateAnimation
 import android.widget.ImageView
@@ -214,4 +215,14 @@ fun View.slideDown() {
         })
         this.startAnimation(animate)
     }
+}
+
+fun SparseBooleanArray.oldIndexOfChapter(): Int? {
+    for (i in 0 until this.size()) {
+        val key = this.keyAt(i)
+        if (this.get(key)) {
+            return key
+        }
+    }
+    return null
 }

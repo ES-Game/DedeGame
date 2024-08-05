@@ -4,30 +4,38 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import com.dede.dedegame.R
+import com.dede.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.OptionChapter
 import com.dede.dedegame.domain.model.StoryDetail
+import com.dede.dedegame.domain.usecase.GetOptionChapterAction
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.quangph.base.mvp.ICommand
+import com.quangph.base.mvp.action.Action
+import com.quangph.base.mvp.action.ActionException
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.IScreenData
 import com.quangph.jetpack.JetActivity
 
 @Layout(R.layout.activity_chapter)
 class ChapterActivity : JetActivity<ChapterView>() {
-    private var chapterId = -1
+    private var mChapterId = -1
     override fun onPresenterReady() {
         super.onPresenterReady()
 
         val type = object : TypeToken<StoryDetail>() {}.type
         val input: StoryDetail? = Gson().fromJson(intent.getStringExtra("key_data_story"), type)
-        chapterId = intent.getIntExtra("chapter_id", -1)
-        input?.let {
-            it.title?.let { it1 -> mvpView.setStoryName(it1) }
-            it.chapters?.reversed()?.let { it1 -> mvpView.fillDataToSpinner(chapterId, it1) }
-            it.chapters?.reversed()?.first()?.id?.let { it1 -> getChapterDetail(it1) }
-            trackingOnChapterScreen(PARAM_STORY, it.id)
+        mChapterId = intent.getIntExtra("chapter_id", -1)
+        input?.let { story ->
+            getOptionChapter() { listMenu ->
+                story.title?.let { storyName -> mvpView.setStoryName(storyName) }
+                story.chapters?.reversed()?.let { chapters ->
+                    refreshStateItemViewMenu(listMenu, chapters, mChapterId)
+                }
+                trackingOnChapterScreen(PARAM_STORY, story.id)
+            }
         }
     }
 
@@ -35,14 +43,96 @@ class ChapterActivity : JetActivity<ChapterView>() {
         super.onExecuteCommand(command)
         when (command) {
             is ChapterView.ChangeChapterCmd -> {
-//                trackingTapEventChapter(EVENT_TAP_CHAPTER_ITEM, PARAM_CHAPTER, command.chapterId)
                 getChapterDetail(command.chapterId)
             }
 
             is ChapterView.OnBackCmd -> {
                 onBackPressedDispatcher.onBackPressed()
             }
+
+            is ChapterView.RefreshMenuCmd -> {
+                refreshStateItemViewMenu(command.listMenu, command.chapters, command.chapterId)
+            }
         }
+    }
+
+    private fun refreshStateItemViewMenu(
+        listMenu: List<OptionChapter>,
+        chapters: List<Chapter>,
+        chapterId: Int
+    ) {
+        if (chapters.isEmpty()) {
+            listMenu.forEach {
+                it.enabled = false
+                it.selected = false
+            }
+            mvpView.fillDataToBottomMenu(listMenu)
+        } else {
+            if (chapterId == -1) {
+                if (chapters.size > 1) {
+                    listMenu.first().enabled = false
+                    listMenu.first().selected = false
+                    listMenu.last().enabled = true
+                    listMenu.last().selected = false
+                } else {
+                    listMenu.first().enabled = false
+                    listMenu.first().selected = false
+                    listMenu.last().enabled = false
+                    listMenu.last().selected = false
+                }
+            } else {
+                if (chapters.size > 1) {
+                    val currentIndex = chapters.indexOfFirst { it.id == chapterId }
+                    when (currentIndex) {
+                        0 -> {
+                            listMenu.first().enabled = false
+                            listMenu.first().selected = false
+                            listMenu.last().enabled = true
+                            listMenu.last().selected = false
+                        }
+
+                        chapters.size - 1 -> {
+                            listMenu.first().enabled = true
+                            listMenu.first().selected = false
+                            listMenu.last().enabled = false
+                            listMenu.last().selected = false
+                        }
+
+                        else -> {
+                            listMenu.first().enabled = true
+                            listMenu.first().selected = false
+                            listMenu.last().enabled = true
+                            listMenu.last().selected = false
+                        }
+                    }
+                } else {
+                    listMenu.first().enabled = false
+                    listMenu.first().selected = false
+                    listMenu.last().enabled = false
+                    listMenu.last().selected = false
+                }
+            }
+            mvpView.fillDataToSpinner(chapterId, chapters)
+            mvpView.fillDataToBottomMenu(listMenu)
+        }
+    }
+
+    private fun getOptionChapter(callback: (List<OptionChapter>) -> Unit) {
+        val getOptionAction = GetOptionChapterAction(this@ChapterActivity)
+        mActionManager.executeAction(
+            getOptionAction,
+            object : Action.SimpleActionCallback<List<OptionChapter>>() {
+                override fun onSuccess(responseValue: List<OptionChapter>?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        callback(it)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                }
+            })
     }
 
     private fun getChapterDetail(id: Int) {

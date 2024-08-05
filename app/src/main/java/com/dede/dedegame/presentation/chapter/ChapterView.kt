@@ -13,40 +13,62 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.util.forEach
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Chapter
+import com.dede.dedegame.domain.model.OptionChapter
+import com.dede.dedegame.domain.model.TypeOption
+import com.dede.dedegame.extension.oldIndexOfChapter
 import com.dede.dedegame.extension.slideDown
 import com.dede.dedegame.extension.slideUp
+import com.dede.dedegame.presentation.chapter.adapter.ChapterSpinnerAdapter
+import com.dede.dedegame.presentation.chapter.group.ListChapterNavGroupData
+import com.dede.dedegame.presentation.chapter.group.OptionChapterGroupData
 import com.dede.dedegame.presentation.common.DimensUtil
-import com.dede.dedegame.presentation.widget.gridRecyclerview.GridRecyclerView
 import com.dede.dedegame.presentation.widget.nestedWeb.NestedWebView
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.quangph.base.mvp.ICommand
-import com.quangph.base.mvp.mvpcomponent.view.BaseConstraintView
+import com.quangph.base.mvp.mvpcomponent.view.BaseDrawerLayout
+import com.quangph.base.view.recyclerview.adapter.group.GroupRclvAdapter
+import com.skydoves.powerspinner.PowerSpinnerView
 
 
-class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(context, attrs) {
+class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(context!!, attrs) {
 
     private var tvChapterName: TextView? = null
     private var collapsingToolbar: CollapsingToolbarLayout? = null
-    private lateinit var spListChapter: Spinner
     private var wvContent: NestedWebView? = null
-    private val rcvOption by lazy { findViewById<GridRecyclerView>(R.id.rcvOption) }
+    private val tvChapterLabel by lazy { findViewById<TextView>(R.id.tvChapterLabel) }
+    private val spListChapter by lazy { findViewById<PowerSpinnerView>(R.id.spListChapter) }
+    private val rcvOption by lazy { findViewById<RecyclerView>(R.id.rcvOption) }
     private val ivMoveTop by lazy { findViewById<View>(R.id.ivMoveTop) }
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.app_bar) }
+    private val drawerLayout by lazy { findViewById<DrawerLayout>(R.id.drawer_layout) }
+    private val rcvChapterNav by lazy { findViewById<RecyclerView>(R.id.rcvChapterNav) }
 
+
+    private val mMenuAdapter = GroupRclvAdapter()
+    private val optionChapterGroupData = OptionChapterGroupData(null)
+    private lateinit var mLayoutManager: GridLayoutManager
+
+    private lateinit var chapterSpinnerAdapter: ChapterSpinnerAdapter
+
+    private val mChapterNavAdapter = GroupRclvAdapter()
+    private val mListChapterNavGroupData = ListChapterNavGroupData(null)
+    private lateinit var mNavLayoutManager: LinearLayoutManager
 
     override fun onInitView() {
         super.onInitView()
         collapsingToolbar = findViewById(R.id.toolbar_layout)
         tvChapterName = findViewById(R.id.tvStoryNameDetail)
-        spListChapter = findViewById(R.id.spListChapter)
         ivMoveTop.visibility = View.GONE
         rcvOption.visibility = View.GONE
         setupToolbar()
@@ -163,6 +185,132 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
             appBarLayout.setExpanded(true, true)
             rcvOption.slideUp()
         }
+
+        setupChapterNav()
+
+        setupBottomMenu()
+    }
+
+    private fun setupChapterNav() {
+        mNavLayoutManager = LinearLayoutManager(context)
+        rcvChapterNav.layoutManager = mNavLayoutManager
+        rcvChapterNav.adapter = mChapterNavAdapter
+        mChapterNavAdapter.addGroup(mListChapterNavGroupData)
+        mListChapterNavGroupData.onClickItemListener =
+            object : ListChapterNavGroupData.OnClickItemListener {
+                override fun onClickMenuItem(item: Chapter, position: Int) {
+                    drawerLayout.closeDrawer(GravityCompat.START)
+                    val oldIndex =
+                        mListChapterNavGroupData.getItemStateArray().oldIndexOfChapter() ?: return
+                    if (oldIndex != position) {
+                        mListChapterNavGroupData.getItemStateArray().put(oldIndex, false)
+                        mListChapterNavGroupData.getItemStateArray().put(position, true)
+
+                        spListChapter.clearSelectedItem()
+                        chapterSpinnerAdapter.index = position
+                        mPresenter.executeCommand(item.id?.let { ChangeChapterCmd(it) })
+                        spListChapter.setSpinnerAdapter(chapterSpinnerAdapter)
+                        spListChapter.selectItemByIndex(position)
+                        spListChapter.dismiss()
+                        tvChapterLabel.text = item.title
+                        fillDataToNavChapter(position, chapterSpinnerAdapter.items)
+                        mPresenter.executeCommand(
+                            RefreshMenuCmd(
+                                optionChapterGroupData.menuChapter()!!,
+                                chapterSpinnerAdapter.items,
+                                chapterSpinnerAdapter.items[position].id!!
+                            )
+                        )
+                        wvContent?.evaluateJavascript(
+                            "window.scrollTo({ top: 0, behavior: 'smooth' });",
+                            null
+                        )
+                        appBarLayout.setExpanded(true, true)
+                        rcvOption.slideUp()
+                    }
+                }
+            }
+    }
+
+    private fun setupBottomMenu() {
+        mLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+        rcvOption.layoutManager = mLayoutManager
+        rcvOption.adapter = mMenuAdapter
+        mMenuAdapter.addGroup(optionChapterGroupData)
+        optionChapterGroupData.onClickItemListener =
+            object : OptionChapterGroupData.OnClickItemListener {
+                override fun onClickMenuItem(item: OptionChapter) {
+                    when (item.type) {
+                        TypeOption.PREVIOUS -> {
+                            val prevIndex =
+                                chapterSpinnerAdapter.index.previousIndex(chapterSpinnerAdapter.items.size)
+                                    ?: return
+                            spListChapter.clearSelectedItem()
+                            chapterSpinnerAdapter.index = prevIndex
+                            mPresenter.executeCommand(chapterSpinnerAdapter.items[prevIndex].id?.let {
+                                ChangeChapterCmd(
+                                    it
+                                )
+                            })
+                            spListChapter.setSpinnerAdapter(chapterSpinnerAdapter)
+                            spListChapter.selectItemByIndex(prevIndex)
+                            spListChapter.dismiss()
+                            tvChapterLabel.text = chapterSpinnerAdapter.items[prevIndex].title
+                            mPresenter.executeCommand(
+                                RefreshMenuCmd(
+                                    optionChapterGroupData.menuChapter()!!,
+                                    chapterSpinnerAdapter.items,
+                                    chapterSpinnerAdapter.items[prevIndex].id!!
+                                )
+                            )
+                            wvContent?.evaluateJavascript(
+                                "window.scrollTo({ top: 0, behavior: 'smooth' });",
+                                null
+                            )
+                            appBarLayout.setExpanded(true, true)
+                            rcvOption.slideUp()
+                        }
+
+                        TypeOption.CHAPTER -> {
+                            drawerLayout.openDrawer(GravityCompat.START)
+                        }
+
+                        TypeOption.COMMENT -> {
+
+                        }
+
+                        TypeOption.NEXT -> {
+                            val nextIndex =
+                                chapterSpinnerAdapter.index.nextIndex(chapterSpinnerAdapter.items.size)
+                                    ?: return
+                            mPresenter.executeCommand(
+                                RefreshMenuCmd(
+                                    optionChapterGroupData.menuChapter()!!,
+                                    chapterSpinnerAdapter.items,
+                                    chapterSpinnerAdapter.items[nextIndex].id!!
+                                )
+                            )
+                            spListChapter.clearSelectedItem()
+                            chapterSpinnerAdapter.index = nextIndex
+                            mPresenter.executeCommand(chapterSpinnerAdapter.items[nextIndex].id?.let {
+                                ChangeChapterCmd(
+                                    it
+                                )
+                            })
+                            spListChapter.setSpinnerAdapter(chapterSpinnerAdapter)
+                            spListChapter.selectItemByIndex(nextIndex)
+                            spListChapter.dismiss()
+                            tvChapterLabel.text = chapterSpinnerAdapter.items[nextIndex].title
+                            wvContent?.evaluateJavascript(
+                                "window.scrollTo({ top: 0, behavior: 'smooth' });",
+                                null
+                            )
+                            appBarLayout.setExpanded(true, true)
+                            rcvOption.slideUp()
+                        }
+                    }
+                }
+            }
     }
 
     private fun setupToolbar() {
@@ -176,36 +324,66 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
     }
 
     fun fillDataToSpinner(chapterId: Int, chapters: List<Chapter>) {
-
-        val listChapterName = chapters.map { chapter: Chapter -> chapter.title }
-
-        val adapter = ArrayAdapter(
-            context,
-            androidx.appcompat.R.layout.support_simple_spinner_dropdown_item,
-            listChapterName
-        )
-        adapter.setDropDownViewResource(R.layout.item_dropdown)
-        spListChapter.adapter = adapter
-
-        spListChapter.onItemSelectedListener = object :
-            AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(
-                parent: AdapterView<*>,
-                view: View, position: Int, id: Long
-            ) {
-
-                spListChapter.setSelection(position)
-                mPresenter.executeCommand(chapters[position].id?.let { ChangeChapterCmd(it) })
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>) {
-            }
-        }
-        if (chapterId == -1) {
-            spListChapter.setSelection(0)
+        var currentPhonePos = if (chapterId == -1) {
+            0
         } else {
-            spListChapter.setSelection(chapters.indexOfFirst { it.id == chapterId })
+            chapters.indexOfFirst { it.id == chapterId }
         }
+        chapterSpinnerAdapter = ChapterSpinnerAdapter(
+            context, chapters
+        ) { oldIndex, oldItem, newIndex, newItem ->
+            currentPhonePos = newIndex
+            spListChapter.clearSelectedItem()
+            chapterSpinnerAdapter.index = newIndex
+            mPresenter.executeCommand(chapters[newIndex].id?.let { ChangeChapterCmd(it) })
+            spListChapter.setSpinnerAdapter(chapterSpinnerAdapter)
+            spListChapter.selectItemByIndex(currentPhonePos)
+            spListChapter.dismiss()
+            tvChapterLabel.text = chapters[newIndex].title
+            fillDataToNavChapter(currentPhonePos, chapters)
+            mPresenter.executeCommand(
+                RefreshMenuCmd(
+                    optionChapterGroupData.menuChapter()!!,
+                    chapterSpinnerAdapter.items,
+                    chapterSpinnerAdapter.items[newIndex].id!!
+                )
+            )
+            wvContent?.evaluateJavascript(
+                "window.scrollTo({ top: 0, behavior: 'smooth' });",
+                null
+            )
+            appBarLayout.setExpanded(true, true)
+            rcvOption.slideUp()
+        }
+
+        spListChapter.setOnClickListener {
+            spListChapter.show()
+            spListChapter.getSpinnerRecyclerView().layoutManager?.scrollToPosition(currentPhonePos)
+        }
+
+        if (chapterId == -1) {
+            chapterSpinnerAdapter.index = 0
+        } else {
+            chapterSpinnerAdapter.index = chapters.indexOfFirst { it.id == chapterId }
+        }
+
+        spListChapter.setSpinnerAdapter(chapterSpinnerAdapter)
+        spListChapter.selectItemByIndex(currentPhonePos)
+        spListChapter.setIsFocusable(true)
+        spListChapter.getSpinnerRecyclerView().layoutManager?.scrollToPosition(currentPhonePos)
+        mPresenter.executeCommand(chapters[currentPhonePos].id?.let { ChangeChapterCmd(it) })
+        tvChapterLabel.text = chapters[currentPhonePos].title
+
+        fillDataToNavChapter(currentPhonePos, chapters)
+    }
+
+    private fun fillDataToNavChapter(currentPhonePos: Int, chapters: List<Chapter>) {
+        mListChapterNavGroupData.getItemStateArray().forEach { key, _ ->
+            mListChapterNavGroupData.getItemStateArray().put(key, false)
+        }
+        mListChapterNavGroupData.getItemStateArray().put(currentPhonePos, true)
+        mListChapterNavGroupData.reset(chapters)
+        mListChapterNavGroupData.show()
     }
 
     fun setStoryName(name: String) {
@@ -216,7 +394,28 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(
         wvContent?.loadUrl(storyUrl)
     }
 
+    fun fillDataToBottomMenu(listMenu: List<OptionChapter>) {
+        optionChapterGroupData.reset(listMenu)
+        optionChapterGroupData.show()
+    }
+
+    fun Int.nextIndex(listSize: Int): Int? {
+        val nextIndex = this + 1
+        return if (nextIndex < listSize) nextIndex else null
+    }
+
+    fun Int.previousIndex(listSize: Int): Int? {
+        val previousIndex = this - 1
+        return if (previousIndex >= 0) previousIndex else null
+    }
+
     class ChangeChapterCmd(val chapterId: Int) : ICommand {}
+    class RefreshMenuCmd(
+        val listMenu: List<OptionChapter>,
+        val chapters: List<Chapter>,
+        val chapterId: Int
+    ) : ICommand {}
+
     class OnBackCmd() : ICommand
 }
 

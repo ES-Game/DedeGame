@@ -2,146 +2,200 @@
 <com.dede.dedegame.presentation.chapter.ChapterView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:background="@drawable/background_app_common"
     tools:context=".presentation.chapter.ChapterActivity">
 
-    <include
-        android:id="@+id/include"
-        layout="@layout/layout_toolbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content_fl"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/include">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar"
+        <include
+            android:id="@+id/include"
+            layout="@layout/layout_toolbar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/include">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <com.google.android.material.appbar.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <LinearLayout
+                <com.google.android.material.appbar.CollapsingToolbarLayout
+                    android:id="@+id/toolbar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tvStoryNameDetail"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:textColor="@color/orange_300"
+                            android:fontFamily="@font/montserrat_bold"
+                            android:textAllCaps="true"
+                            android:textSize="@dimen/size_text_large"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/include">
+
+                        </TextView>
+
+                        <androidx.constraintlayout.widget.ConstraintLayout
+                            android:id="@+id/containerSpin"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="16dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginEnd="16dp"
+                            android:background="@drawable/bg_corner_orange_spinner"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/tvStoryNameDetail">
+
+                            <ImageView
+                                android:id="@+id/imageView18"
+                                android:layout_width="20dp"
+                                android:layout_height="20dp"
+                                android:layout_marginEnd="@dimen/margin_small_to_medium_between_part_in_item"
+                                android:src="@drawable/ic_dropdown_arrow"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="1.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <com.skydoves.powerspinner.PowerSpinnerView
+                                android:id="@+id/spListChapter"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                app:spinner_popup_background="@color/white"
+                                app:spinner_popup_animation="dropdown"
+                                app:spinner_divider_show="true"
+                                app:spinner_divider_size="0.4dp"
+                                app:spinner_arrow_tint="@android:color/transparent"
+                                app:spinner_divider_color="#233a9a"
+                                android:paddingStart="0dp"
+                                android:paddingEnd="0dp"
+                                android:background="@null"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent" />
+
+                            <LinearLayout
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:gravity="center_vertical"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toStartOf="@+id/imageView18"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent">
+
+                                <TextView
+                                    android:id="@+id/tvChapterLabel"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/montserrat_regular"
+                                    android:textColor="@color/black"
+                                    android:text=""
+                                    android:maxLines="1"
+                                    android:ellipsize="end"
+                                    android:paddingStart="16dp"
+                                    android:paddingEnd="16dp"
+                                    android:paddingTop="8dp"
+                                    android:paddingBottom="8dp"
+                                    android:textSize="@dimen/size_text_medium"
+                                    android:textStyle="bold">
+
+                                </TextView>
+
+                            </LinearLayout>
+
+                        </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    </LinearLayout>
+
+                </com.google.android.material.appbar.CollapsingToolbarLayout>
+            </com.google.android.material.appbar.AppBarLayout>
+
+            <com.dede.dedegame.presentation.widget.nestedWeb.NestedWebView
+                android:id="@+id/wvContent"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            </com.dede.dedegame.presentation.widget.nestedWeb.NestedWebView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
+
+            <ImageView
+                android:id="@+id/ivMoveTop"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginEnd="@dimen/margin_left_right_layout"
+                android:layout_marginBottom="@dimen/margin_between_part_in_item_24dp"
+                android:src="@drawable/ic_scroll_to_top"
+                app:tint="@color/orange_300"
+                android:layout_gravity="end"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rcvOption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:layout_gravity="center"
+                android:scrollbars="none"
+                android:background="@drawable/bg_bottom_action_chapters_detail"/>
 
-                <TextView
-                    android:id="@+id/tvStoryNameDetail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:textColor="@color/orange_300"
-                    android:fontFamily="@font/montserrat_bold"
-                    android:textAllCaps="true"
-                    android:textSize="@dimen/size_text_large"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/include">
+        </LinearLayout>
 
-                </TextView>
-
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:id="@+id/containerSpin"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:background="@drawable/bg_corner_orange_spinner"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/tvStoryNameDetail">
-
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:layout_marginEnd="@dimen/margin_small_to_medium_between_part_in_item"
-                        android:src="@drawable/ic_dropdown_arrow"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <Spinner
-                        android:id="@+id/spListChapter"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:popupBackground="@color/white"
-                        android:spinnerMode="dropdown"
-                        android:paddingStart="0dp"
-                        android:paddingEnd="28dp"
-                        android:background="@null"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                </androidx.constraintlayout.widget.ConstraintLayout>
-
-            </LinearLayout>
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <com.dede.dedegame.presentation.widget.nestedWeb.NestedWebView
-            android:id="@+id/wvContent"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/white"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-        </com.dede.dedegame.presentation.widget.nestedWeb.NestedWebView>
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <LinearLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:id="@+id/ll_nav_start"
+        android:layout_width="@dimen/dimen_330"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/black"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/ivMoveTop"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_marginEnd="@dimen/margin_left_right_layout"
-            android:layout_marginBottom="@dimen/margin_between_part_in_item_24dp"
-            android:src="@drawable/ic_scroll_to_top"
-            app:tint="@color/orange_300"
-            android:layout_gravity="end"/>
-
-        <com.dede.dedegame.presentation.widget.gridRecyclerview.GridRecyclerView
-            android:id="@+id/rcvOption"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:columnNum="4"
-            app:maxRow="1"
-            app:itemMargin="1dp"
-            android:layout_gravity="center"
-            android:scrollbars="none"
-            android:background="@drawable/bg_bottom_action_chapters_detail"/>
-
+        <include layout="@layout/nav_layout_chapter" />
     </LinearLayout>
 
 </com.dede.dedegame.presentation.chapter.ChapterView>

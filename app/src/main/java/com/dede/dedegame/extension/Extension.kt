@@ -217,6 +217,43 @@ fun View.slideDown() {
     }
 }
 
+fun View.slideStart() {
+    if (visibility != View.VISIBLE) {
+        visibility = View.VISIBLE
+        val animate = TranslateAnimation(
+            this.width.toFloat(),
+            0f,
+            0f,
+            0f
+        )
+        animate.duration = 300L
+        animate.fillAfter = true
+        this.startAnimation(animate)
+    }
+}
+
+fun View.slideEnd() {
+    if (visibility != View.GONE) {
+        val animate = TranslateAnimation(
+            0f,
+            this.width.toFloat(),
+            0f,
+            0f
+        )
+        animate.duration = 300L
+        animate.fillAfter = true
+        animate.setAnimationListener(object : android.view.animation.Animation.AnimationListener {
+            override fun onAnimationStart(animation: android.view.animation.Animation?) {}
+            override fun onAnimationEnd(animation: android.view.animation.Animation?) {
+                visibility = View.GONE
+            }
+
+            override fun onAnimationRepeat(animation: android.view.animation.Animation?) {}
+        })
+        this.startAnimation(animate)
+    }
+}
+
 fun SparseBooleanArray.oldIndexOfChapter(): Int? {
     for (i in 0 until this.size()) {
         val key = this.keyAt(i)

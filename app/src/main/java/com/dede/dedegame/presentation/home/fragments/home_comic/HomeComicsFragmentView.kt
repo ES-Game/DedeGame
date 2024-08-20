@@ -44,6 +44,9 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
         setupCategoryBtnState(true)
         setupRankListBtnState(false)
         btnCategory?.setOnClickListener {
+            if (btnCategory?.isSelected!!){
+                return@setOnClickListener
+            }
             setupCategoryBtnState(true)
             setupRankListBtnState(false)
             rvContent.visibility = View.GONE
@@ -52,6 +55,9 @@ class HomeComicsFragmentView(context: Context?, attrs: AttributeSet?) :
 
 
         btnRankList?.setOnClickListener {
+            if (btnRankList?.isSelected!!){
+                return@setOnClickListener
+            }
             setupCategoryBtnState(false)
             setupRankListBtnState(true)
             rvContent.visibility = View.GONE

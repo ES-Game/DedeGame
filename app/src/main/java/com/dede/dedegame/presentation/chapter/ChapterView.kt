@@ -26,8 +26,8 @@ import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.OptionChapter
 import com.dede.dedegame.domain.model.TypeOption
 import com.dede.dedegame.extension.oldIndexOfChapter
-import com.dede.dedegame.extension.slideDown
-import com.dede.dedegame.extension.slideUp
+import com.dede.dedegame.extension.slideEnd
+import com.dede.dedegame.extension.slideStart
 import com.dede.dedegame.presentation.chapter.adapter.ChapterSpinnerAdapter
 import com.dede.dedegame.presentation.chapter.group.ListChapterNavGroupData
 import com.dede.dedegame.presentation.chapter.group.OptionChapterGroupData
@@ -49,7 +49,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
     private val tvChapterLabel by lazy { findViewById<TextView>(R.id.tvChapterLabel) }
     private val spListChapter by lazy { findViewById<PowerSpinnerView>(R.id.spListChapter) }
     private val rcvOption by lazy { findViewById<RecyclerView>(R.id.rcvOption) }
-    private val ivMoveTop by lazy { findViewById<View>(R.id.ivMoveTop) }
+//    private val ivMoveTop by lazy { findViewById<View>(R.id.ivMoveTop) }
     private val appBarLayout by lazy { findViewById<AppBarLayout>(R.id.app_bar) }
     private val drawerLayout by lazy { findViewById<DrawerLayout>(R.id.drawer_layout) }
     private val rcvChapterNav by lazy { findViewById<RecyclerView>(R.id.rcvChapterNav) }
@@ -57,7 +57,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
 
     private val mMenuAdapter = GroupRclvAdapter()
     private val optionChapterGroupData = OptionChapterGroupData(null)
-    private lateinit var mLayoutManager: GridLayoutManager
+    private lateinit var mLayoutManager: LinearLayoutManager
 
     private lateinit var chapterSpinnerAdapter: ChapterSpinnerAdapter
 
@@ -69,7 +69,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
         super.onInitView()
         collapsingToolbar = findViewById(R.id.toolbar_layout)
         tvChapterName = findViewById(R.id.tvStoryNameDetail)
-        ivMoveTop.visibility = View.GONE
+//        ivMoveTop.visibility = View.GONE
         rcvOption.visibility = View.GONE
         setupToolbar()
 
@@ -143,48 +143,48 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
         wvContent?.setGestureListener(object : NestedWebView.GestureListener {
             override fun onSingleTap() {
                 if (rcvOption.visibility == View.VISIBLE) {
-                    rcvOption.slideDown()
+                    rcvOption.slideEnd()
                 } else {
-                    rcvOption.slideUp()
+                    rcvOption.slideStart()
                 }
             }
 
             override fun onDoubleTap() {
                 if (rcvOption.visibility == View.VISIBLE) {
-                    rcvOption.slideDown()
+                    rcvOption.slideEnd()
                 } else {
-                    rcvOption.slideUp()
+                    rcvOption.slideStart()
                 }
             }
 
             override fun onScroll(distanceX: Float, distanceY: Float) {
                 if (rcvOption.visibility == View.VISIBLE) {
-                    rcvOption.slideDown()
+                    rcvOption.slideEnd()
                 }
             }
 
             override fun onLongPress() {
                 if (rcvOption.visibility == View.VISIBLE) {
-                    rcvOption.slideDown()
+                    rcvOption.slideEnd()
                 } else {
-                    rcvOption.slideUp()
+                    rcvOption.slideStart()
                 }
             }
 
             override fun onScrollDistance(cumulativeDistanceY: Float) {
                 if (cumulativeDistanceY > (DimensUtil.screenHeight(context) / 4)) {
-                    ivMoveTop.visibility = View.VISIBLE;
+//                    ivMoveTop.visibility = View.VISIBLE
                 } else {
-                    ivMoveTop.visibility = View.GONE;
+//                    ivMoveTop.visibility = View.GONE
                 }
             }
         })
 
-        ivMoveTop.setOnClickListener {
-            wvContent?.evaluateJavascript("window.scrollTo({ top: 0, behavior: 'smooth' });", null)
-            appBarLayout.setExpanded(true, true)
-            rcvOption.slideUp()
-        }
+//        ivMoveTop.setOnClickListener {
+//            wvContent?.evaluateJavascript("window.scrollTo({ top: 0, behavior: 'smooth' });", null)
+//            appBarLayout.setExpanded(true, true)
+//            rcvOption.slideStart()
+//        }
 
         setupChapterNav()
 
@@ -199,7 +199,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
         mListChapterNavGroupData.onClickItemListener =
             object : ListChapterNavGroupData.OnClickItemListener {
                 override fun onClickMenuItem(item: Chapter, position: Int) {
-                    drawerLayout.closeDrawer(GravityCompat.START)
+                    drawerLayout.closeDrawer(GravityCompat.END)
                     val oldIndex =
                         mListChapterNavGroupData.getItemStateArray().oldIndexOfChapter() ?: return
                     if (oldIndex != position) {
@@ -226,14 +226,14 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
                             null
                         )
                         appBarLayout.setExpanded(true, true)
-                        rcvOption.slideUp()
+                        rcvOption.slideStart()
                     }
                 }
             }
     }
 
     private fun setupBottomMenu() {
-        mLayoutManager = GridLayoutManager(context, 1, GridLayoutManager.HORIZONTAL, false)
+        mLayoutManager = LinearLayoutManager(context)
         rcvOption.layoutManager = mLayoutManager
         rcvOption.adapter = mMenuAdapter
         mMenuAdapter.addGroup(optionChapterGroupData)
@@ -268,15 +268,22 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
                                 null
                             )
                             appBarLayout.setExpanded(true, true)
-                            rcvOption.slideUp()
+                            rcvOption.slideStart()
                         }
 
                         TypeOption.CHAPTER -> {
-                            drawerLayout.openDrawer(GravityCompat.START)
+                            drawerLayout.openDrawer(GravityCompat.END)
                         }
 
                         TypeOption.COMMENT -> {
-
+                            val currentIndex =
+                                mListChapterNavGroupData.getItemStateArray().oldIndexOfChapter()
+                                    ?: return
+                            mPresenter.executeCommand(chapterSpinnerAdapter.items[currentIndex].id?.let {
+                                MoveCommentChapterCmd(
+                                    it
+                                )
+                            })
                         }
 
                         TypeOption.NEXT -> {
@@ -306,7 +313,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
                                 null
                             )
                             appBarLayout.setExpanded(true, true)
-                            rcvOption.slideUp()
+                            rcvOption.slideStart()
                         }
                     }
                 }
@@ -353,7 +360,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
                 null
             )
             appBarLayout.setExpanded(true, true)
-            rcvOption.slideUp()
+            rcvOption.slideStart()
         }
 
         spListChapter.setOnClickListener {
@@ -410,6 +417,7 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
     }
 
     class ChangeChapterCmd(val chapterId: Int) : ICommand {}
+    class MoveCommentChapterCmd(val chapterId: Int) : ICommand {}
     class RefreshMenuCmd(
         val listMenu: List<OptionChapter>,
         val chapters: List<Chapter>,

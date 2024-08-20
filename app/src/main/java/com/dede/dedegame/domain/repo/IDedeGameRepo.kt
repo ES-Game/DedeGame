@@ -54,4 +54,11 @@ interface IDedeGameRepo {
         clientId: Int,
         clientSecret: String
     ): UserInfo
+
+    fun getCommentChapter(chapterId: Int, page: Int): DataPage<Comment>
+    fun sendCommentToChapter(chapterId: Int, comment: String): Comment
+    fun replyCommentChapter(chapterId: Int, comment: String, parentId: Int): Comment
+
+    fun likeCommentChapter(chapterId: Int, commentId: Int): Int
+    fun unlikeCommentChapter(chapterId: Int, commentId: Int): Int
 }

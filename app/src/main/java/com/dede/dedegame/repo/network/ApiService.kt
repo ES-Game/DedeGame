@@ -135,4 +135,44 @@ interface ApiService {
         @Field("client_id") clientId: Int,
         @Field("client_secret") clientSecret: String
     ): Call<UserResponse>
+
+    @GET("comments/chapter/{chapterId}")
+    fun getCommentChapter(
+        @Header("Authorization") authToken: String,
+        @Path("chapterId") chapterId: Int,
+        @Query("page") page: Int
+    ): Call<ListCommentResponse>
+
+    @FormUrlEncoded
+    @POST("comment-chapter")
+    fun sendCommentToChapter(
+        @Header("Authorization") authToken: String,
+        @Field("chapter_id") chapterId: Int,
+        @Field("comment") comment: String,
+    ): Call<CommentResponse>
+
+    @FormUrlEncoded
+    @POST("comment-chapter")
+    fun replyCommentChapter(
+        @Header("Authorization") authToken: String,
+        @Field("chapter_id") chapterId: Int,
+        @Field("comment") comment: String,
+        @Field("parent_id") parentId: Int,
+    ): Call<CommentResponse>
+
+    @FormUrlEncoded
+    @POST("like-chapter-comment")
+    fun likeCommentChapter(
+        @Header("Authorization") authToken: String,
+        @Field("chapter_id") chapterId: Int,
+        @Field("comment_id") commentId: Int,
+    ): Call<LikedResponse>
+
+    @FormUrlEncoded
+    @POST("unlike-chapter-comment")
+    fun unlikeCommentChapter(
+        @Header("Authorization") authToken: String,
+        @Field("chapter_id") chapterId: Int,
+        @Field("comment_id") commentId: Int,
+    ): Call<LikedResponse>
 }

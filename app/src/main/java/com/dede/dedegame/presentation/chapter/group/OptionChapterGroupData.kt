@@ -38,9 +38,9 @@ class OptionChapterGroupData(listMenuChapter: List<OptionChapter>?) :
 
     override fun onCreateVH(itemView: View, viewType: Int): BaseRclvHolder<*>? {
         if (viewType == ItemViewType.ITEM_OPTION_CHAPTER) {
-            val layoutParams = itemView.layoutParams
-            layoutParams.width = DimensUtil.screenWidth(itemView.context) / 4
-            itemView.layoutParams = layoutParams
+//            val layoutParams = itemView.layoutParams
+//            layoutParams.width = DimensUtil.screenWidth(itemView.context) / 4
+//            itemView.layoutParams = layoutParams
             return OptionChaperVH(itemView, this)
         }
         return null
@@ -65,6 +65,7 @@ class OptionChapterGroupData(listMenuChapter: List<OptionChapter>?) :
             super.onBind(vhData)
             vhData?.let { vhData ->
                 imvIcon.setImageResource(vhData.id)
+                tvName.visibility = View.GONE
                 tvName.text = vhData.name
                 if (vhData.enabled) {
                     itemView.isEnabled = true

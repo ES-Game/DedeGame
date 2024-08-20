@@ -4,8 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/margin_between_part_in_item_10dp"
-    android:paddingBottom="@dimen/margin_between_part_in_item_10dp"
+    android:paddingTop="@dimen/margin_between_part_in_item_16dp"
+    android:paddingBottom="@dimen/margin_between_part_in_item_16dp"
+    android:paddingStart="@dimen/margin_between_part_in_item_10dp"
+    android:paddingEnd="@dimen/margin_between_part_in_item_10dp"
     android:gravity="center"
     tools:ignore="contentDescription">
 

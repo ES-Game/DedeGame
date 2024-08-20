@@ -10,6 +10,7 @@ import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.usecase.GetOptionChapterAction
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
+import com.dede.dedegame.presentation.widget.dialog.CommentChapterDialog
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.quangph.base.mvp.ICommand
@@ -52,6 +53,11 @@ class ChapterActivity : JetActivity<ChapterView>() {
 
             is ChapterView.RefreshMenuCmd -> {
                 refreshStateItemViewMenu(command.listMenu, command.chapters, command.chapterId)
+            }
+
+            is ChapterView.MoveCommentChapterCmd -> {
+                val commentChapterDialog = CommentChapterDialog.newInstance(command.chapterId)
+                commentChapterDialog.show(supportFragmentManager, commentChapterDialog.tag)
             }
         }
     }

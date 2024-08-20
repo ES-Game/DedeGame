@@ -475,4 +475,110 @@ class DedeGameRepoImpl : IDedeGameRepo {
             }
         }
     }
+
+    override fun getCommentChapter(chapterId: Int, page: Int): DataPage<Comment> {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getCommentChapter(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            chapterId,
+            page
+        ).invokeApi {
+            DataPage<Comment>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.dataList = flattenComments(it.data?.comments?.let { it1 ->
+                    ListConverter<CommentData, Comment>(
+                        CommentDataToComment()
+                    ).convert(it1)
+                }!!)
+                this.hasNextPage = this.currentPage <= this.lastPage
+            }
+
+        }
+    }
+
+    override fun sendCommentToChapter(chapterId: Int, comment: String): Comment {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.sendCommentToChapter(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            chapterId,
+            comment
+        ).invokeApi { source ->
+            Comment().apply {
+                this.id = source.data?.id
+                this.user = source.data?.user
+                this.comment = source.data?.comment
+                this.children = source.data?.children?.let {
+                    ListConverter<CommentData, Comment>(CommentDataToComment()).convert(
+                        it
+                    )
+                }
+                this.likes = source.data?.likes!!
+                when (source.data?.liked) {
+                    1 -> this.statusLike = Comment.LikeStatus.LIKED
+                    0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                    else -> this.statusLike = Comment.LikeStatus.NOT_LOGIN
+                }
+                this.createdAt = source.data?.createdAt
+                this.updatedAt = source.data?.updatedAt
+            }
+        }
+    }
+
+    override fun replyCommentChapter(chapterId: Int, comment: String, parentId: Int): Comment {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.replyCommentChapter(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            chapterId,
+            comment,
+            parentId
+        ).invokeApi { source ->
+            Comment().apply {
+                this.id = source.data?.id
+                this.user = source.data?.user
+                this.comment = source.data?.comment
+                this.children = source.data?.children?.let {
+                    ListConverter<CommentData, Comment>(CommentDataToComment()).convert(
+                        it
+                    )
+                }
+                this.likes = source.data?.likes!!
+                when (source.data?.liked) {
+                    1 -> this.statusLike = Comment.LikeStatus.LIKED
+                    0 -> this.statusLike = Comment.LikeStatus.NOT_YET_LIKED
+                    else -> this.statusLike = Comment.LikeStatus.NOT_LOGIN
+                }
+                this.createdAt = source.data?.createdAt
+                this.updatedAt = source.data?.updatedAt
+            }
+        }
+    }
+
+    override fun likeCommentChapter(chapterId: Int, commentId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.likeCommentChapter(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            chapterId,
+            commentId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun unlikeCommentChapter(chapterId: Int, commentId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.unlikeCommentChapter(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            chapterId,
+            commentId
+        ).invokeApi {
+            it.data!!
+        }
+    }
 }

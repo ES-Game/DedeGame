@@ -55,8 +55,15 @@
     <string name="option_chapter_previous_action">Trước</string>
     <string name="option_chapter_next_action">Sau</string>
     <string name="option_chapter_comment_action">Bình luận</string>
+    <string name="option_chapter_sound_action">Âm thanh</string>
     <string name="option_chapter_chapter_action">Chương</string>
     <string name="app_chapter_lis_title">Danh sách chương</string>
+
+    <string name="chapter_cover_author_label">Tác giả</string>
+    <string name="chapter_cover_rating_label">Đánh giá</string>
+    <string name="chapter_cover_number_rated">Có %d đánh giá</string>
+    <string name="chapter_cover_not_yet_rated">Chưa có đánh giá</string>
+    <string name="story_cover_rating_success">Đánh giá thành công</string>
 
 
 </resources>

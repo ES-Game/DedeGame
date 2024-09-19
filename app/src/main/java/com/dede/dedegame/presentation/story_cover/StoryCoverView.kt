@@ -59,6 +59,10 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
 
             override fun onClickReadLater(item: StoryDetail) {
             }
+
+            override fun onRatingChanged(newRate: Float, oldRate: Float, count: Int) {
+                mPresenter.executeCommand(RatingStoryCmd(newRate, oldRate, count))
+            }
         }
         latestChapterGroupData.listener = object : LatestChapterGroupData.OnClickChapterListener {
             override fun onClickChapter(storyDetail: StoryDetail, chapterId: Int) {
@@ -146,6 +150,7 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
     class OnclickLikedCmd(val comment: Comment?) : ICommand
     class OnclickReplyCmd(val comment: Comment?, val comments: List<Comment>) : ICommand
     class ViewCommentCmd(val comments: List<Comment>) : ICommand
+    class RatingStoryCmd(val newRate: Float, val oldRate: Float, val count: Int) : ICommand
     class OnBackCmd() : ICommand
 }
 

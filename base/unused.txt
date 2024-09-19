@@ -12,6 +12,7 @@ com.quangph.base.common.ScreenOrientationHelper:
     private static final java.lang.String LAST_ORIENTATION
 com.quangph.base.common.bus.AppBus$EventHandler:
     static final int HANDLE_EVENT
+com.quangph.base.common.feature.Feature
 com.quangph.base.mvp.action.ActionInfo
 com.quangph.base.mvp.action.ActionManager:
     private static final java.lang.String TAG

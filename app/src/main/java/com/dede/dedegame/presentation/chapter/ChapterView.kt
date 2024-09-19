@@ -275,6 +275,10 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
                             drawerLayout.openDrawer(GravityCompat.END)
                         }
 
+                        TypeOption.SOUND -> {
+                            mPresenter.executeCommand(ChangeStateSoundCmd())
+                        }
+
                         TypeOption.COMMENT -> {
                             val currentIndex =
                                 mListChapterNavGroupData.getItemStateArray().oldIndexOfChapter()
@@ -416,15 +420,22 @@ class ChapterView(context: Context?, attrs: AttributeSet?) : BaseDrawerLayout(co
         return if (previousIndex >= 0) previousIndex else null
     }
 
-    class ChangeChapterCmd(val chapterId: Int) : ICommand {}
-    class MoveCommentChapterCmd(val chapterId: Int) : ICommand {}
+    fun setStateSoundMenu(playing: Boolean) {
+        optionChapterGroupData.menuChapter()?.get(3)!!.selected = playing
+        optionChapterGroupData.reset(optionChapterGroupData.menuChapter())
+        optionChapterGroupData.show()
+    }
+
+    class ChangeStateSoundCmd : ICommand
+    class ChangeChapterCmd(val chapterId: Int) : ICommand
+    class MoveCommentChapterCmd(val chapterId: Int) : ICommand
     class RefreshMenuCmd(
         val listMenu: List<OptionChapter>,
         val chapters: List<Chapter>,
         val chapterId: Int
-    ) : ICommand {}
+    ) : ICommand
 
-    class OnBackCmd() : ICommand
+    class OnBackCmd : ICommand
 }
 
 

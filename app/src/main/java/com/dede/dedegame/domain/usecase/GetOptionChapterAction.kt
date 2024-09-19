@@ -34,6 +34,13 @@ class GetOptionChapterAction(private val context: Context) :
         )
         result.add(
             OptionChapter(
+                R.drawable.ic_sound_off,
+                context.getString(R.string.option_chapter_sound_action),
+                TypeOption.SOUND, enabled = true, selected = false
+            )
+        )
+        result.add(
+            OptionChapter(
                 R.drawable.ic_next_chapter,
                 context.getString(R.string.option_chapter_next_action),
                 TypeOption.NEXT, enabled = false, selected = false

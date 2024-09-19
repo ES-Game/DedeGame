@@ -7,6 +7,7 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.OptionChapter
+import com.dede.dedegame.domain.model.TypeOption
 import com.dede.dedegame.presentation.common.DimensUtil
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
@@ -69,27 +70,55 @@ class OptionChapterGroupData(listMenuChapter: List<OptionChapter>?) :
                 tvName.text = vhData.name
                 if (vhData.enabled) {
                     itemView.isEnabled = true
-                    if (vhData.selected) {
-                        imvIcon.imageTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                itemView.context,
-                                R.color.orange_300
+                    if (vhData.type == TypeOption.SOUND){
+                        if (vhData.selected) {
+                            imvIcon.setImageResource(R.drawable.ic_sound_on)
+                            imvIcon.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.orange_300
+                                )
                             )
-                        )
-                        tvName.setTextColor(
-                            ContextCompat.getColor(
-                                itemView.context,
-                                R.color.orange_300
+                            tvName.setTextColor(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.orange_300
+                                )
                             )
-                        )
+                        } else {
+                            imvIcon.setImageResource(R.drawable.ic_sound_off)
+                            imvIcon.setImageResource(vhData.id)
+                            imvIcon.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.white
+                                )
+                            )
+                            tvName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                        }
                     } else {
-                        imvIcon.imageTintList = ColorStateList.valueOf(
-                            ContextCompat.getColor(
-                                itemView.context,
-                                R.color.white
+                        if (vhData.selected) {
+                            imvIcon.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.orange_300
+                                )
                             )
-                        )
-                        tvName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                            tvName.setTextColor(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.orange_300
+                                )
+                            )
+                        } else {
+                            imvIcon.imageTintList = ColorStateList.valueOf(
+                                ContextCompat.getColor(
+                                    itemView.context,
+                                    R.color.white
+                                )
+                            )
+                            tvName.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                        }
                     }
                 } else {
                     itemView.isEnabled = false

@@ -21,9 +21,12 @@ public class SimplePresenter<V extends IView> extends BasePresenter<V> implement
     private IParentPresenter mParent;
     private String mTag;
     private boolean isReady = false;
-    private PresenterHelper mPresenterHelper = new PresenterHelper("SimplePresenter");
+    private PresenterHelper mPresenterHelper;
 
-    public SimplePresenter() {
+    public SimplePresenter(IParentPresenter mParent) {
+        this.mParent = mParent;
+        isReady = false;
+        mPresenterHelper = new PresenterHelper("SimplePresenter");
     }
 
     @Override
@@ -66,6 +69,13 @@ public class SimplePresenter<V extends IView> extends BasePresenter<V> implement
     @Override
     public void setTagName(String tag) {
         mTag = tag;
+    }
+
+    public void ready(){
+        if (!isReady){
+            isReady = true;
+            onPresenterReady();
+        }
     }
 
     @Override

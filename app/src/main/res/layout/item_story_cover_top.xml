@@ -235,17 +235,17 @@
                android:orientation="vertical">
 
                <TextView
-                   android:id="@+id/txtStatusLabel"
+                   android:id="@+id/txtAuthorLabel"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textColor="@color/black"
                    android:fontFamily="@font/montserrat_regular"
                    android:textStyle="bold"
-                   android:text="Author"
+                   android:text="@string/chapter_cover_author_label"
                    android:textSize="@dimen/size_text_small"/>
 
                <TextView
-                   android:id="@+id/txtStatus"
+                   android:id="@+id/txtAuthor"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
                    android:textColor="@color/black"
@@ -265,15 +265,48 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_regular"
+                    android:textStyle="bold"
+                    android:text="@string/chapter_cover_rating_label"
                     android:textSize="@dimen/size_text_small"/>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/txtCountRating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/black"
+                        android:fontFamily="@font/montserrat_regular"
+                        android:gravity="center"
+                        android:text=""
+                        android:textSize="@dimen/size_text_small"/>
+
+                    <com.dede.dedegame.presentation.widget.decimalRatingBar.DecimalRatingBar
+                        android:id="@+id/ratingBar"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:srb_numberOfStars="5"
+                        app:srb_rating="0"
+                        app:srb_stepSize="1"
+                        app:srb_borderColor="@color/gray_300"
+                        app:srb_fillColor="@color/srb_golden_stars"
+                        android:layout_marginStart="@dimen/margin_between_part_in_item_8dp"
+                        android:layout_marginEnd="@dimen/margin_between_part_in_item_8dp"/>
+
+                </LinearLayout>
+
                 <TextView
-                    android:id="@+id/txtRate"
+                    android:id="@+id/txtRating"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textColor="@color/black"
                     android:fontFamily="@font/montserrat_regular"
-                    android:textSize="@dimen/size_text_small"/>
+                    android:gravity="center"
+                    android:textSize="@dimen/size_text_very_small"/>
 
             </LinearLayout>
 

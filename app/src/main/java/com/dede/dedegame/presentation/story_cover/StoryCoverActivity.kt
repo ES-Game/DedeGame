@@ -9,12 +9,14 @@ import com.dede.dedegame.AppConfig
 import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
+import com.dede.dedegame.domain.model.Rating
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.domain.usecase.LikeCommentStory
+import com.dede.dedegame.domain.usecase.RatingStoryAction
 import com.dede.dedegame.domain.usecase.RefreshToken
 import com.dede.dedegame.domain.usecase.UnLikeCommentStory
 import com.dede.dedegame.presentation.chapter.ChapterActivity
@@ -35,14 +37,15 @@ import com.quangph.jetpack.JetActivity
 @Layout(R.layout.activity_story_cover)
 class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
-    private var storyId = -1
+    private var mStoryId = -1
     private lateinit var listComment: List<Comment>
+    private lateinit var mStoryDetail: StoryDetail
     override fun onPresenterReady() {
         super.onPresenterReady()
-        storyId = intent.getIntExtra("storyId", -1)
-        trackingOnStoryCoverScreen(PARAM_STORY, storyId)
-        getStory(storyId)
-        getComments(storyId, true)
+        mStoryId = intent.getIntExtra("storyId", -1)
+        trackingOnStoryCoverScreen(PARAM_STORY, mStoryId)
+        getStory(mStoryId)
+        getComments(mStoryId, true)
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -52,11 +55,11 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                 if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
                     when (command.comment?.statusLike) {
                         Comment.LikeStatus.LIKED -> {
-                            unLikeCommentStory(storyId, command.comment.id!!)
+                            unLikeCommentStory(mStoryId, command.comment.id!!)
                         }
 
                         Comment.LikeStatus.NOT_YET_LIKED -> {
-                            likeCommentStory(storyId, command.comment.id!!)
+                            likeCommentStory(mStoryId, command.comment.id!!)
                         }
 
                         else -> {
@@ -65,7 +68,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                                 AppConfig.clientId,
                                 AppConfig.clientSecret
                             ) {
-                                getComments(storyId, true)
+                                getComments(mStoryId, true)
                             }
                         }
                     }
@@ -80,7 +83,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
             is StoryCoverView.OnclickReplyCmd -> {
                 if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
-                    gotoCommentDetail(storyId, command.comment, command.comments)
+                    gotoCommentDetail(mStoryId, command.comment, command.comments)
                 } else {
                     Toast.makeText(
                         this,
@@ -92,7 +95,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
 
             is StoryCoverView.ViewCommentCmd -> {
                 if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
-                    gotoCommentDetail(storyId, null, command.comments)
+                    gotoCommentDetail(mStoryId, null, command.comments)
                 } else {
                     Toast.makeText(
                         this,
@@ -110,6 +113,10 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
             is StoryCoverView.GotoChapterBySelectChapterCmd -> {
                 trackingTapEventStoryCover(EVENT_TAP_CHAPTER_ITEM, PARAM_CHAPTER, command.chapterId)
                 gotoChapter(command.item, command.chapterId)
+            }
+
+            is StoryCoverView.RatingStoryCmd -> {
+                ratingStory(command.newRate, command.oldRate, command.count)
             }
 
             is StoryCoverView.OnBackCmd -> {
@@ -135,6 +142,7 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     super.onSuccess(responseValue)
                     hideLoading()
                     responseValue?.let {
+                        mStoryDetail = it
                         mvpView.fillDataToTopGroup(it)
                         mvpView.fillDataToSummary(it)
                         if (!it.chapters.isNullOrEmpty()) {
@@ -312,6 +320,42 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     }
                 }
             })
+    }
+
+    private fun ratingStory(newRate: Float, oldRate: Float, count: Int) {
+        val rv = RatingStoryAction.RV().apply {
+            this.storyId = mStoryId
+            this.rating = newRate.toInt()
+        }
+        actionManager.executeAction(RatingStoryAction(), rv,
+            object : Action.SimpleActionCallback<Rating>() {
+                override fun onSuccess(responseValue: Rating?) {
+                    super.onSuccess(responseValue)
+                    if (responseValue != null) {
+                        mStoryDetail.count = responseValue.count
+                        mStoryDetail.score = newRate
+                    }
+                    mStoryDetail?.let {
+                        mvpView.fillDataToTopGroup(it)
+                    }
+                    Toast.makeText(this@StoryCoverActivity, getString(R.string.story_cover_rating_success), Toast.LENGTH_SHORT)
+                        .show()
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                    mStoryDetail?.let {
+                        mvpView.fillDataToTopGroup(it)
+                    }
+                }
+            }
+        )
     }
 
     private fun gotoChapter(storyDetail: StoryDetail, chapterId: Int) {

@@ -5,6 +5,7 @@ import com.dede.dedegame.repo.home.OldHomeResponse
 import com.dede.dedegame.repo.home.RankResponse
 import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
+import com.dede.dedegame.repo.story.RatingResponse
 import com.dede.dedegame.repo.temp.comment.CommentResponse
 import com.dede.dedegame.repo.temp.comment.LikedResponse
 import com.dede.dedegame.repo.temp.comment.ListCommentResponse
@@ -42,7 +43,9 @@ interface ApiService {
     ): Call<RankResponse>
 
     @GET("story/{storyId}")
-    fun getStoryDetail(@Path("storyId") storyId: Int): Call<StoryDetailResponse>
+    fun getStoryDetail(
+        @Header("Authorization") authToken: String,
+        @Path("storyId") storyId: Int): Call<StoryDetailResponse>
 
     @FormUrlEncoded
     @POST("auth/login")
@@ -175,4 +178,12 @@ interface ApiService {
         @Field("chapter_id") chapterId: Int,
         @Field("comment_id") commentId: Int,
     ): Call<LikedResponse>
+
+    @FormUrlEncoded
+    @POST("rate-story")
+    fun ratingStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") storyId: Int,
+        @Field("rating") rating: Int,
+    ): Call<RatingResponse>
 }

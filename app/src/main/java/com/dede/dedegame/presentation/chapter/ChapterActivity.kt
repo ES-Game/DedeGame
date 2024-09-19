@@ -1,5 +1,6 @@
 package com.dede.dedegame.presentation.chapter
 
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
@@ -23,6 +24,8 @@ import com.quangph.jetpack.JetActivity
 @Layout(R.layout.activity_chapter)
 class ChapterActivity : JetActivity<ChapterView>() {
     private var mChapterId = -1
+    private lateinit var mediaPlayer: MediaPlayer
+    private var isPlaying = false
     override fun onPresenterReady() {
         super.onPresenterReady()
 
@@ -38,6 +41,7 @@ class ChapterActivity : JetActivity<ChapterView>() {
                 trackingOnChapterScreen(PARAM_STORY, story.id)
             }
         }
+        initMediaPlayer()
     }
 
     override fun onExecuteCommand(command: ICommand) {
@@ -53,6 +57,18 @@ class ChapterActivity : JetActivity<ChapterView>() {
 
             is ChapterView.RefreshMenuCmd -> {
                 refreshStateItemViewMenu(command.listMenu, command.chapters, command.chapterId)
+            }
+
+            is ChapterView.ChangeStateSoundCmd -> {
+                if (isPlaying) {
+                    mediaPlayer.pause()
+//                    playButton.text = "Play"
+                } else {
+                    mediaPlayer.start()
+//                    playButton.text = "Pause"
+                }
+                isPlaying = !isPlaying
+                mvpView.setStateSoundMenu(isPlaying)
             }
 
             is ChapterView.MoveCommentChapterCmd -> {
@@ -146,6 +162,14 @@ class ChapterActivity : JetActivity<ChapterView>() {
         mvpView.loadChapterContent(chapterLink)
     }
 
+    private fun initMediaPlayer() {
+        mediaPlayer = MediaPlayer.create(this, R.raw.asmr)
+        mediaPlayer.setOnCompletionListener {
+//            playButton.text = "Play"
+            isPlaying = false
+        }
+    }
+
 
     class ChapterInput() : IScreenData {
         var storyDetail: StoryDetail? = null
@@ -197,6 +221,11 @@ class ChapterActivity : JetActivity<ChapterView>() {
             this.paramValue = paramValue.toString()
         }
         DedeFirebaseTracker.track(fbModel)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        mediaPlayer.release()
     }
 
     inner class FirebaseLoginModel : DedeFirebaseTrackerModel() {

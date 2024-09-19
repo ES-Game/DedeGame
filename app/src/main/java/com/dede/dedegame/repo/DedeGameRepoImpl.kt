@@ -7,6 +7,7 @@ import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
+import com.dede.dedegame.domain.model.Rating
 import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.StoryListDataPage
@@ -165,7 +166,7 @@ class DedeGameRepoImpl : IDedeGameRepo {
     override fun getStoryDetail(storyId: Int): StoryDetail {
         val service =
             createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
-        return service.getStoryDetail(storyId).invokeApi {
+        return service.getStoryDetail("Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!, storyId).invokeApi {
             StoryDetail().apply {
                 this.id = it.data?.id
                 this.title = it.data?.title
@@ -579,6 +580,21 @@ class DedeGameRepoImpl : IDedeGameRepo {
             commentId
         ).invokeApi {
             it.data!!
+        }
+    }
+
+    override fun ratingStory(storyId: Int, rating: Int): Rating {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.ratingStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId,
+            rating
+        ).invokeApi {
+            Rating().apply {
+                this.count =  it.data?.count
+                this.score =  it.data?.score
+            }
         }
     }
 }

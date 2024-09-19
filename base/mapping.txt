@@ -2,8 +2,8 @@
 # compiler_version: 4.0.52
 # common_typos_disable
 # {"id":"com.android.tools.r8.mapping","version":"2.1"}
-# pg_map_id: 8167491
-# pg_map_hash: SHA-256 81674912c95455139d13449341c4705b10bff1267f1e1cdced244c9370ab1735
+# pg_map_id: 26a58b0
+# pg_map_hash: SHA-256 26a58b07b7a19251b4586032babc11e4a1bf32d8de18f523b51a35c8897af78c
 com.quangph.base.cache.CacheAppEvent -> com.quangph.base.cache.CacheAppEvent:
     int mEventType -> a
     1:2:void <init>(int):11:12 -> <init>
@@ -383,6 +383,8 @@ com.quangph.base.common.converter.Mapper$srcPropertyNames$2 -> com.quangph.base.
     107:211:java.lang.Object invoke():30 -> invoke
 com.quangph.base.common.converter.MapperKt -> com.quangph.base.common.converter.MapperKt:
 # {"id":"sourceFile","fileName":"Mapper.kt"}
+com.quangph.base.common.feature.IFeature -> com.quangph.base.common.feature.IFeature:
+# {"id":"sourceFile","fileName":"IFeature.kt"}
 com.quangph.base.dispatcher.BaseDispatcher -> com.quangph.base.dispatcher.BaseDispatcher:
     java.lang.ThreadLocal mQueue -> a
     java.lang.ThreadLocal mDispatching -> b

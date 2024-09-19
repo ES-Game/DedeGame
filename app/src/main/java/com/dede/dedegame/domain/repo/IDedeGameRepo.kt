@@ -3,6 +3,7 @@ package com.dede.dedegame.domain.repo
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.OldHome
 import com.dede.dedegame.domain.model.Rank
+import com.dede.dedegame.domain.model.Rating
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.StoryListDataPage
 import com.dede.dedegame.domain.model.UserInfo
@@ -61,4 +62,5 @@ interface IDedeGameRepo {
 
     fun likeCommentChapter(chapterId: Int, commentId: Int): Int
     fun unlikeCommentChapter(chapterId: Int, commentId: Int): Int
+    fun ratingStory(storyId: Int, rating: Int): Rating
 }

@@ -23,9 +23,12 @@
     <dimen name="size_icon_30dp">30dp</dimen>
     <dimen name="size_icon_35dp">35dp</dimen>
     <dimen name="size_icon_40dp">40dp</dimen>
+    <dimen name="size_icon_42dp">42dp</dimen>
+    <dimen name="size_icon_48dp">48dp</dimen>
     <dimen name="size_icon_58dp">58dp</dimen>
 
     <dimen name="margin_left_right_layout">16dp</dimen>
+    <dimen name="margin_left_right_layout_small">8dp</dimen>
 
     <dimen name="padding_icon_toolbar">16dp</dimen>
 
@@ -42,6 +45,11 @@
 
     <dimen name="margin_left_right_decorate">24dp</dimen>
     <dimen name="margin_top_bottom_decorate">16dp</dimen>
+    <dimen name="margin_left_right_decorate_16dp">16dp</dimen>
+
+
+    <dimen name="size_view_42dp">42dp</dimen>
+    <dimen name="size_view_48dp">48dp</dimen>
 
 
 

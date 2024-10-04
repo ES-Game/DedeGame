@@ -124,7 +124,7 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <ImageView
-                    android:id="@+id/imvFavorite"
+                    android:id="@+id/imvLike"
                     android:layout_width="@dimen/size_icon_medium"
                     android:layout_height="@dimen/size_icon_medium"
                     android:background="@drawable/ic_heart"/>
@@ -217,6 +217,37 @@
                     app:layout_constraintVertical_bias="0.0" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <LinearLayout
+                android:id="@+id/constraintLayout5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_small_between_part_in_item"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/constraintLayout53"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout3">
+
+                <ImageView
+                    android:id="@+id/imvBookmark"
+                    android:layout_width="@dimen/size_icon_medium"
+                    android:layout_height="@dimen/size_icon_medium"
+                    android:background="@drawable/ic_bookmark_disable" />
+
+                <TextView
+                    android:id="@+id/txtBookmark"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/margin_small_between_part_in_item"
+                    android:fontFamily="@font/montserrat_regular"
+                    android:textColor="@color/black"
+                    android:text="@string/story_cover_bookmark_label"
+                    android:textSize="@dimen/size_text_very_small" />
+
+            </LinearLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

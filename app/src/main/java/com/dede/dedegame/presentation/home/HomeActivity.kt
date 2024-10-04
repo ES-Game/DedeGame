@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.dede.dedegame.R
+import com.dede.dedegame.extension.startActivityExt
+import com.dede.dedegame.presentation.profile.ProfileActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
@@ -12,7 +14,7 @@ import com.quangph.jetpack.JetActivity
 @Layout(R.layout.activity_home)
 class HomeActivity : JetActivity<HomeView>() {
 
-    companion object{
+    companion object {
         const val NOTIFICATION_PERMISSION_REQUEST_CODE: Int = 11112
     }
 
@@ -35,6 +37,9 @@ class HomeActivity : JetActivity<HomeView>() {
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
         when (command) {
+            is HomeView.MoveProfileCmd -> {
+                startActivityExt(ProfileActivity::class.java)
             }
         }
     }
+}

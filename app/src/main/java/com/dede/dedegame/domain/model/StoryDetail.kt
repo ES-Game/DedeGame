@@ -3,6 +3,8 @@ package com.dede.dedegame.domain.model
 import android.os.Parcel
 import com.dede.dedegame.extension.parcel.KParcelable
 import com.dede.dedegame.extension.parcel.parcelableCreator
+import com.dede.dedegame.extension.readEnum
+import com.dede.dedegame.extension.writeEnum
 
 class StoryDetail() : KParcelable {
     var id: Int? = null
@@ -17,8 +19,8 @@ class StoryDetail() : KParcelable {
     var likes: Int? = null
     var comments: Int? = null
     var follows: Int? = null
-    var followed: Int? = null
-    var liked: Int? = null
+    var followed= InteractionState.NOT_LOGIN
+    var liked = InteractionState.NOT_LOGIN
     var publishedAt: String? = null
     var createdAt: String? = null
     var updatedAt: String? = null
@@ -39,8 +41,8 @@ class StoryDetail() : KParcelable {
         likes = parcel.readInt()
         comments = parcel.readInt()
         follows = parcel.readInt()
-        followed = parcel.readInt()
-        liked = parcel.readInt()
+        followed = parcel.readEnum<InteractionState>()
+        liked = parcel.readEnum<InteractionState>()
         publishedAt = parcel.readString()
         createdAt = parcel.readString()
         updatedAt = parcel.readString()
@@ -62,8 +64,8 @@ class StoryDetail() : KParcelable {
         likes?.let { parcel.writeInt(it) }
         comments?.let { parcel.writeInt(it) }
         follows?.let { parcel.writeInt(it) }
-        followed?.let { parcel.writeInt(it) }
-        liked?.let { parcel.writeInt(it) }
+        parcel.writeEnum(followed)
+        parcel.writeEnum(liked)
         parcel.writeString(publishedAt)
         parcel.writeString(createdAt)
         parcel.writeString(updatedAt)
@@ -71,6 +73,10 @@ class StoryDetail() : KParcelable {
         parcel.writeTypedList(authors)
         parcel.writeTypedList(tags)
 
+    }
+
+    enum class InteractionState {
+        NOT_LOGIN, NOT_YET_INTERACTED, INTERACTED
     }
 
     companion object {

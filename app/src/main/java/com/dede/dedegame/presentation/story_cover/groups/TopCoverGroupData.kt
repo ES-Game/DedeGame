@@ -4,6 +4,7 @@ import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.appcompat.content.res.AppCompatResources
 import com.bumptech.glide.Glide
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
@@ -51,6 +52,8 @@ class TopCoverGroupData(data: StoryDetail?) :
         GroupRclvVH<StoryDetail, TopCoverGroupData>(itemView) {
 
         private var imvThumbnail: ImageView
+        private var imvLike: ImageView
+        private var imvBookmark: ImageView
         private var txtStoryName: TextView
         private var txtReadNow: TextView
         private var txtReadLater: TextView
@@ -66,6 +69,8 @@ class TopCoverGroupData(data: StoryDetail?) :
 
         init {
             imvThumbnail = itemView.findViewById(R.id.imvThumbnail)
+            imvLike = itemView.findViewById(R.id.imvLike)
+            imvBookmark = itemView.findViewById(R.id.imvBookmark)
             txtStoryName = itemView.findViewById(R.id.txtStoryName)
             txtReadNow = itemView.findViewById(R.id.txtReadNow)
             txtReadLater = itemView.findViewById(R.id.txtReadLater)
@@ -101,6 +106,30 @@ class TopCoverGroupData(data: StoryDetail?) :
                     homeTabGroupData.onClickTopCoverItem?.onClickReadNow(vhData)
                 }
 
+                when (it.liked) {
+                    StoryDetail.InteractionState.INTERACTED -> {
+                        imvLike.background = AppCompatResources.getDrawable(imvLike.context, R.drawable.ic_heart)
+                    }
+                    StoryDetail.InteractionState.NOT_YET_INTERACTED -> {
+                        imvLike.background = AppCompatResources.getDrawable(imvLike.context, R.drawable.ic_unlike)
+                    }
+                    else -> {
+                        imvLike.background = AppCompatResources.getDrawable(imvLike.context, R.drawable.ic_unlike)
+                    }
+                }
+
+                when (it.followed) {
+                    StoryDetail.InteractionState.INTERACTED -> {
+                        imvBookmark.background = AppCompatResources.getDrawable(imvBookmark.context, R.drawable.ic_bookmark)
+                    }
+                    StoryDetail.InteractionState.NOT_YET_INTERACTED -> {
+                        imvBookmark.background = AppCompatResources.getDrawable(imvBookmark.context, R.drawable.ic_bookmark_disable)
+                    }
+                    else -> {
+                        imvBookmark.background = AppCompatResources.getDrawable(imvBookmark.context, R.drawable.ic_bookmark_disable)
+                    }
+                }
+
                 if (!it.authors.isNullOrEmpty()) {
                     txtStatusLabel.visibility = View.VISIBLE
                     txtStatus.visibility = View.VISIBLE
@@ -132,6 +161,14 @@ class TopCoverGroupData(data: StoryDetail?) :
                     )
                 }
 
+                imvLike.setOnClickListener {
+                    homeTabGroupData.onClickTopCoverItem?.onClickLikeStory(vhData)
+                }
+
+                imvBookmark.setOnClickListener {
+                    homeTabGroupData.onClickTopCoverItem?.onClickBookmarkStory(vhData)
+                }
+
                 ratingBar.setOnRatingBarChangeListener { _, rating, fromUser ->
                     if (fromUser) {
                         homeTabGroupData.onClickTopCoverItem?.onRatingChanged(
@@ -147,6 +184,8 @@ class TopCoverGroupData(data: StoryDetail?) :
     }
 
     interface OnClickTopCoverItem {
+        fun onClickLikeStory(story: StoryDetail)
+        fun onClickBookmarkStory(story: StoryDetail)
         fun onClickReadNow(item: StoryDetail)
         fun onClickReadLater(item: StoryDetail)
         fun onRatingChanged(newRate: Float, oldRate: Float, count: Int)

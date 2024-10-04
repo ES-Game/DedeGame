@@ -61,7 +61,7 @@ inline fun <reified Output : IScreenData> returnData(data: Output): Intent {
     return itn
 }
 
-fun Context.startActivity(activityClass: Class<out Activity>, extras: Intent.() -> Unit = {}) {
+fun Context.startActivityExt(activityClass: Class<out Activity>, extras: Intent.() -> Unit = {}) {
     val intent = Intent(this, activityClass)
     intent.extras()
     startActivity(intent)

@@ -11,7 +11,7 @@ import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.usecase.RegisterAction
-import com.dede.dedegame.extension.startActivity
+import com.dede.dedegame.extension.startActivityExt
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.HomeActivity
@@ -39,7 +39,7 @@ class RegisterActivity : JetActivity<RegisterView>() {
             }
 
             is RegisterView.MoveLoginCmd -> {
-                startActivity(LoginActivity::class.java)
+                startActivityExt(LoginActivity::class.java)
             }
 
             is RegisterView.OnClickRegisterCmd -> {

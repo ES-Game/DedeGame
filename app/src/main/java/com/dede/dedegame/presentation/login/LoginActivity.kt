@@ -11,7 +11,7 @@ import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.usecase.LoginAction
-import com.dede.dedegame.extension.startActivity
+import com.dede.dedegame.extension.startActivityExt
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.forget_password.ForgetPasswordActivity
@@ -40,11 +40,11 @@ class LoginActivity : JetActivity<LoginView>() {
             }
 
             is LoginView.MoveRegisterCmd -> {
-                startActivity(RegisterActivity::class.java)
+                startActivityExt(RegisterActivity::class.java)
             }
 
             is LoginView.MoveForgetPasswordCmd -> {
-                startActivity(ForgetPasswordActivity::class.java)
+                startActivityExt(ForgetPasswordActivity::class.java)
             }
 
             is LoginView.OnClickLoginCmd -> {

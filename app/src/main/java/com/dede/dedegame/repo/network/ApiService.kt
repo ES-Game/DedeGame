@@ -7,7 +7,7 @@ import com.dede.dedegame.repo.home.StoryDetailResponse
 import com.dede.dedegame.repo.payment.PaymentResponse
 import com.dede.dedegame.repo.story.RatingResponse
 import com.dede.dedegame.repo.temp.comment.CommentResponse
-import com.dede.dedegame.repo.temp.comment.LikedResponse
+import com.dede.dedegame.repo.temp.comment.InteractionResponse
 import com.dede.dedegame.repo.temp.comment.ListCommentResponse
 import com.dede.dedegame.repo.temp.mainGame.ListGameResponse
 import com.dede.dedegame.repo.temp.mainGame.ListStoryResponse
@@ -121,7 +121,7 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Field("story_id") storyId: Int,
         @Field("comment_id") commentId: Int,
-    ): Call<LikedResponse>
+    ): Call<InteractionResponse>
 
     @FormUrlEncoded
     @POST("unlike-story-comment")
@@ -129,7 +129,7 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Field("story_id") storyId: Int,
         @Field("comment_id") commentId: Int,
-    ): Call<LikedResponse>
+    ): Call<InteractionResponse>
 
     @FormUrlEncoded
     @POST("auth/refresh-token")
@@ -169,7 +169,7 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Field("chapter_id") chapterId: Int,
         @Field("comment_id") commentId: Int,
-    ): Call<LikedResponse>
+    ): Call<InteractionResponse>
 
     @FormUrlEncoded
     @POST("unlike-chapter-comment")
@@ -177,7 +177,7 @@ interface ApiService {
         @Header("Authorization") authToken: String,
         @Field("chapter_id") chapterId: Int,
         @Field("comment_id") commentId: Int,
-    ): Call<LikedResponse>
+    ): Call<InteractionResponse>
 
     @FormUrlEncoded
     @POST("rate-story")
@@ -186,4 +186,39 @@ interface ApiService {
         @Field("story_id") storyId: Int,
         @Field("rating") rating: Int,
     ): Call<RatingResponse>
+
+    @FormUrlEncoded
+    @POST("like-story")
+    fun likeStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") chapterId: Int
+    ): Call<InteractionResponse>
+
+    @FormUrlEncoded
+    @POST("unlike-story")
+    fun unlikeStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") chapterId: Int
+    ): Call<InteractionResponse>
+
+    @FormUrlEncoded
+    @POST("follow-story")
+    fun followStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") chapterId: Int
+    ): Call<InteractionResponse>
+
+    @FormUrlEncoded
+    @POST("unfollow-story")
+    fun unFollowStory(
+        @Header("Authorization") authToken: String,
+        @Field("story_id") chapterId: Int
+    ): Call<InteractionResponse>
+
+    @GET("followed-stories")
+    fun getFollowedStories(
+        @Header("Authorization") authToken: String,
+        @Query("page") page: Int
+    ): Call<ListStoryResponse>
+
 }

@@ -13,12 +13,16 @@ import com.dede.dedegame.domain.model.Rating
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.UserInfo
 import com.dede.dedegame.domain.model.comment.Comment
+import com.dede.dedegame.domain.usecase.FollowStoryAction
 import com.dede.dedegame.domain.usecase.GetCommentByStoryId
 import com.dede.dedegame.domain.usecase.GetStoryDetailAction
 import com.dede.dedegame.domain.usecase.LikeCommentStory
+import com.dede.dedegame.domain.usecase.LikeStoryAction
 import com.dede.dedegame.domain.usecase.RatingStoryAction
 import com.dede.dedegame.domain.usecase.RefreshToken
+import com.dede.dedegame.domain.usecase.UnFollowStoryAction
 import com.dede.dedegame.domain.usecase.UnLikeCommentStory
+import com.dede.dedegame.domain.usecase.UnLikeStoryAction
 import com.dede.dedegame.presentation.chapter.ChapterActivity
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
@@ -51,7 +55,51 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
     override fun onExecuteCommand(command: ICommand) {
         super.onExecuteCommand(command)
         when (command) {
-            is StoryCoverView.OnclickLikedCmd -> {
+            is StoryCoverView.LikedStoryCmd -> {
+                when (command.story.liked) {
+                    StoryDetail.InteractionState.INTERACTED -> {
+                        unLikeStory(mStoryId)
+                    }
+
+                    StoryDetail.InteractionState.NOT_YET_INTERACTED -> {
+                        likeStory(mStoryId)
+                    }
+
+                    else -> {
+                        refreshToken(
+                            DedeSharedPref.getUserInfo()?.authen?.refreshToken!!,
+                            AppConfig.clientId,
+                            AppConfig.clientSecret
+                        ) {
+                            getStory(mStoryId)
+                        }
+                    }
+                }
+            }
+
+            is StoryCoverView.BookmarkStoryCmd -> {
+                when (command.story.followed) {
+                    StoryDetail.InteractionState.INTERACTED -> {
+                        unFollowStory(mStoryId)
+                    }
+
+                    StoryDetail.InteractionState.NOT_YET_INTERACTED -> {
+                        followStory(mStoryId)
+                    }
+
+                    else -> {
+                        refreshToken(
+                            DedeSharedPref.getUserInfo()?.authen?.refreshToken!!,
+                            AppConfig.clientId,
+                            AppConfig.clientSecret
+                        ) {
+                            getStory(mStoryId)
+                        }
+                    }
+                }
+            }
+
+            is StoryCoverView.OnclickLikedCommentCmd -> {
                 if (DedeSharedPref.getUserInfo()?.authen?.accessToken != null && !DedeSharedPref.getUserInfo()?.authen?.accessToken?.isEmpty()!!) {
                     when (command.comment?.statusLike) {
                         Comment.LikeStatus.LIKED -> {
@@ -185,6 +233,126 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     super.onError(e)
                     hideLoading()
                     Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT).show()
+                }
+            })
+    }
+
+    private fun followStory(id: Int) {
+        val rv = FollowStoryAction.RV().apply {
+            this.storyId = id
+        }
+
+        mActionManager.executeAction(
+            FollowStoryAction(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        mStoryDetail.followed = StoryDetail.InteractionState.INTERACTED
+                        mStoryDetail.follows = it
+                        mvpView.fillDataToTopGroup(mStoryDetail)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    private fun unFollowStory(id: Int) {
+        val rv = UnFollowStoryAction.RV().apply {
+            this.storyId = id
+        }
+
+        mActionManager.executeAction(
+            UnFollowStoryAction(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        mStoryDetail.followed = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                        mStoryDetail.follows = it
+                        mvpView.fillDataToTopGroup(mStoryDetail)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    private fun likeStory(id: Int) {
+        val rv = LikeStoryAction.RV().apply {
+            this.storyId = id
+        }
+
+        mActionManager.executeAction(
+            LikeStoryAction(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        mStoryDetail.liked = StoryDetail.InteractionState.INTERACTED
+                        mStoryDetail.likes = it
+                        mvpView.fillDataToTopGroup(mStoryDetail)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
+                }
+            })
+    }
+
+    private fun unLikeStory(id: Int) {
+        val rv = UnLikeStoryAction.RV().apply {
+            this.storyId = id
+        }
+
+        mActionManager.executeAction(
+            UnLikeStoryAction(),
+            rv,
+            object : Action.SimpleActionCallback<Int>() {
+                override fun onSuccess(responseValue: Int?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        mStoryDetail.liked = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                        mStoryDetail.likes = it
+                        mvpView.fillDataToTopGroup(mStoryDetail)
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(this@StoryCoverActivity, e.message, Toast.LENGTH_SHORT)
+                            .show()
+                    }
                 }
             })
     }
@@ -338,7 +506,11 @@ class StoryCoverActivity : JetActivity<StoryCoverView>() {
                     mStoryDetail?.let {
                         mvpView.fillDataToTopGroup(it)
                     }
-                    Toast.makeText(this@StoryCoverActivity, getString(R.string.story_cover_rating_success), Toast.LENGTH_SHORT)
+                    Toast.makeText(
+                        this@StoryCoverActivity,
+                        getString(R.string.story_cover_rating_success),
+                        Toast.LENGTH_SHORT
+                    )
                         .show()
                 }
 

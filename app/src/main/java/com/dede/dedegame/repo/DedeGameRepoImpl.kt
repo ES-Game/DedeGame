@@ -180,8 +180,16 @@ class DedeGameRepoImpl : IDedeGameRepo {
                 this.likes = it.data?.likes
                 this.comments = it.data?.comments
                 this.follows = it.data?.follows
-                this.followed = it.data?.followed
-                this.liked = it.data?.liked
+                when (it.data?.followed) {
+                    1 -> this.followed = StoryDetail.InteractionState.INTERACTED
+                    0 -> this.followed = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                    else -> this.followed = StoryDetail.InteractionState.NOT_LOGIN
+                }
+                when (it.data?.liked) {
+                    1 -> this.liked = StoryDetail.InteractionState.INTERACTED
+                    0 -> this.liked = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                    else -> this.liked = StoryDetail.InteractionState.NOT_LOGIN
+                }
                 this.publishedAt = it.data?.publishedAt
                 this.createdAt = it.data?.createdAt
                 this.updatedAt = it.data?.updatedAt
@@ -594,6 +602,68 @@ class DedeGameRepoImpl : IDedeGameRepo {
             Rating().apply {
                 this.count =  it.data?.count
                 this.score =  it.data?.score
+            }
+        }
+    }
+
+    override fun likeStory(storyId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.likeStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun unlikeStory(storyId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.unlikeStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun followStory(storyId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.followStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun unFollowStory(storyId: Int): Int {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.unFollowStory(
+            "Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!,
+            storyId
+        ).invokeApi {
+            it.data!!
+        }
+    }
+
+    override fun getFollowedStories(page: Int): StoryListDataPage<StoryDetail> {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.getFollowedStories("Bearer " + DedeSharedPref.getUserInfo()?.authen?.accessToken!!, page).invokeApi {
+            StoryListDataPage<StoryDetail>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.dataList = it.data?.stories?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<StoryDetailData, StoryDetail>(
+                        StoryDetailDataToStoryDetail()
+                    ).convert(it1)
+                }!!
+                this.hasNextPage = this.currentPage <= this.lastPage
             }
         }
     }

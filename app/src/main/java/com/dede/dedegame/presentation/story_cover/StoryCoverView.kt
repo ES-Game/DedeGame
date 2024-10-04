@@ -53,6 +53,14 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
         storyCoverAdapter.addGroup(commentGroupData)
 
         topCoverGroupData.onClickTopCoverItem = object : TopCoverGroupData.OnClickTopCoverItem {
+            override fun onClickLikeStory(story: StoryDetail) {
+                mPresenter.executeCommand(LikedStoryCmd(story))
+            }
+
+            override fun onClickBookmarkStory(story: StoryDetail) {
+                mPresenter.executeCommand(BookmarkStoryCmd(story))
+            }
+
             override fun onClickReadNow(item: StoryDetail) {
                 mPresenter.executeCommand(GotoChapterCmd(item))
             }
@@ -93,7 +101,7 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
             }
 
             override fun onClickLikedComment(comment: Comment?) {
-                mPresenter.executeCommand(OnclickLikedCmd(comment))
+                mPresenter.executeCommand(OnclickLikedCommentCmd(comment))
             }
 
         }
@@ -147,7 +155,9 @@ class StoryCoverView(context: Context?, attrs: AttributeSet?) : BaseConstraintVi
 
     class GotoChapterCmd(val item: StoryDetail) : ICommand
     class GotoChapterBySelectChapterCmd(val item: StoryDetail, val chapterId: Int) : ICommand
-    class OnclickLikedCmd(val comment: Comment?) : ICommand
+    class LikedStoryCmd(val story: StoryDetail) : ICommand
+    class BookmarkStoryCmd(val story: StoryDetail) : ICommand
+    class OnclickLikedCommentCmd(val comment: Comment?) : ICommand
     class OnclickReplyCmd(val comment: Comment?, val comments: List<Comment>) : ICommand
     class ViewCommentCmd(val comments: List<Comment>) : ICommand
     class RatingStoryCmd(val newRate: Float, val oldRate: Float, val count: Int) : ICommand

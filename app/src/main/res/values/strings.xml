@@ -64,6 +64,20 @@
     <string name="chapter_cover_number_rated">Có %d đánh giá</string>
     <string name="chapter_cover_not_yet_rated">Chưa có đánh giá</string>
     <string name="story_cover_rating_success">Đánh giá thành công</string>
+    <string name="story_cover_bookmark_label">Bookmark</string>
+    <string name="story_cover_no_story_summary_yet">Chưa có nội dung tóm tắt</string>
 
+    <string name="profile_setting_title">Cá nhân</string>
+    <string name="profile_setting_logout">Đăng xuất</string>
+    <string name="profile_setting_stories_followed">Đang theo dõi</string>
+    <string name="profile_setting_stories_history">Lịch sử đọc</string>">
+
+    <string name="dialog_user_logout_title">Đăng xuất</string>
+    <string name="dialog_user_logout_content">Bạn có chắc chắn muốn đăng xuất?</string>
+    <string name="dialog_user_logout_cancel">Hủy</string>
+    <string name="dialog_user_logout_confirm">Đăng xuất</string>
+
+
+    <string name="stories_followed_title">Đang theo dõi</string>
 
 </resources>

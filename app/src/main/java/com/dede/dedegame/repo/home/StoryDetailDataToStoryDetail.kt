@@ -6,6 +6,7 @@ import com.dede.dedegame.domain.model.Author
 import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.Tag
+import com.dede.dedegame.domain.model.comment.Comment
 
 
 class StoryDetailDataToStoryDetail: IConverter<StoryDetailData, StoryDetail> {
@@ -23,8 +24,16 @@ class StoryDetailDataToStoryDetail: IConverter<StoryDetailData, StoryDetail> {
             this.likes = source.likes
             this.comments = source.comments
             this.follows = source.follows
-            this.followed = source.followed
-            this.liked = source.liked
+            when (source.followed) {
+                1 -> this.followed = StoryDetail.InteractionState.INTERACTED
+                0 -> this.followed = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                else -> this.followed = StoryDetail.InteractionState.NOT_LOGIN
+            }
+            when (source.liked) {
+                1 -> this.liked = StoryDetail.InteractionState.INTERACTED
+                0 -> this.liked = StoryDetail.InteractionState.NOT_YET_INTERACTED
+                else -> this.liked = StoryDetail.InteractionState.NOT_LOGIN
+            }
             this.publishedAt = source.publishedAt
             this.createdAt = source.createdAt
             this.updatedAt = source.updatedAt

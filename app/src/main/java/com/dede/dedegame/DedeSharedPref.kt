@@ -39,6 +39,11 @@ object DedeSharedPref {
         }
     }
 
+    fun isLoginUser(): Boolean {
+        val user = getUserInfo()
+        return user != null
+    }
+
     fun clearUserInfo() {
         saveUserInfo(null)
     }

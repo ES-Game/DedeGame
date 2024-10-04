@@ -86,6 +86,24 @@
         </activity>
 
         <activity
+            android:name="com.dede.dedegame.presentation.profile.ProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
+            android:name="com.dede.dedegame.presentation.story_followed.StoryBookmarkActivity"
+            android:exported="false"
+            android:parentActivityName=".presentation.home.HomeActivity">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
+        <activity
             android:name="com.dede.dedegame.presentation.forget_password.ForgetPasswordActivity"
             android:exported="false"
             android:parentActivityName=".presentation.home.HomeActivity">

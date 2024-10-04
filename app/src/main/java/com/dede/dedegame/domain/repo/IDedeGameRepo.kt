@@ -63,4 +63,11 @@ interface IDedeGameRepo {
     fun likeCommentChapter(chapterId: Int, commentId: Int): Int
     fun unlikeCommentChapter(chapterId: Int, commentId: Int): Int
     fun ratingStory(storyId: Int, rating: Int): Rating
+    fun likeStory(storyId: Int): Int
+    fun unlikeStory(storyId: Int): Int
+
+    fun followStory(storyId: Int): Int
+    fun unFollowStory(storyId: Int): Int
+
+    fun getFollowedStories(page: Int): StoryListDataPage<StoryDetail>
 }

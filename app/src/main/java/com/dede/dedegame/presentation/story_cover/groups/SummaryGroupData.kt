@@ -57,7 +57,11 @@ class SummaryGroupData(data: StoryDetail?) :
 
         override fun onBind(vhData: StoryDetail?) {
             super.onBind(vhData)
-            txtSummContent.text = vhData?.description
+            if (vhData != null && vhData.description != null && vhData.description!!.isNotEmpty()){
+                txtSummContent.text = vhData?.description
+            } else {
+                txtSummContent.text = txtSummContent.context.getString(R.string.story_cover_no_story_summary_yet)
+            }
         }
 
     }

@@ -221,4 +221,10 @@ interface ApiService {
         @Query("page") page: Int
     ): Call<ListStoryResponse>
 
+    @GET("search")
+    fun searchStory(
+        @Query("q") keyword: String,
+        @Query("page") page: Int
+    ): Call<ListStoryResponse>
+
 }

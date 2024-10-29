@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.dede.dedegame.presentation.story_search.StorySearchView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background_app_common">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/layout_search_toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rcvInfo"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingBottom="24dp"
+        android:clipToPadding="false"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/include" />
+
+    <TextView
+        android:id="@+id/tvEmptyTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/montserrat_medium"
+        android:includeFontPadding="false"
+        android:text="@string/stories_search_empty_result"
+        android:textColor="@color/color_app_common_hint_edt"
+        android:textSize="@dimen/size_text_medium"
+        app:layout_constraintBottom_toBottomOf="@id/rcvInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/rcvInfo"
+        app:layout_constraintVertical_bias="0.5" />
+
+</com.dede.dedegame.presentation.story_search.StorySearchView>

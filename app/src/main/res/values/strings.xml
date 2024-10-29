@@ -70,6 +70,7 @@
     <string name="profile_setting_title">Cá nhân</string>
     <string name="profile_setting_logout">Đăng xuất</string>
     <string name="profile_setting_stories_followed">Đang theo dõi</string>
+    <string name="profile_setting_stories_music_background">Nhạc nền truyện mặc định</string>
     <string name="profile_setting_stories_history">Lịch sử đọc</string>">
 
     <string name="dialog_user_logout_title">Đăng xuất</string>
@@ -79,5 +80,9 @@
 
 
     <string name="stories_followed_title">Đang theo dõi</string>
+    <string name="stories_search_hint">Tìm kiếm kho truyện</string>
+    <string name="stories_search_empty_result">Không tìm thấy kết quả</string>">
+
+    <string name="app_common_coming_soon">Coming soon</string>">
 
 </resources>

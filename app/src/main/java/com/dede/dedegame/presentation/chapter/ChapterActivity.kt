@@ -4,6 +4,7 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.OptionChapter
@@ -153,6 +154,7 @@ class ChapterActivity : JetActivity<ChapterView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
+                    Toast.makeText(this@ChapterActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

@@ -127,7 +127,7 @@ class CommentChapterDialog : BottomSheetDialogFragment() {
         behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
         behavior.state = BottomSheetBehavior.STATE_EXPANDED
 
-        initView()
+        setupView()
     }
 
     override fun onStart() {
@@ -141,7 +141,7 @@ class CommentChapterDialog : BottomSheetDialogFragment() {
         }
     }
 
-    private fun initView() {
+    private fun setupView() {
         containerBack.setOnClickListener {
             dismiss()
             onEventDialogListener?.onRefreshData(hasUpdate)
@@ -271,68 +271,9 @@ class CommentChapterDialog : BottomSheetDialogFragment() {
 
         imvSend.setOnClickListener {
             if (mComment != null) {
-                val rv = ReplyCommentChapter.RV().apply {
-                    this.chapterId = mChapterId!!
-                    this.comment = editText.text.toString()
-                    this.parentId = mComment?.id!!
-                }
-                (activity as ChapterActivity).mActionManager.executeAction(
-                    ReplyCommentChapter(),
-                    rv,
-                    object : Action.SimpleActionCallback<Comment>() {
-                        override fun onSuccess(responseValue: Comment?) {
-                            super.onSuccess(responseValue)
-                            responseValue?.let {
-                                editText.setText("")
-                                currentPage = 0
-                                hasUpdate = true
-                                mLastPage = 1
-                                commentListAdapter.setComments(emptyList())
-                                scrollListener.resetState()
-                                loadMoreItems()
-                            }
-                        }
-
-                        override fun onError(e: ActionException) {
-                            super.onError(e)
-                            if (e.cause is LogoutException) {
-                                logOut()
-                            } else {
-                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    })
+                replyComment()
             } else {
-                val rv = SendCommentToChapter.RV().apply {
-                    this.chapterId = mChapterId!!
-                    this.comment = editText.text.toString()
-                }
-                (activity as ChapterActivity).mActionManager.executeAction(
-                    SendCommentToChapter(),
-                    rv,
-                    object : Action.SimpleActionCallback<Comment>() {
-                        override fun onSuccess(responseValue: Comment?) {
-                            super.onSuccess(responseValue)
-                            responseValue?.let {
-                                editText.setText("")
-                                currentPage = 0
-                                hasUpdate = true
-                                mLastPage = 1
-                                commentListAdapter.setComments(emptyList())
-                                scrollListener.resetState()
-                                loadMoreItems()
-                            }
-                        }
-
-                        override fun onError(e: ActionException) {
-                            super.onError(e)
-                            if (e.cause is LogoutException) {
-                                logOut()
-                            } else {
-                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
-                            }
-                        }
-                    })
+                sendComment()
             }
         }
         scrollListener = object : EndlessRecyclerViewScrollListener(layoutManager) {
@@ -345,6 +286,73 @@ class CommentChapterDialog : BottomSheetDialogFragment() {
         rvComments.addOnScrollListener(scrollListener)
         emptyView.visibility = View.INVISIBLE
         loadMoreItems()
+    }
+
+    private fun replyComment() {
+        val rv = ReplyCommentChapter.RV().apply {
+            this.chapterId = mChapterId!!
+            this.comment = editText.text.toString()
+            this.parentId = mComment?.id!!
+        }
+        (activity as ChapterActivity).mActionManager.executeAction(
+            ReplyCommentChapter(),
+            rv,
+            object : Action.SimpleActionCallback<Comment>() {
+                override fun onSuccess(responseValue: Comment?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        editText.setText("")
+                        currentPage = 0
+                        hasUpdate = true
+                        mLastPage = 1
+                        commentListAdapter.setComments(emptyList())
+                        scrollListener.resetState()
+                        loadMoreItems()
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
+    }
+
+    private fun sendComment() {
+        val rv = SendCommentToChapter.RV().apply {
+            this.chapterId = mChapterId!!
+            this.comment = editText.text.toString()
+        }
+        (activity as ChapterActivity).mActionManager.executeAction(
+            SendCommentToChapter(),
+            rv,
+            object : Action.SimpleActionCallback<Comment>() {
+                override fun onSuccess(responseValue: Comment?) {
+                    super.onSuccess(responseValue)
+                    responseValue?.let {
+                        editText.setText("")
+                        currentPage = 0
+                        hasUpdate = true
+                        mLastPage = 1
+                        commentListAdapter.setComments(emptyList())
+                        scrollListener.resetState()
+                        loadMoreItems()
+                    }
+                }
+
+                override fun onError(e: ActionException) {
+                    super.onError(e)
+                    if (e.cause is LogoutException) {
+                        logOut()
+                    } else {
+                        Toast.makeText(activity, e.message, Toast.LENGTH_SHORT).show()
+                    }
+                }
+            })
     }
 
     private fun loadMoreItems() {

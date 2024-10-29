@@ -41,6 +41,10 @@
     <dimen name="margin_between_part_in_item_12dp">12dp</dimen>
     <dimen name="margin_between_part_in_item_15dp">10dp</dimen>
     <dimen name="margin_between_part_in_item_16dp">16dp</dimen>
+    <dimen name="margin_between_part_in_item_20dp">20dp</dimen>
+    <dimen name="margin_between_part_in_item_21dp">21dp</dimen>
+    <dimen name="margin_between_part_in_item_22dp">22dp</dimen>
+    <dimen name="margin_between_part_in_item_23dp">23dp</dimen>
     <dimen name="margin_between_part_in_item_24dp">24dp</dimen>
 
     <dimen name="margin_left_right_decorate">24dp</dimen>

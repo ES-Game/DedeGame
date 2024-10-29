@@ -667,4 +667,22 @@ class DedeGameRepoImpl : IDedeGameRepo {
             }
         }
     }
+
+    override fun searchStory(keyword: String, page: Int): StoryListDataPage<StoryDetail> {
+        val service =
+            createDefaultService(ApiService::class.java) ?: throw APIException("Api config error")
+        return service.searchStory(keyword, page).invokeApi {
+            StoryListDataPage<StoryDetail>().apply {
+                this.currentPage = it.data?.pagination?.currentPage!!
+                this.lastPage = it.data!!.pagination!!.lastPage!!
+                this.perPage = it.data!!.pagination!!.perPage!!
+                this.dataList = it.data?.stories?.let { it1 ->
+                    com.dede.dedegame.repo.convert.ListConverter<StoryDetailData, StoryDetail>(
+                        StoryDetailDataToStoryDetail()
+                    ).convert(it1)
+                }!!
+                this.hasNextPage = this.currentPage <= this.lastPage
+            }
+        }
+    }
 }

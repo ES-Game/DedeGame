@@ -70,4 +70,5 @@ interface IDedeGameRepo {
     fun unFollowStory(storyId: Int): Int
 
     fun getFollowedStories(page: Int): StoryListDataPage<StoryDetail>
+    fun searchStory(keyword: String, page: Int): StoryListDataPage<StoryDetail>
 }

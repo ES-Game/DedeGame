@@ -1,6 +1,7 @@
 package com.dede.dedegame.presentation.profile
 
 import android.content.Intent
+import android.widget.Toast
 import androidx.fragment.app.FragmentManager
 import com.dede.dedegame.DedeSharedPref
 import com.dede.dedegame.R
@@ -32,7 +33,7 @@ class ProfileActivity : JetActivity<ProfileView>() {
             }
 
             is ProfileView.OnViewProfileDetailCmd -> {
-
+                Toast.makeText(this, this.getString(R.string.app_common_coming_soon), Toast.LENGTH_SHORT).show()
             }
 
             is ProfileView.OnMenuProfileCmd -> {
@@ -67,6 +68,7 @@ class ProfileActivity : JetActivity<ProfileView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
+                    Toast.makeText(this@ProfileActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

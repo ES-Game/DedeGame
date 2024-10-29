@@ -3,6 +3,7 @@ plugins {
     id 'org.jetbrains.kotlin.android'
     id 'com.google.gms.google-services'
     id 'com.google.firebase.crashlytics'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -14,7 +15,7 @@ android {
         minSdk 23
         targetSdk 34
         versionCode 3
-        versionName "1.0.2"
+        versionName "1.0.3"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -47,7 +48,13 @@ dependencies {
     implementation 'com.intuit.sdp:sdp-android:1.0.6'
     implementation 'com.intuit.ssp:ssp-android:1.0.6'
     implementation ("jp.wasabeef:glide-transformations:4.3.0")
+
     implementation ("com.github.bumptech.glide:glide:4.16.0")
+    kapt "com.github.bumptech.glide:compiler:4.16.0"
+    implementation 'com.caverock:androidsvg-aar:1.4'
+    implementation 'com.github.bumptech.glide:annotations:4.11.0'
+    implementation "com.github.bumptech.glide:okhttp3-integration:4.11.0"
+
     // If you want to use the GPU Filters
 //    implementation ("jp.co.cyberagent.android:gpuimage:2.1.0")
     implementation "androidx.cardview:cardview:1.0.0"

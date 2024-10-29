@@ -13,6 +13,7 @@
     <color name="color_app_common_grey">#80D8D7D7</color>
     <color name="color_app_common_grey_disable">#80D8D7D7</color>
     <color name="color_app_common_hint_edt">#B9B9BB</color>
+    <color name="color_app_search_hint_edt">#D8D8D8</color>
 
     <color name="black_opacity_80">#CC000000</color>
     <color name="orange_300_opacity_80">#CCF47820</color>
@@ -37,6 +38,7 @@
     </color>
     <color name="color_background_common_dialog">#80000000</color>
     <color name="srb_golden_stars">#FFC619</color>
+    <color name="color_mash_search_edt">#1A000000</color>
 
 
 </resources>

@@ -3,6 +3,7 @@ package com.dede.dedegame.presentation.home
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,9 +23,10 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
     private lateinit var adapter: HomeAdapter
     private lateinit var vpMain: ViewPager2
     private lateinit var bnvMain: RecyclerView
-
+    private lateinit var imvSearch: ImageView
     override fun onInitView() {
         super.onInitView()
+        imvSearch = findViewById(R.id.imvSearch)
         vpMain = findViewById(R.id.vpHome)
         bnvMain = findViewById(R.id.bottom_nav)
         setupToolbar()
@@ -53,18 +55,22 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
                 when (pos) {
                     0 -> {
                         vpMain.currentItem = 0
+                        imvSearch.visibility = View.GONE
                     }
 
                     1 -> {
                         vpMain.currentItem = 1
+                        imvSearch.visibility = View.VISIBLE
                     }
 
                     2 -> {
                         vpMain.currentItem = 2
+                        imvSearch.visibility = View.GONE
                     }
 
                     3 -> {
                         vpMain.currentItem = 3
+                        imvSearch.visibility = View.GONE
                     }
                 }
             }
@@ -78,9 +84,9 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
 //        val txtCenterTitle : TextView = findViewById(R.id.txtCenterTitle)
 //        val imvNoti : ImageView = findViewById(R.id.imvNoti)
 //        val imvEnd : ImageView = findViewById(R.id.imvEnd)
-
 //        imvNoti.setImageResource(R.drawable.ic_app_notification)
 //        imvEnd.setImageResource(R.drawable.ic_app_email)
+        imvSearch.visibility = View.GONE
         if (DedeSharedPref.isLoginUser()) {
             containerAvatar.visibility = View.VISIBLE
             txtStartTitle.text = DedeSharedPref.getUserInfo()?.user?.name
@@ -93,9 +99,14 @@ class HomeView(context: Context?, attrs: AttributeSet?) : BaseConstraintView(con
         containerAvatar.setOnClickListener {
             mPresenter.executeCommand(MoveProfileCmd())
         }
+
+        imvSearch.setOnClickListener {
+            mPresenter.executeCommand(MoveSearchStoryCmd())
+        }
     }
 
     class MoveProfileCmd() : ICommand {}
+    class MoveSearchStoryCmd() : ICommand {}
 
 }
 

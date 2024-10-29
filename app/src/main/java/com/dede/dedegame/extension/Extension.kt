@@ -11,9 +11,11 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
+import com.dede.dedegame.presentation.common.glide.GlideApp
+import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
+import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
 import com.quangph.base.common.ActivityNavi
 import com.quangph.jetpack.IScreenData
@@ -138,19 +140,10 @@ fun String.stringToEnum(): Slider.Type? {
 
 fun ImageView.loadImageFromUrl(url: String?) {
     url?.let {
-        Glide.with(this@loadImageFromUrl.context)
+        GlideApp.with(this@loadImageFromUrl.context)
             .load(it)
-            .into(object : CustomTarget<Drawable>() {
-                override fun onResourceReady(
-                    resource: Drawable,
-                    transition: Transition<in Drawable>?
-                ) {
-                    this@loadImageFromUrl.setImageDrawable(resource)
-                }
-
-                override fun onLoadCleared(placeholder: Drawable?) {
-                }
-            })
+            .placeholder(R.drawable.ic_placeholder)
+            .into(this@loadImageFromUrl)
     }
 }
 

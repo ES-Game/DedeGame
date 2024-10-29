@@ -3,6 +3,7 @@ package com.dede.dedegame.presentation.home.fragments.main_game.game_list
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.DataPage
 import com.dede.dedegame.domain.model.mainGame.Game
@@ -101,6 +102,7 @@ class GameListActivity : JetActivity<GameListView>() {
                 override fun onError(e: ActionException) {
                     super.onError(e)
                     hideLoading()
+                    Toast.makeText(this@GameListActivity, e.message, Toast.LENGTH_SHORT).show()
                 }
             })
     }

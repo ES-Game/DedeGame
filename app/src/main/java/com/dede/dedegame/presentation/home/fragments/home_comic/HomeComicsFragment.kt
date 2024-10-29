@@ -1,15 +1,11 @@
 package com.dede.dedegame.presentation.home.fragments.home_comic
 
-import android.content.Intent
 import android.os.Bundle
 import com.dede.dedegame.R
-import com.dede.dedegame.presentation.common.LogUtil
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTracker
 import com.dede.dedegame.presentation.common.tracker.DedeFirebaseTrackerModel
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.CategoryState
 import com.dede.dedegame.presentation.home.fragments.home_comic.states.RankState
-import com.dede.dedegame.presentation.home.fragments.home_comic.story_list.StoryListActivity
-import com.dede.dedegame.presentation.story_cover.StoryCoverActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetFragment

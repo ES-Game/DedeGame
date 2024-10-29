@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import com.dede.dedegame.R
 import com.dede.dedegame.extension.startActivityExt
 import com.dede.dedegame.presentation.profile.ProfileActivity
+import com.dede.dedegame.presentation.story_search.StorySearchActivity
 import com.quangph.base.mvp.ICommand
 import com.quangph.base.viewbinder.Layout
 import com.quangph.jetpack.JetActivity
@@ -39,6 +40,10 @@ class HomeActivity : JetActivity<HomeView>() {
         when (command) {
             is HomeView.MoveProfileCmd -> {
                 startActivityExt(ProfileActivity::class.java)
+            }
+
+            is HomeView.MoveSearchStoryCmd -> {
+                startActivityExt(StorySearchActivity::class.java)
             }
         }
     }

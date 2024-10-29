@@ -1,5 +1,6 @@
 package com.dede.dedegame.presentation.story_followed
 
+import android.widget.Toast
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.domain.model.StoryListDataPage
@@ -73,6 +74,7 @@ class StoryBookmarkActivity : JetActivity<StoryBookmarkView>() {
 
                 override fun onError(e: ActionException) {
                     super.onError(e)
+                    Toast.makeText(this@StoryBookmarkActivity, e.message, Toast.LENGTH_SHORT).show()
                     hideLoading()
                 }
             })

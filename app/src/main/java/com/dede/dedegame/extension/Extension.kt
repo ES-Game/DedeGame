@@ -3,6 +3,7 @@ package com.dede.dedegame.extension
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.os.Parcel
 import android.util.SparseBooleanArray
@@ -11,9 +12,13 @@ import android.view.animation.TranslateAnimation
 import android.widget.ImageView
 import androidx.activity.result.ActivityResult
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.load.DataSource
+import com.bumptech.glide.load.engine.GlideException
+import com.bumptech.glide.request.RequestListener
 import com.dede.dedegame.presentation.common.glide.GlideApp
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.home.Slider
@@ -144,6 +149,27 @@ fun ImageView.loadImageFromUrl(url: String?) {
             .load(it)
             .placeholder(R.drawable.ic_placeholder)
             .into(this@loadImageFromUrl)
+    }
+}
+
+fun ImageView.loadImageFromUrlReady(url: String?) {
+    url?.let {
+        GlideApp.with(this)
+            .asBitmap()
+            .load(url)
+            .placeholder(R.drawable.ic_placeholder)
+            .error(R.drawable.img_error_image)
+            .into(object : CustomTarget<Bitmap>() {
+                override fun onResourceReady(
+                    resource: Bitmap,
+                    transition: Transition<in Bitmap>?
+                ) {
+                    this@loadImageFromUrlReady.setImageBitmap(resource)
+                }
+
+                override fun onLoadCleared(placeholder: Drawable?) {
+                }
+            })
     }
 }
 

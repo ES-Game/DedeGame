@@ -14,8 +14,10 @@ android {
         applicationId "com.dede.dedegame"
         minSdk 23
         targetSdk 34
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.4"
+        multiDexEnabled true
+
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -27,20 +29,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "17"
     }
 }
 
 dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation project(path: ':base')
+    implementation "androidx.multidex:multidex:2.0.1"
+//    implementation project(path: ':base')
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.1'
@@ -61,8 +66,10 @@ dependencies {
     retrofit()
     implementation 'com.google.firebase:firebase-messaging:24.0.0'
     implementation 'com.google.firebase:firebase-crashlytics:18.4.0'
+    implementation 'com.google.firebase:firebase-core:21.1.1'
 
     implementation files('libs/TapDB_3.29.2.aar')
+    implementation files('libs/BaseAndroidSDK.aar')
     implementation "com.google.firebase:firebase-firestore:25.0.0"
 
     implementation "com.github.skydoves:powerspinner:1.2.7"

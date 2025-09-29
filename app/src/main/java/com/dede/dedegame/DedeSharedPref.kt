@@ -48,4 +48,14 @@ object DedeSharedPref {
         saveUserInfo(null)
     }
 
+    fun saveDomain(domain: String) {
+        val editor = sharedPref.edit()
+        editor.putString("selected_dynamic_domain", domain)
+        editor.apply()
+    }
+
+    fun getSavedDomain(): String? {
+        return sharedPref.getString("selected_dynamic_domain", null)
+    }
+
 }

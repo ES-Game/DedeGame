@@ -15,6 +15,7 @@ import com.dede.dedegame.repo.temp.mainGame.gameDetail.GameDetailResponse
 import com.dede.dedegame.repo.temp.news.NewsDetailResponse
 import com.dede.dedegame.repo.user.UserResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
@@ -26,6 +27,9 @@ import retrofit2.http.Query
 interface ApiService {
     @GET("index")
     fun getHomeData(): Call<HomeResponse>
+
+    @GET("index")
+    suspend fun checkDomain(): Response<HomeResponse>
 
     @GET("home")
     fun getCategoriesData(

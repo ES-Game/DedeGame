@@ -60,7 +60,8 @@ class ShopFragment : JetFragment<ShopFragmentView>() {
                             if (e.cause is LogoutException) {
                                 logOut()
                             } else {
-                                Toast.makeText(activity, e.message, Toast.LENGTH_SHORT)
+                                Toast.makeText(activity,
+                                    if ((e.message != null)) e.message else "Có lỗi xảy ra", Toast.LENGTH_SHORT)
                                     .show()
                             }
                         }

@@ -164,6 +164,10 @@
             </intent-filter>
         </service>
 
+        <meta-data
+            android:name="com.example.sdk.ENABLE_TRACKING"
+            android:value="true"/>
+
     </application>
 
 </manifest>

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.Parcelable
 import android.widget.Toast
+import com.dede.dedegame.DomainManager
 import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Chapter
 import com.dede.dedegame.domain.model.OptionChapter
@@ -160,7 +161,7 @@ class ChapterActivity : JetActivity<ChapterView>() {
     }
 
     private fun getChapterDetail(id: Int) {
-        val chapterLink = "https://www.dedegame.me/chapter/iframe/$id"
+        val chapterLink = DomainManager.getCurrentDomain() + "chapter/iframe/$id"
         mvpView.loadChapterContent(chapterLink)
     }
 
@@ -227,7 +228,9 @@ class ChapterActivity : JetActivity<ChapterView>() {
 
     override fun onDestroy() {
         super.onDestroy()
-        mediaPlayer.release()
+        if (::mediaPlayer.isInitialized) {
+            mediaPlayer.release()
+        }
     }
 
     inner class FirebaseLoginModel : DedeFirebaseTrackerModel() {

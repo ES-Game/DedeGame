@@ -15,6 +15,7 @@ import com.quangph.base.view.recyclerview.adapter.group.GroupData
 import com.quangph.base.view.recyclerview.adapter.group.GroupRclvVH
 import com.dede.dedegame.domain.model.StoryDetail
 import com.dede.dedegame.extension.loadImageFromUrl
+import com.dede.dedegame.extension.loadImageFromUrlReady
 
 
 class RankStoryGroupData(listStory: List<StoryDetail>?) :
@@ -85,7 +86,7 @@ class RankStoryGroupData(listStory: List<StoryDetail>?) :
             tvRankIndex.text = (adapterPosition + 1).toString()
             fillColorIndex(adapterPosition)
             vhData?.let { story ->
-                ivThumb.loadImageFromUrl(story.image)
+                ivThumb.loadImageFromUrlReady(story.image)
                 tvDes.text = story.title
                 tvLiked.text = story.likes.toString()
                 tvViewed.text = story.views.toString()

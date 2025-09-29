@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 }
 rootProject.name = "DedeGame"
 include ':app'
-include ':base'

@@ -8,6 +8,7 @@ import com.dede.dedegame.R
 import com.dede.dedegame.domain.model.Category
 import com.dede.dedegame.domain.model.Story
 import com.dede.dedegame.extension.loadImageFromUrl
+import com.dede.dedegame.extension.loadImageFromUrlReady
 import com.dede.dedegame.presentation.widget.RoundedTextView
 import com.quangph.base.mvp.IPresenter
 import com.quangph.base.view.recyclerview.adapter.BaseRclvHolder
@@ -93,7 +94,7 @@ class CategoryStoryGroupData(category: Category?) :
             tvRankIndex.visibility = View.GONE
             vhData?.let { story ->
                 tvDes.text = story.title
-                ivThumb.loadImageFromUrl(story.urlImage)
+                ivThumb.loadImageFromUrlReady(story.urlImage)
                 tvLiked.text = story.featured.toString()
                 tvViewed.text = story.views.toString()
             }
